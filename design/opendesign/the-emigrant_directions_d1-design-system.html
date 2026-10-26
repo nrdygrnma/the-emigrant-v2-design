@@ -310,12 +310,11 @@ b, strong { color: var(--ink-navy); }
 .f-step[data-state="done"] { color: var(--ink-covered); }
 .f-step[data-state="done"] .f-step__n { background: var(--ink-covered); border-color: var(--ink-covered); color: var(--ink-on-covered); }
 .f-step[data-state="later"] { cursor: default; }
-.f-step[data-state="later"] .f-step__n { border-style: var(--dots-style); }
-/* "coming": a 1px dotted outline in the muted ink, 8px from its label (the flex gap of the step and the leg title) */
-.f-step__soon { display: inline-flex; align-items: center; padding: 4px 10px; border: 1px var(--dots-style) var(--ink-muted); border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; line-height: 1; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
+/* "coming": the dotted not-yet mark (2px round dots) in the muted ink, 8px from its label (the flex gap of the step and the leg title) */
+.f-step__soon { display: inline-flex; align-items: center; padding: 3px 9px; border: var(--dots-w) var(--dots-style) var(--ink-muted); border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; line-height: 1; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
 .k-phone .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .k-phone .f-step__n { width: 24px; height: 24px; }
-.k-phone .f-step__soon { padding: 3px 7px; }
+.k-phone .f-step__soon { padding: 2px 6px; }
 .k-phone .f-railrow { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 359px) { .f-rail li + li::before { display: none; } .f-step { letter-spacing: 0; } }
 .k-phone .f-step[data-state="later"] { padding-right: 0; }
@@ -1118,7 +1117,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* Compact plan rail (phone): smaller legs; below 340px the Plan leg wraps to a second line */
 .f-rail--compact .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .f-rail--compact .f-step__n { width: 24px; height: 24px; }
-.f-rail--compact .f-step__soon { padding: 3px 7px; }
+.f-rail--compact .f-step__soon { padding: 2px 6px; }
 .f-rail--compact li + li::before { width: 6px; margin: 0; }
 .f-railrow:has(.f-rail--compact) { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 339px) { .f-rail--compact ol { flex-wrap: wrap; row-gap: 0; } }
@@ -1356,19 +1355,18 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 @container app (max-width: 1279px) { .f-toplinks { display: none; } }
 
 /* The compact rail on a narrow phone (360): no letter-spacing, tighter legs and tag, so the three steps hold one line */
-@container rail (max-width: 359px) { .f-rail--compact ol { gap: 3px; } .f-rail--compact .f-step { letter-spacing: 0; gap: 4px; } .f-rail--compact .f-step__soon { padding: 3px 6px; } }
+@container rail (max-width: 359px) { .f-rail--compact ol { gap: 3px; } .f-rail--compact .f-step { letter-spacing: 0; gap: 4px; } .f-rail--compact .f-step__soon { padding: 2px 5px; } }
 
-/* Footers: the disclaimer line, the sentence with the Terms of use link, on every screen, phone included */
-.appfoot .disc { font-size: var(--fs-xs); line-height: 1.5; }
-.appfoot .disc a { display: inline; min-height: 0; min-width: 0; }
+/* Footers, the minimum on every screen: the privacy promise and the two links, Disclaimer and Terms of use.
+   Desktop: legal (links and promise) on the left, metadata (credit, version) on the right. */
 .appfoot--desk { justify-content: space-between; }
-.appfoot__legal { display: grid; gap: 4px; min-width: 0; flex: 1 1 520px; }
-.appfoot__legal .disc { font-size: var(--fs-sm); }
+.appfoot__legal { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-width: 0; }
 .appfoot__promise { color: var(--ink-text-2); }
 .appfoot__meta { display: flex; align-items: center; gap: 16px; flex: none; white-space: nowrap; }
-.k-phone .appfoot { padding: 8px 16px 12px; gap: 2px; }
-.k-phone .appfoot .disc > .od-icon { margin-top: 2px; }
+.st-quiet__links { gap: 12px; align-items: center; }
+.k-phone .appfoot { padding: 8px 16px 10px; gap: 0; }
 .k-phone .appfoot .st-quiet__line { font-size: var(--fs-xs); }
+.k-phone .appfoot .st-quiet__links a { display: inline-flex; align-items: center; min-height: 44px; }
 
 /* Phone: compact page header on every screen. Condensed title, "What happens next" as a small info button beside it */
 .f-titleblock--compact { gap: 8px; }
@@ -1450,7 +1448,6 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .st-legs { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: 0; background: transparent; }
 .st-leg { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 8px 0; align-items: start; }
 .st-leg__n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; color: var(--ink-navy); }
-.st-leg--soon .st-leg__n { border: var(--b-notyet); color: var(--ink-text-2); }
 .st-leg__body { display: grid; gap: 2px; min-width: 0; }
 .st-leg__title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-lg); line-height: 1; color: var(--ink-navy); }
 .st-leg--soon .st-leg__title { color: var(--ink-text-2); }
@@ -1461,14 +1458,12 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .st-col--legs { border-top: 0; padding-top: 0; }
 .k-phone .st-leg { padding: 6px 0; }
 .k-phone .st-card--b2 .st-leg + .st-leg { padding-top: 13px; border-top: 1px solid var(--line-hair); margin-top: 6px; }
-.k-desk .st-card--b2 .st-legs { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line-hair); padding-top: 16px; counter-reset: leg; }
-.k-desk .st-card--b2 .st-leg { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "text"; gap: 6px 10px; padding: 0 20px 0 0; }
+.k-desk .st-card--b2 .st-legs { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line-hair); padding-top: 16px; }
+.k-desk .st-card--b2 .st-leg { grid-template-columns: 24px minmax(0, 1fr); grid-template-areas: "n head" ". text"; gap: 6px 8px; padding: 0 20px 0 0; align-items: start; }
 .k-desk .st-card--b2 .st-leg + .st-leg { border-left: 1px solid var(--line-hair); padding-left: 20px; }
-.k-desk .st-card--b2 .st-leg__n { display: none; }
+.k-desk .st-card--b2 .st-leg__n { grid-area: n; width: 24px; height: 24px; font-size: var(--fs-xs); }
 .k-desk .st-card--b2 .st-leg__body { display: contents; }
 .k-desk .st-card--b2 .st-leg__title { grid-area: head; display: flex; align-items: center; gap: 8px; font-size: var(--fs-lg); line-height: 24px; }
-.k-desk .st-card--b2 .st-leg__title::before { content: counter(leg); counter-increment: leg; display: inline-grid; place-items: center; width: 24px; height: 24px; padding-bottom: 2px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; font-size: var(--fs-xs); line-height: 1; color: var(--ink-navy); }
-.k-desk .st-card--b2 .st-leg--soon .st-leg__title::before { border: var(--b-notyet); color: var(--ink-text-2); }
 .k-desk .st-card--b2 .st-leg__text { grid-area: text; font-size: var(--fs-xs); line-height: 1.5; }
 /* The boarding pass at ticket size: tinted paper, half-circle notches with the outline following the curve, a hole
    perforation, its shadow following the outline. On desktop the pass is about 15% larger than on phone-size tickets. */
@@ -1545,6 +1540,19 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .cp--compact .cp__fields > div.cp__credit { grid-column: 1 / -1; }
 /* The D1 gallery shows the Start artboards the way D2 does: the desktop one scaled to fit its column */
 .g-boards .k-boards { margin-top: 4px; }
+/* ── The not-yet rings and the "coming" tag: drawn dots ──────────────────────────────────────────
+   A CSS dotted border cannot set the gap, so the ring is drawn: round dots 2.5px thick, 6.5px apart (a 4px gap),
+   in the control-edge ink, over a transparent border of the same width. One drawing per ring size. */
+.f-step[data-state="later"] .f-step__n { position: relative; border: 2px solid transparent; }
+.f-step[data-state="later"] .f-step__n::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--line-edge); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Ccircle%20cx='14.0'%20cy='14.0'%20r='12.75'%20pathLength='78.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Ccircle%20cx='14.0'%20cy='14.0'%20r='12.75'%20pathLength='78.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.k-phone .f-step[data-state="later"] .f-step__n::after, .f-rail--compact .f-step[data-state="later"] .f-step__n::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.st-leg--soon .st-leg__n { position: relative; border: 2px solid transparent; color: var(--ink-text-2); }
+.st-leg--soon .st-leg__n::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--line-edge); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20.0'%20cy='20.0'%20r='18.75'%20pathLength='117.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20.0'%20cy='20.0'%20r='18.75'%20pathLength='117.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.k-desk .st-card--b2 .st-leg--soon .st-leg__n::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.f-step__soon { position: relative; border: 0; padding: 5px 11px; }
+.f-step__soon::after { content: ""; position: absolute; inset: 0; border-radius: 999px; background: var(--ink-muted); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2065%2022'%20preserveAspectRatio='none'%3E%3Crect%20x='1.25'%20y='1.25'%20width='62.5'%20height='19.5'%20rx='9.75'%20pathLength='149.5'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2065%2022'%20preserveAspectRatio='none'%3E%3Crect%20x='1.25'%20y='1.25'%20width='62.5'%20height='19.5'%20rx='9.75'%20pathLength='149.5'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.k-phone .f-step__soon, .f-rail--compact .f-step__soon { padding: 4px 8px; }
+@container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 4px 7px; } }
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
 <style>
@@ -1602,7 +1610,8 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
         <li><span data-i="check"></span>Before the household exists, answers come from the criteria ("Meets all your Non-negotiables", "Climate not known yet"). The route shows only as the route check label.</li>
         <li><span data-i="check"></span>Unknown is a calm state with its reason, never an empty cell, a zero or a hidden row. Not yet and unknown share one mark: round dots, never dashes.</li>
         <li><span data-i="check"></span>The evidence band is capped at Partial while one of the household's Non-negotiables is unknown, with the one line that says why.</li>
-        <li><span data-i="check"></span>The disclaimer line, the sentence with the Terms of use link, sits in the footer of every screen, phone included, once. Oxblood is for real next steps only; reading pages have a Back link instead.</li>
+        <li><span data-i="check"></span>Every footer carries the privacy promise and the two links, Disclaimer and Terms of use, phone included. The disclaimer sentence with its Terms of use link appears once on every screen, as the fine line at the end, and once on the Start card.</li>
+        <li><span data-i="check"></span>Oxblood is for real next steps only; reading pages have a Back link instead.</li>
         <li><span data-i="check"></span>Citrus highlights at most one value per card, never a stale, unknown or flagged value.</li>
         <li><span data-i="check"></span>Text never sits on a photo. Every photo has a credit line: "Drone photo: [credit]" or "Photo: [name] / Unsplash".</li>
       </ul></div>
@@ -1662,7 +1671,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
       <div class="card"><h3>Spacing</h3><div class="space"><div><i style="width:4px;height:4px"></i>4</div><div><i style="width:8px;height:8px"></i>8</div><div><i style="width:12px;height:12px"></i>12</div><div><i style="width:16px;height:16px"></i>16</div><div><i style="width:20px;height:20px"></i>20</div><div><i style="width:24px;height:24px"></i>24</div><div><i style="width:32px;height:32px"></i>32</div><div><i style="width:48px;height:48px"></i>48</div><div><i style="width:64px;height:64px"></i>64</div></div><p class="g-note">Phone gutter 16, tablet 32, desktop 48. Content up to 1240 wide. Grid: 4 columns phone, 8 tablet, 12 desktop.</p></div>
       <div class="card"><h3>Shape and elevation</h3><div class="shapes"><div><i style="border-radius:6px"></i>6 · marks</div><div><i style="border-radius:8px"></i>8 · buttons, fields</div><div><i style="border-radius:12px;box-shadow:var(--shadow-card);border:0"></i>12 · cards</div><div><i style="border-radius:4px;box-shadow:var(--shadow-print);border:8px solid var(--print-border)"></i>print</div><div><i style="border-radius:12px;box-shadow:var(--shadow-lift);border:0"></i>sheet, dialog</div></div></div>
       <div class="card"><h3>Touch and focus</h3><ul class="rules"><li><span data-i="check"></span>Every control and every small mark (note marks, evidence marks, coverage marks, rail legs) has a hit area of at least 44 × 44px, even where the mark is smaller.</li><li><span data-i="check"></span>Visible 2px focus ring in stamp violet. Full keyboard use: criteria move with keys 1 to 4.</li><li><span data-i="check"></span>Nothing needs hover. Tooltips open on tap or focus.</li></ul></div>
-      <div class="card card--stretch"><h3>Not yet, unknown: the dotted mark</h3><p class="g-note">One mark for everything that is not there yet, system-wide: 2px round dots, never dashes. Tokens <span class="mono">--dots-w</span>, <span class="mono">--dots-style</span> and <span class="mono">--b-notyet</span> (the edge in the control-edge ink). Used by the E0 evidence mark, unknown values, the not-yet step circle, the boarding pass destination (a dotted underline, no box), yes/no criterion cards, empty piles, drop zones, empty states, the provisional banner and the "shown but not counted" value. The "coming" tag is a 1px dotted outline in the muted ink. Dividers are plain 1px hairlines; the only dashes left are the tear-off perforation on tickets.</p>
+      <div class="card card--stretch"><h3>Not yet, unknown: the dotted mark</h3><p class="g-note">One mark for everything that is not there yet, system-wide: 2px round dots, never dashes. Tokens <span class="mono">--dots-w</span>, <span class="mono">--dots-style</span> and <span class="mono">--b-notyet</span> (the edge in the control-edge ink). Used by the E0 evidence mark, unknown values, the not-yet step circle, the boarding pass destination (a dotted underline, no box), yes/no criterion cards, empty piles, drop zones, empty states, the provisional banner and the "shown but not counted" value. The "coming" tag carries the same mark in the muted ink. Dividers are plain 1px hairlines; the only dashes left are the tear-off perforation on tickets.</p>
         <div class="g-row" id="dotsDemo"></div></div>
     </div>
   </section>
@@ -2252,13 +2261,18 @@ function deskHeader(p = {}) {
   const railPart = p.rail === false ? '<span class="od-fill"></span>' : `<div class="od-fill f-head__rail">${rail(p.rail || 'shortlist')}</div>`;
   return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${topLinks()}${moreBtn(p.ctx || 'desktop')}${nextBar('head', p.next)}</header>`;
 }
-/* The footers: the disclaimer line (the sentence with the Terms of use link) on every screen, phone included */
+/* The footers, the minimum on every screen, phone included: the privacy promise and the two links, Disclaimer and
+   Terms of use. The disclaimer sentence itself is the fine line on each screen (fineLine), once. */
+const TERMS_TOAST = 'Opens the full terms of use (screen 14).';
+const footLinks = () => `<a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><span aria-hidden="true">·</span><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a>`;
 function phoneFoot(p = {}) {
-  return `<div class="appfoot${p.cls ? ` ${p.cls}` : ''}">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p>${disclaimerLine()}</div>`;
+  return `<div class="appfoot${p.cls ? ` ${p.cls}` : ''}">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p><p class="st-quiet__line st-quiet__links">${footLinks()}</p></div>`;
 }
 function deskFoot(p = {}) {
-  return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal">${disclaimerLine()}<span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<span class="mono">${DATA_VERSION}</span></div></footer>`;
+  return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal"><a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a><span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<span class="mono">${DATA_VERSION}</span></div></footer>`;
 }
+/* The disclaimer sentence with the Terms of use link, once per screen, in the body */
+const fineLine = () => `<p class="f-fine">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p>`;
 /* Desktop artboards shown scaled to fit their column */
 function fitDesks() {
   document.querySelectorAll('[data-fit]').forEach(fit => {
@@ -2275,7 +2289,7 @@ function fitDesks() {
 const START = {
   cover: {
     provisional: true,
-    src: './assets/photos/cover-houses-sears.jpg', small: './assets/photos/cover-houses-sears-1200.jpg',
+    src: './assets/photos/cole-sears-OL-nSRo19mQ-unsplash.jpg', w: 2400, h: 1800,
     alt: 'Houses nestled near a mountain with palm trees',
     credit: 'Photo: Cole Sears / Unsplash',
     place: 'Cover: [place name] · [latitude] (sample)',
@@ -2289,7 +2303,7 @@ const START = {
 };
 function startCover() {
   const cv = START.cover;
-  return `<figure class="ph st-cover st-cover--stage st-cover--drift" style="--obj-desk:${cv.objDesk};--obj-phone:${cv.objPhone}"><img class="st-cover__img" src="${cv.src}" srcset="${cv.small} 1200w, ${cv.src} 2400w" sizes="(max-width: 480px) 390px, 1240px" alt="${esc(cv.alt)}" width="2400" height="1800"></figure>`;
+  return `<figure class="ph st-cover st-cover--stage st-cover--drift" style="--obj-desk:${cv.objDesk};--obj-phone:${cv.objPhone}"><img class="st-cover__img" src="${cv.src}"${cv.small ? ` srcset="${cv.small} 1200w, ${cv.src} ${cv.w || 2400}w" sizes="(max-width: 480px) 390px, 1240px"` : ''} alt="${esc(cv.alt)}" width="${cv.w || 2400}" height="${cv.h || 1800}"></figure>`;
 }
 /* The card band carries the place line of the cover, never "Start" alone */
 const startBand = () => `<div class="cp__band st-band"><span class="cp__label">Start${START.cover.provisional ? ' · provisional cover' : ''}</span><span class="ph__credit" data-place>${esc(START.cover.place)}</span></div>`;
@@ -2350,14 +2364,14 @@ function startB2(variant, ctx) {
     const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
       ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
       : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
-    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
+    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p><p class="st-quiet__line">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p></div>`;
   }
   const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
   return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
     <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
 }
 /* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
-   in the footers. The disclaimer line appears once, in the footer. parts: { body, offline, menuId } */
+   in the footers. The disclaimer sentence appears once, on the card under the proof line. parts: { body, offline, menuId } */
 function startShell(ctx, parts) {
   const id = parts.menuId || ctx;
   const credit = `Cover: ${esc(START.cover.credit)}`;

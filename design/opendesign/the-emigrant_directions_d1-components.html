@@ -310,12 +310,11 @@ b, strong { color: var(--ink-navy); }
 .f-step[data-state="done"] { color: var(--ink-covered); }
 .f-step[data-state="done"] .f-step__n { background: var(--ink-covered); border-color: var(--ink-covered); color: var(--ink-on-covered); }
 .f-step[data-state="later"] { cursor: default; }
-.f-step[data-state="later"] .f-step__n { border-style: var(--dots-style); }
-/* "coming": a 1px dotted outline in the muted ink, 8px from its label (the flex gap of the step and the leg title) */
-.f-step__soon { display: inline-flex; align-items: center; padding: 4px 10px; border: 1px var(--dots-style) var(--ink-muted); border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; line-height: 1; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
+/* "coming": the dotted not-yet mark (2px round dots) in the muted ink, 8px from its label (the flex gap of the step and the leg title) */
+.f-step__soon { display: inline-flex; align-items: center; padding: 3px 9px; border: var(--dots-w) var(--dots-style) var(--ink-muted); border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; line-height: 1; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
 .k-phone .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .k-phone .f-step__n { width: 24px; height: 24px; }
-.k-phone .f-step__soon { padding: 3px 7px; }
+.k-phone .f-step__soon { padding: 2px 6px; }
 .k-phone .f-railrow { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 359px) { .f-rail li + li::before { display: none; } .f-step { letter-spacing: 0; } }
 .k-phone .f-step[data-state="later"] { padding-right: 0; }
@@ -1118,7 +1117,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* Compact plan rail (phone): smaller legs; below 340px the Plan leg wraps to a second line */
 .f-rail--compact .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .f-rail--compact .f-step__n { width: 24px; height: 24px; }
-.f-rail--compact .f-step__soon { padding: 3px 7px; }
+.f-rail--compact .f-step__soon { padding: 2px 6px; }
 .f-rail--compact li + li::before { width: 6px; margin: 0; }
 .f-railrow:has(.f-rail--compact) { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 339px) { .f-rail--compact ol { flex-wrap: wrap; row-gap: 0; } }
@@ -1356,19 +1355,18 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 @container app (max-width: 1279px) { .f-toplinks { display: none; } }
 
 /* The compact rail on a narrow phone (360): no letter-spacing, tighter legs and tag, so the three steps hold one line */
-@container rail (max-width: 359px) { .f-rail--compact ol { gap: 3px; } .f-rail--compact .f-step { letter-spacing: 0; gap: 4px; } .f-rail--compact .f-step__soon { padding: 3px 6px; } }
+@container rail (max-width: 359px) { .f-rail--compact ol { gap: 3px; } .f-rail--compact .f-step { letter-spacing: 0; gap: 4px; } .f-rail--compact .f-step__soon { padding: 2px 5px; } }
 
-/* Footers: the disclaimer line, the sentence with the Terms of use link, on every screen, phone included */
-.appfoot .disc { font-size: var(--fs-xs); line-height: 1.5; }
-.appfoot .disc a { display: inline; min-height: 0; min-width: 0; }
+/* Footers, the minimum on every screen: the privacy promise and the two links, Disclaimer and Terms of use.
+   Desktop: legal (links and promise) on the left, metadata (credit, version) on the right. */
 .appfoot--desk { justify-content: space-between; }
-.appfoot__legal { display: grid; gap: 4px; min-width: 0; flex: 1 1 520px; }
-.appfoot__legal .disc { font-size: var(--fs-sm); }
+.appfoot__legal { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-width: 0; }
 .appfoot__promise { color: var(--ink-text-2); }
 .appfoot__meta { display: flex; align-items: center; gap: 16px; flex: none; white-space: nowrap; }
-.k-phone .appfoot { padding: 8px 16px 12px; gap: 2px; }
-.k-phone .appfoot .disc > .od-icon { margin-top: 2px; }
+.st-quiet__links { gap: 12px; align-items: center; }
+.k-phone .appfoot { padding: 8px 16px 10px; gap: 0; }
 .k-phone .appfoot .st-quiet__line { font-size: var(--fs-xs); }
+.k-phone .appfoot .st-quiet__links a { display: inline-flex; align-items: center; min-height: 44px; }
 
 /* Phone: compact page header on every screen. Condensed title, "What happens next" as a small info button beside it */
 .f-titleblock--compact { gap: 8px; }
@@ -1450,7 +1448,6 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .st-legs { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: 0; background: transparent; }
 .st-leg { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 8px 0; align-items: start; }
 .st-leg__n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; color: var(--ink-navy); }
-.st-leg--soon .st-leg__n { border: var(--b-notyet); color: var(--ink-text-2); }
 .st-leg__body { display: grid; gap: 2px; min-width: 0; }
 .st-leg__title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-lg); line-height: 1; color: var(--ink-navy); }
 .st-leg--soon .st-leg__title { color: var(--ink-text-2); }
@@ -1461,14 +1458,12 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .st-col--legs { border-top: 0; padding-top: 0; }
 .k-phone .st-leg { padding: 6px 0; }
 .k-phone .st-card--b2 .st-leg + .st-leg { padding-top: 13px; border-top: 1px solid var(--line-hair); margin-top: 6px; }
-.k-desk .st-card--b2 .st-legs { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line-hair); padding-top: 16px; counter-reset: leg; }
-.k-desk .st-card--b2 .st-leg { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "text"; gap: 6px 10px; padding: 0 20px 0 0; }
+.k-desk .st-card--b2 .st-legs { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line-hair); padding-top: 16px; }
+.k-desk .st-card--b2 .st-leg { grid-template-columns: 24px minmax(0, 1fr); grid-template-areas: "n head" ". text"; gap: 6px 8px; padding: 0 20px 0 0; align-items: start; }
 .k-desk .st-card--b2 .st-leg + .st-leg { border-left: 1px solid var(--line-hair); padding-left: 20px; }
-.k-desk .st-card--b2 .st-leg__n { display: none; }
+.k-desk .st-card--b2 .st-leg__n { grid-area: n; width: 24px; height: 24px; font-size: var(--fs-xs); }
 .k-desk .st-card--b2 .st-leg__body { display: contents; }
 .k-desk .st-card--b2 .st-leg__title { grid-area: head; display: flex; align-items: center; gap: 8px; font-size: var(--fs-lg); line-height: 24px; }
-.k-desk .st-card--b2 .st-leg__title::before { content: counter(leg); counter-increment: leg; display: inline-grid; place-items: center; width: 24px; height: 24px; padding-bottom: 2px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; font-size: var(--fs-xs); line-height: 1; color: var(--ink-navy); }
-.k-desk .st-card--b2 .st-leg--soon .st-leg__title::before { border: var(--b-notyet); color: var(--ink-text-2); }
 .k-desk .st-card--b2 .st-leg__text { grid-area: text; font-size: var(--fs-xs); line-height: 1.5; }
 /* The boarding pass at ticket size: tinted paper, half-circle notches with the outline following the curve, a hole
    perforation, its shadow following the outline. On desktop the pass is about 15% larger than on phone-size tickets. */
@@ -1545,6 +1540,19 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .cp--compact .cp__fields > div.cp__credit { grid-column: 1 / -1; }
 /* The D1 gallery shows the Start artboards the way D2 does: the desktop one scaled to fit its column */
 .g-boards .k-boards { margin-top: 4px; }
+/* ── The not-yet rings and the "coming" tag: drawn dots ──────────────────────────────────────────
+   A CSS dotted border cannot set the gap, so the ring is drawn: round dots 2.5px thick, 6.5px apart (a 4px gap),
+   in the control-edge ink, over a transparent border of the same width. One drawing per ring size. */
+.f-step[data-state="later"] .f-step__n { position: relative; border: 2px solid transparent; }
+.f-step[data-state="later"] .f-step__n::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--line-edge); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Ccircle%20cx='14.0'%20cy='14.0'%20r='12.75'%20pathLength='78.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Ccircle%20cx='14.0'%20cy='14.0'%20r='12.75'%20pathLength='78.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.k-phone .f-step[data-state="later"] .f-step__n::after, .f-rail--compact .f-step[data-state="later"] .f-step__n::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.st-leg--soon .st-leg__n { position: relative; border: 2px solid transparent; color: var(--ink-text-2); }
+.st-leg--soon .st-leg__n::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--line-edge); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20.0'%20cy='20.0'%20r='18.75'%20pathLength='117.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20.0'%20cy='20.0'%20r='18.75'%20pathLength='117.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.k-desk .st-card--b2 .st-leg--soon .st-leg__n::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.f-step__soon { position: relative; border: 0; padding: 5px 11px; }
+.f-step__soon::after { content: ""; position: absolute; inset: 0; border-radius: 999px; background: var(--ink-muted); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2065%2022'%20preserveAspectRatio='none'%3E%3Crect%20x='1.25'%20y='1.25'%20width='62.5'%20height='19.5'%20rx='9.75'%20pathLength='149.5'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2065%2022'%20preserveAspectRatio='none'%3E%3Crect%20x='1.25'%20y='1.25'%20width='62.5'%20height='19.5'%20rx='9.75'%20pathLength='149.5'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+.k-phone .f-step__soon, .f-rail--compact .f-step__soon { padding: 4px 8px; }
+@container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 4px 7px; } }
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
 </head>
@@ -2118,13 +2126,18 @@ function deskHeader(p = {}) {
   const railPart = p.rail === false ? '<span class="od-fill"></span>' : `<div class="od-fill f-head__rail">${rail(p.rail || 'shortlist')}</div>`;
   return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${topLinks()}${moreBtn(p.ctx || 'desktop')}${nextBar('head', p.next)}</header>`;
 }
-/* The footers: the disclaimer line (the sentence with the Terms of use link) on every screen, phone included */
+/* The footers, the minimum on every screen, phone included: the privacy promise and the two links, Disclaimer and
+   Terms of use. The disclaimer sentence itself is the fine line on each screen (fineLine), once. */
+const TERMS_TOAST = 'Opens the full terms of use (screen 14).';
+const footLinks = () => `<a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><span aria-hidden="true">·</span><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a>`;
 function phoneFoot(p = {}) {
-  return `<div class="appfoot${p.cls ? ` ${p.cls}` : ''}">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p>${disclaimerLine()}</div>`;
+  return `<div class="appfoot${p.cls ? ` ${p.cls}` : ''}">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p><p class="st-quiet__line st-quiet__links">${footLinks()}</p></div>`;
 }
 function deskFoot(p = {}) {
-  return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal">${disclaimerLine()}<span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<span class="mono">${DATA_VERSION}</span></div></footer>`;
+  return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal"><a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a><span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<span class="mono">${DATA_VERSION}</span></div></footer>`;
 }
+/* The disclaimer sentence with the Terms of use link, once per screen, in the body */
+const fineLine = () => `<p class="f-fine">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p>`;
 /* Desktop artboards shown scaled to fit their column */
 function fitDesks() {
   document.querySelectorAll('[data-fit]').forEach(fit => {
@@ -2141,7 +2154,7 @@ function fitDesks() {
 const START = {
   cover: {
     provisional: true,
-    src: './assets/photos/cover-houses-sears.jpg', small: './assets/photos/cover-houses-sears-1200.jpg',
+    src: './assets/photos/cole-sears-OL-nSRo19mQ-unsplash.jpg', w: 2400, h: 1800,
     alt: 'Houses nestled near a mountain with palm trees',
     credit: 'Photo: Cole Sears / Unsplash',
     place: 'Cover: [place name] · [latitude] (sample)',
@@ -2155,7 +2168,7 @@ const START = {
 };
 function startCover() {
   const cv = START.cover;
-  return `<figure class="ph st-cover st-cover--stage st-cover--drift" style="--obj-desk:${cv.objDesk};--obj-phone:${cv.objPhone}"><img class="st-cover__img" src="${cv.src}" srcset="${cv.small} 1200w, ${cv.src} 2400w" sizes="(max-width: 480px) 390px, 1240px" alt="${esc(cv.alt)}" width="2400" height="1800"></figure>`;
+  return `<figure class="ph st-cover st-cover--stage st-cover--drift" style="--obj-desk:${cv.objDesk};--obj-phone:${cv.objPhone}"><img class="st-cover__img" src="${cv.src}"${cv.small ? ` srcset="${cv.small} 1200w, ${cv.src} ${cv.w || 2400}w" sizes="(max-width: 480px) 390px, 1240px"` : ''} alt="${esc(cv.alt)}" width="${cv.w || 2400}" height="${cv.h || 1800}"></figure>`;
 }
 /* The card band carries the place line of the cover, never "Start" alone */
 const startBand = () => `<div class="cp__band st-band"><span class="cp__label">Start${START.cover.provisional ? ' · provisional cover' : ''}</span><span class="ph__credit" data-place>${esc(START.cover.place)}</span></div>`;
@@ -2216,14 +2229,14 @@ function startB2(variant, ctx) {
     const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
       ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
       : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
-    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
+    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p><p class="st-quiet__line">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p></div>`;
   }
   const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
   return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
     <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
 }
 /* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
-   in the footers. The disclaimer line appears once, in the footer. parts: { body, offline, menuId } */
+   in the footers. The disclaimer sentence appears once, on the card under the proof line. parts: { body, offline, menuId } */
 function startShell(ctx, parts) {
   const id = parts.menuId || ctx;
   const credit = `Cover: ${esc(START.cover.credit)}`;
@@ -2640,9 +2653,9 @@ S.members = () => `<div class="g-grid">${HOUSEHOLDS.map((h, hi) => item(h.name, 
   ${item('Household member card', 'incomplete: partner without a relationship', `<div class="mcard mcard--incomplete"><div class="mcard__head"><span class="mcard__role">Partner</span></div><dl><div><dt class="lbl">Nationalities</dt><dd>Brazil</dd></div><div><dt class="lbl">Relationship</dt><dd class="mcard__missing">Not chosen yet</dd></div></dl><p class="qp__why">${icon('info-circle')}<span>Why we ask: routes treat married, registered and durable partners differently.</span></p></div>`, 'g-item--plain')}</div>`;
 
 S.lines = () => `<div class="g-grid">
-  ${item('Disclaimer line', 'the sentence with the Terms of use link: in the footer of every screen, phone included, once', disclaimerLine())}
+  ${item('Disclaimer line', 'the sentence with the Terms of use link: once on every screen, phone included, as the fine line at the end', disclaimerLine())}
   ${item('Disclaimer line', 'in the Save sheet', disclaimerLine({ box: true }))}
-  ${item('Disclaimer under the privacy promise', 'the footer, on Start as on every screen', `<p class="start-card__promise">${icon('lock')}<span>${PRIVACY}</span></p>${disclaimerLine()}`)}
+  ${item('Footer, the minimum on every screen', 'the privacy promise and the two links, Disclaimer and Terms of use', `<div class="g-col" style="justify-items:stretch">${phoneFoot()}${deskFoot()}</div>`, 'g-item--plain')}
   ${item('Route result note', 'kept on every route result', `<div class="f-pinned" role="note">${icon('info-circle')}<p><b>This is not a visa or residence decision.</b> Only the authority decides.</p></div>${disclaimerLine()}`)}
   ${item('Provisional banner', 'until the criteria sort is touched · on phone, on one line', `<div class="banner banner--prov" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional.</b> Set your priorities to make this ranking yours.</span></span><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the criteria sort.">Set priorities</button></div><div class="banner banner--prov banner--line" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional</b> until you set your priorities.</span></span><button type="button" class="f-link" data-toast="Opens the criteria sort.">Set them</button></div>`)}
   ${item('Data-updated notice', 'with what changed', `<div class="banner banner--upd" role="status"><span class="banner__txt">${icon('refresh')}<span><b>Data updated, your results were recalculated.</b> 3 changes.</span></span><button type="button" class="btn btn--ghost btn--sm" data-disclose aria-expanded="false" aria-controls="updList">Show changes</button><div class="banner__changes" id="updList" hidden><span>Austria · Cost · Price level: 102 → 104</span><span>Costa Rica moved from Possible to Matches</span><span>Germany · Internet · Speed tests: now E1, was unknown</span></div></div>`)}
@@ -2657,11 +2670,11 @@ S.report = () => `<div class="g-grid">
 
 S.shell = () => `<div class="g-item"><div class="g-item__label"><b>Plan rail</b><span>current · done · not yet; Plan "coming"; neutral pages mark no step as current; 44px legs</span></div>
   ${frames(`<div class="f-railrow" style="border-radius:8px">${rail('shortlist', { compact: true })}</div><div class="f-railrow" style="border-radius:8px">${rail('route', { compact: true })}</div><div class="f-railrow" style="border-radius:8px">${rail('none', { compact: true })}</div>`, `<div class="g-desk--scroll" tabindex="0" aria-label="Desktop rail demo"><div class="g-col" style="min-width:420px">${rail('shortlist')}${rail('route')}${rail('none')}</div></div>`)}
-  <p class="g-note">The third row is the neutral rail: on reading pages, system states and the empty travel folder no step is current. The not-yet step keeps its dotted circle; "coming" is a 1px dotted tag in the muted ink.</p></div>
-<div class="g-item"><div class="g-item__label"><b>Phone: header, menu, next-action bar, footer</b><span>the compact title with the info button; the one action sticky at the bottom; the disclaimer line in the footer</span></div>
+  <p class="g-note">The third row is the neutral rail: on reading pages, system states and the empty travel folder no step is current. The not-yet step keeps its dotted circle; "coming" carries the same dotted mark in the muted ink.</p></div>
+<div class="g-item"><div class="g-item__label"><b>Phone: header, menu, next-action bar, footer</b><span>the compact title with the info button; the one action sticky at the bottom; the footer with the two links</span></div>
   <div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390</span><div class="g-phone" style="height:560px;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr)"><div class="f-top"><header class="f-head" style="height:68px;padding:8px 8px 0 16px">${WORDMARK}<span class="od-fill"></span><button type="button" class="f-menubtn" data-toast="Opens the menu.">${icon('menu')}<span>Menu</span></button></header><div class="f-railrow">${rail('shortlist', { compact: true })}</div></div><div class="g-pad"><div class="f-titleblock f-titleblock--compact" style="background:var(--paper-card);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow-card)"><div class="f-titlerow"><h3 class="f-title">Where could you go?</h3><button type="button" class="f-iconbtn f-whatbtn" data-disclose aria-expanded="false" aria-controls="whatDemo" aria-label="What happens next">${icon('info-circle')}</button></div><p class="f-whatfold" id="whatDemo" hidden><b>What happens next:</b> add up to three countries to your shortlist.</p></div></div><div>${nextBar('phone', { label: 'Compare your shortlist', hint: 'Step 1 of 3 · 2 countries on your shortlist' })}${phoneFoot()}</div></div></div>
   </div></div>
-<div class="g-item"><div class="g-item__label"><b>Desktop header and footer at full width</b><span>1440 and 1024: wordmark, plan rail, the inline links, More (open), the one action; the footer with the disclaimer line</span></div>${deskHeaderDemo(1440)}${deskHeaderDemo(1024)}<p class="g-note">The same header on every screen: wordmark, plan rail, "How the evidence works", "Privacy", "Import a plan", "More", and the one action with its hint underneath. "Menu" exists on phone only. From 1024 to 1279px the links and the rail tighten; nothing wraps. The footer carries the disclaimer line, the privacy promise and the data version.</p></div>`;
+<div class="g-item"><div class="g-item__label"><b>Desktop header and footer at full width</b><span>1440 and 1024: wordmark, plan rail, the inline links, More (open), the one action; the footer with the two links</span></div>${deskHeaderDemo(1440)}${deskHeaderDemo(1024)}<p class="g-note">The same header on every screen: wordmark, plan rail, "How the evidence works", "Privacy", "Import a plan", "More", and the one action with its hint underneath. "Menu" exists on phone only. From 1024 to 1279px the links and the rail tighten; nothing wraps. The footer carries the Disclaimer and Terms of use links, the privacy promise and the data version; the disclaimer sentence is the fine line at the end of every screen.</p></div>`;
 function deskHeaderDemo(w) {
   return `<div class="g-frame"><span class="g-frame__label">Desktop · ${w} wide · shown at <span data-scale-pct>100%</span></span><div class="scaler" data-scale-w="${w}"><div class="scaler__in" style="width:${w}px"><div class="f-app">${deskHeader({ rail: 'shortlist', next: { label: 'Compare your shortlist', hint: '2 countries on your shortlist' }, ctx: `d${w}` })}
     <div class="f-menu--open">${menuList(`d${w}`)}</div>
@@ -2694,7 +2707,7 @@ S.tickets = () => `<div class="g-item"><div class="g-item__label"><b>Ticket</b><
 const COVER_STATES = [['first', 'first visit: the destination still blank, the departure board on arrival'], ['terms', 'terms not yet accepted: the card is the terms, the only button is Accept'], ['changed', 'terms changed since you accepted'], ['returning', 'returning with a travel folder: the shortlist codes on the pass'], ['firstload', 'data loading for the first time']];
 S.cover = () => COVER_STATES.map(([v, label]) => `<div class="g-item g-boards" id="cover-${v}"><div class="g-item__label"><b>Cover with the papers card</b><span>${label}</span></div>
   <div class="k-boards"><div class="k-board"><div class="board-label"><b>Phone</b><span>390 × 844</span><span class="sample">Sample data</span></div><div class="k-artboard k-phone" data-frame data-cover="${v}" data-ctx="phone">${startShell('phone', { body: startB2(v, 'phone'), menuId: `cover-${v}-phone` })}</div></div>
-    <div class="k-board k-board--desktop"><div class="board-label"><b>Desktop</b><span data-fit-label>1440 × 900</span><span class="sample">Sample data</span></div><div class="k-fit k-artboard" data-fit><div class="k-desk" data-frame data-cover="${v}" data-ctx="desktop">${startShell('desktop', { body: startB2(v, 'desktop'), menuId: `cover-${v}-desktop` })}</div></div></div></div></div>`).join('') + '<p class="g-note">The full photo as the stage, the papers card over its lower part: the headline about the life, the rational line, the boarding pass as the one object (the destination "???" in navy on a dotted underline, the stub code in oxblood), the three journey legs with plain hairline dividers, Plan marked "coming". The card band carries the cover\'s place line. On desktop the card ends 24px above the footer with the journey row fully visible, and the pass is about 15% larger. The footers carry the cover credit, the privacy promise and the disclaimer line, once. Text never sits on the photo.</p>';
+    <div class="k-board k-board--desktop"><div class="board-label"><b>Desktop</b><span data-fit-label>1440 × 900</span><span class="sample">Sample data</span></div><div class="k-fit k-artboard" data-fit><div class="k-desk" data-frame data-cover="${v}" data-ctx="desktop">${startShell('desktop', { body: startB2(v, 'desktop'), menuId: `cover-${v}-desktop` })}</div></div></div></div></div>`).join('') + '<p class="g-note">The full photo as the stage, the papers card over its lower part: the headline about the life, the rational line, the boarding pass as the one object (the destination "???" in navy on a dotted underline, the stub code in oxblood), the three journey legs with plain hairline dividers, Plan marked "coming". The card band carries the cover\'s place line. On desktop the card ends 24px above the footer with the journey row fully visible, and the pass is about 15% larger. The footers carry the cover credit, the privacy promise and the Disclaimer and Terms of use links; the disclaimer sentence sits once on the card. Text never sits on the photo.</p>';
 
 S.profile = () => `<div class="g-grid">
   ${item('Quick profile · 1 of 3', 'where you live now · select menu with search', `<div class="qp"><span class="qp__step">Question 1 of 3</span><div class="prog"><div class="prog__track" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="3" aria-label="Question 1 of 3"><span class="prog__bar" style="width:33%"></span></div></div><p class="qp__q" id="qp1q">Where do you live now?</p><p class="qp__why">${icon('info-circle')}<span>Why we ask: to compare prices from where you are.</span></p>${selectMenu({ ariaLabel: 'Where do you live now?', items: COUNTRY_ITEMS(), value: 'Austria', searchPlaceholder: 'Type a country' })}<div class="qp__foot"><button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. We use no home country.">Skip</button><button type="button" class="btn btn--secondary" data-toast="Next question.">Next</button></div></div>`)}
