@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Emigrant — D2 · Reading pages and system states</title>
-<style data-od-inline-asset="./emigrant-ds.css?v=20261026n">/* The Emigrant — design system stylesheet (D1).
+<style data-od-inline-asset="./emigrant-ds.css?v=20261026z">/* The Emigrant — design system stylesheet (D1).
  * Developed from transit-papers-base: Direction P, Blue + citrus, background pattern A2,
  * photo prints without fastening. Light is the base mode for screens; dark is defined and
  * checked as tokens (.theme-dark or :root[data-theme="dark"]), designed rather than inverted.
@@ -142,6 +142,12 @@ dialog.k-dialog::backdrop { background: var(--k-scrim); }
   /* Lines */
   --line-hair: #c3ccdb;
   --line-edge: #6e7a92;
+  /* Not yet / unknown: one mark, system-wide. 2px round dots, never dashes: the E0 mark, unknown
+     values, "coming", the not-yet step circle, the boarding pass destination, yes/no criterion cards,
+     empty piles and drop zones. --b-notyet on an edge; where the mark takes currentColor, the style alone. */
+  --dots-w: 2px;
+  --dots-style: dotted;
+  --b-notyet: var(--dots-w) var(--dots-style) var(--line-edge);
   /* Background pattern (A2): five waves on a 360 × 160 tile, 1px lines.
      Used for the page, the app screens and the thin bands on the cards. */
   --pattern-line-1: #cdd6e6;
@@ -250,7 +256,7 @@ b, strong { color: var(--ink-navy); }
 .stamp__code { font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0; white-space: nowrap; }
 .stamp__text { display: grid; min-width: 0; }
 .stamp__name { font-family: var(--f-mono); font-stretch: 75%; text-transform: none; letter-spacing: 0; font-weight: 600; }
-.stamp--e0 { border-style: dashed; color: var(--ink-muted); }
+.stamp--e0 { border-style: var(--dots-style); color: var(--ink-muted); }
 .stamp--e2 { border-style: double; border-width: 3px; padding: 3px 9px; }
 .stamp--e3 { border-style: double; border-width: 3px; padding: 3px 10px 3px 6px; border-radius: 16px; }
 .stamp--big { padding: 8px 14px; transform: rotate(var(--rot, -2deg)); }
@@ -260,10 +266,10 @@ b, strong { color: var(--ink-navy); }
 .stamp-row__date { font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); color: var(--ink-text-2); }
 .seal { color: inherit; }
 
-/* Coverage marks: 11 boxes, filled when known, dashed when not */
+/* Coverage marks: 11 boxes, filled when known, dotted when not */
 .cov { display: grid; gap: 4px; }
 .cov__boxes { display: inline-flex; gap: 2px; }
-.cov__boxes i { display: block; width: 8px; height: 12px; border: 1px dashed var(--line-edge); border-radius: 2px; }
+.cov__boxes i { display: block; width: 8px; height: 12px; border: 1px var(--dots-style) var(--line-edge); border-radius: 2px; }
 .cov__boxes i.on { border: 1px solid var(--ink-navy); background: var(--ink-navy); }
 .cov__txt { font-size: var(--fs-sm); color: var(--ink-text-2); }
 
@@ -273,7 +279,7 @@ b, strong { color: var(--ink-navy); }
 .f-answer { font-weight: 700; color: var(--ink-navy); }
 .f-answer > .od-icon { color: var(--ink-text-2); }
 .f-answer--yes > .od-icon { color: var(--ink-covered); } .f-answer--check > .od-icon { color: var(--ink-partly); }
-.f-unknown { display: grid; gap: 4px; padding: 12px 16px; border: 2px dashed var(--line-edge); border-radius: var(--r-card); background: var(--paper-card); }
+.f-unknown { display: grid; gap: 4px; padding: 12px 16px; border: var(--b-notyet); border-radius: var(--r-card); background: var(--paper-card); }
 .f-unknown__title { font-weight: 700; color: var(--ink-navy); }
 .f-unknown__why { color: var(--ink-text-2); font-size: var(--fs-sm); padding-left: 28px; }
 .f-stale { color: var(--ink-partly); font-size: var(--fs-sm); font-weight: 700; }
@@ -300,16 +306,16 @@ b, strong { color: var(--ink-navy); }
 .f-step__n { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 2px solid currentColor; border-radius: 50%; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0; }
 .f-step[data-state="now"] { background: var(--step-now-bg); color: var(--step-now-fg); }
 .f-step[data-state="now"] .f-step__n { background: var(--step-now-n-bg); color: var(--step-now-n-fg); border-color: var(--step-now-n-bg); }
+.f-step[data-state="todo"] { color: var(--ink-text-2); }
 .f-step[data-state="done"] { color: var(--ink-covered); }
 .f-step[data-state="done"] .f-step__n { background: var(--ink-covered); border-color: var(--ink-covered); color: var(--ink-on-covered); }
 .f-step[data-state="later"] { cursor: default; }
-.f-step__soon { position: relative; display: inline-flex; align-items: center; padding: 2px 10px; border: 0; border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
-.f-step__soon::before { content: ""; position: absolute; inset: 0; border-radius: 999px; background: var(--line-edge); pointer-events: none;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2060%2020'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='59'%20height='19'%20rx='9.5'%20pathLength='140'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2060%2020'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='59'%20height='19'%20rx='9.5'%20pathLength='140'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-.k-phone .f-step { padding: 0 8px 0 4px; gap: 6px; }
+.f-step[data-state="later"] .f-step__n { border-style: var(--dots-style); }
+/* "coming": a 1px dotted outline in the muted ink, 8px from its label (the flex gap of the step and the leg title) */
+.f-step__soon { display: inline-flex; align-items: center; padding: 4px 10px; border: 1px var(--dots-style) var(--ink-muted); border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; line-height: 1; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
+.k-phone .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .k-phone .f-step__n { width: 24px; height: 24px; }
-.k-phone .f-step__soon { padding: 2px 8px; }
+.k-phone .f-step__soon { padding: 3px 7px; }
 .k-phone .f-railrow { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 359px) { .f-rail li + li::before { display: none; } .f-step { letter-spacing: 0; } }
 .k-phone .f-step[data-state="later"] { padding-right: 0; }
@@ -510,7 +516,7 @@ b, strong { color: var(--ink-navy); }
 .rc__name { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-h2); line-height: 1; }
 .f-members { display: grid; gap: 8px; }
 .f-member { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 8px 12px; align-items: start; padding: 8px 8px 8px 12px; border: 2px solid currentColor; border-radius: var(--r-card); }
-.f-member--covered { color: var(--ink-covered); } .f-member--partly { color: var(--ink-partly); } .f-member--none { color: var(--ink-muted); border-style: dashed; }
+.f-member--covered { color: var(--ink-covered); } .f-member--partly { color: var(--ink-partly); } .f-member--none { color: var(--ink-muted); border-style: var(--dots-style); }
 .f-member__who { font-stretch: 125%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--fs-xs); line-height: 24px; padding-top: 10px; color: inherit; }
 .f-member__body { display: grid; gap: 0; padding-top: 10px; min-width: 0; }
 .f-member__verdict { font-weight: 700; color: inherit; }
@@ -577,7 +583,7 @@ b, strong { color: var(--ink-navy); }
 .strip a { display: inline-flex; align-items: center; min-height: 44px; color: var(--paper-page); font-size: var(--fs-sm); }
 .strip a[aria-current="page"] { font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--paper-page); }
 .strip a:focus-visible { outline-color: var(--paper-page); }
-.sample { display: inline-block; padding: 0 8px; border: 1px dashed var(--ink-evidence); border-radius: 4px; color: var(--ink-evidence); background: var(--paper-card); font-stretch: 125%; font-weight: 700; text-transform: uppercase; font-size: var(--fs-xs); letter-spacing: 0.04em; transform: rotate(-2deg); }
+.sample { display: inline-block; padding: 0 8px; border: 1px var(--dots-style) var(--ink-evidence); border-radius: 4px; color: var(--ink-evidence); background: var(--paper-card); font-stretch: 125%; font-weight: 700; text-transform: uppercase; font-size: var(--fs-xs); letter-spacing: 0.04em; transform: rotate(-2deg); }
 .strip .sample { border-color: var(--paper-page); color: var(--paper-page); background: transparent; }
 .wrap { max-width: calc(1240px + 2 * var(--m)); margin: 0 auto; padding: 0 var(--m); }
 
@@ -774,7 +780,7 @@ b, strong { color: var(--ink-navy); }
 .field__why { font-size: var(--fs-sm); color: var(--ink-text-2); }
 .field__error { font-size: var(--fs-sm); color: var(--ink-danger); font-weight: 700; }
 .input, .select { width: 100%; min-height: 48px; padding: 10px 14px; border: 1px solid var(--line-edge); border-radius: var(--r-btn); background: var(--paper-card); color: var(--ink-navy); font: inherit; }
-.input:disabled, .select:disabled { background: var(--paper-page); color: var(--ink-muted); border-style: dashed; }
+.input:disabled, .select:disabled { background: var(--paper-page); color: var(--ink-muted); border-style: var(--dots-style); }
 .input[aria-invalid="true"] { border: 2px solid var(--ink-danger); }
 .select { appearance: none; padding-right: 44px; background-image: linear-gradient(45deg, transparent 50%, var(--ink-navy) 50%), linear-gradient(135deg, var(--ink-navy) 50%, transparent 50%); background-position: right 22px center, right 16px center; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
 .num { display: flex; align-items: stretch; }
@@ -814,7 +820,7 @@ b, strong { color: var(--ink-navy); }
 .radio input:checked + .radio__box::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--ink-navy); }
 .check input:focus-visible + .check__box, .radio input:focus-visible + .radio__box, .switch input:focus-visible + .switch__track { outline: 2px solid var(--k-focus); outline-offset: 2px; }
 .check input:disabled ~ *, .radio input:disabled ~ * { opacity: 1; color: var(--ink-muted); }
-.check input:disabled + .check__box { border-style: dashed; }
+.check input:disabled + .check__box { border-style: var(--dots-style); }
 .rgroup { display: grid; gap: 0; margin: 0; padding: 0; border: 0; min-width: 0; }
 .rgroup legend { padding: 0 0 4px; font-weight: 700; color: var(--ink-navy); }
 .switch { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; color: var(--ink-navy); }
@@ -832,7 +838,7 @@ b, strong { color: var(--ink-navy); }
 /* Tags, badges */
 .tagx { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border: 1px solid var(--line-edge); border-radius: 999px; font-size: var(--fs-xs); font-weight: 700; color: var(--ink-navy); background: var(--paper-card); letter-spacing: 0.02em; --od-icon-size: 14px; }
 .tagx--quiet { border-color: var(--line-hair); color: var(--ink-text-2); }
-.tagx--sample { border-style: dashed; color: var(--ink-evidence); border-color: var(--ink-evidence); }
+.tagx--sample { border-style: var(--dots-style); color: var(--ink-evidence); border-color: var(--ink-evidence); }
 .countbadge { display: inline-grid; place-items: center; min-width: 28px; height: 24px; padding: 0 8px; border-radius: 999px; background: var(--ink-navy); color: var(--paper-card); font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 600; }
 
 /* Tabs */
@@ -874,14 +880,14 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .prog__txt { display: flex; justify-content: space-between; gap: 8px; font-size: var(--fs-sm); color: var(--ink-text-2); }
 
 /* File drop zone */
-.drop { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; border: 2px dashed var(--line-edge); border-radius: var(--r-card); background: var(--paper-page); text-align: center; color: var(--ink-text); --od-icon-size: 28px; }
+.drop { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; border: var(--b-notyet); border-radius: var(--r-card); background: var(--paper-page); text-align: center; color: var(--ink-text); --od-icon-size: 28px; }
 .drop.is-over { border-style: solid; border-color: var(--ink-navy); background: var(--tint-focus); }
 .drop.is-chosen { border-style: solid; background: var(--paper-card); }
 .drop.is-error { border-color: var(--ink-danger); }
 .drop__file { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); }
 
 /* Empty state */
-.empty { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; border: 2px dashed var(--line-hair); border-radius: var(--r-card); background: var(--paper-card); text-align: center; --od-icon-size: 32px; }
+.empty { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; border: var(--dots-w) var(--dots-style) var(--line-hair); border-radius: var(--r-card); background: var(--paper-card); text-align: center; --od-icon-size: 32px; }
 .empty > .od-icon { color: var(--ink-text-2); }
 .empty__title { font-weight: 700; color: var(--ink-navy); }
 .empty p { color: var(--ink-text-2); font-size: var(--fs-sm); max-width: 40ch; }
@@ -911,7 +917,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* ── Route check label: a quiet tag, never a band, never approval ── */
 .rtag { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border: 1px solid var(--line-hair); border-radius: 999px; background: var(--paper-card); color: var(--ink-text-2); font-size: var(--fs-xs); font-weight: 600; line-height: 18px; --od-icon-size: 14px; white-space: nowrap; }
 .rtag--available { color: var(--ink-navy); border-color: var(--line-edge); }
-.rtag--partly { border-style: dashed; border-color: var(--line-edge); color: var(--ink-navy); }
+.rtag--partly { border-style: var(--dots-style); border-color: var(--line-edge); color: var(--ink-navy); }
 .rtag--none { color: var(--ink-text-2); }
 
 /* Member result (only on the route result, and on the shortlist after Route) */
@@ -929,13 +935,13 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .eband__bars i { width: 6px; border: 1px solid var(--ink-navy); border-radius: 1px; }
 .eband__bars i:nth-child(1) { height: 6px; } .eband__bars i:nth-child(2) { height: 10px; } .eband__bars i:nth-child(3) { height: 14px; }
 .eband--strong .eband__bars i, .eband--partial .eband__bars i:nth-child(-n+2), .eband--thin .eband__bars i:nth-child(1) { background: var(--ink-navy); }
-.eband--thin .eband__bars i:not(:first-child), .eband--partial .eband__bars i:nth-child(3) { border-style: dashed; }
+.eband--thin .eband__bars i:not(:first-child), .eband--partial .eband__bars i:nth-child(3) { border-style: var(--dots-style); }
 .cov--btn { display: grid; gap: 4px; justify-items: start; align-content: center; padding: 4px 8px; margin-left: -8px; border: 0; border-radius: var(--r-btn); background: transparent; cursor: pointer; text-align: left; }
 @media (hover: hover) { .cov--btn:hover { background: var(--paper-page); } }
 .f-val__u { font-size: var(--fs-sm); color: var(--ink-text-2); }
 
 /* Shown but not counted */
-.nc { display: grid; gap: 4px; justify-items: start; padding: 12px 16px; border: 1px dashed var(--line-edge); border-radius: var(--r-card); background: var(--paper-card); }
+.nc { display: grid; gap: 4px; justify-items: start; padding: 12px 16px; border: var(--b-notyet); border-radius: var(--r-card); background: var(--paper-card); }
 .nc__value { font-size: var(--fs-num); color: var(--ink-text-2); text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--line-edge); }
 .nc__why { font-size: var(--fs-sm); color: var(--ink-text-2); }
 
@@ -954,7 +960,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .crow__route { grid-area: route; }
 .crow__add { grid-area: add; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 56px; padding: 4px; border: 1px solid var(--line-edge); border-radius: var(--r-btn); background: var(--paper-card); color: var(--ink-navy); cursor: pointer; font-size: var(--fs-xs); font-weight: 700; line-height: 1.2; --od-icon-size: 20px; }
 .crow__add[aria-pressed="true"] { background: var(--ink-navy); border-color: var(--ink-navy); color: var(--paper-card); }
-.crow--full .crow__add { border-style: dashed; color: var(--ink-text-2); }
+.crow--full .crow__add { border-style: var(--dots-style); color: var(--ink-text-2); }
 .crow--ruled { background: var(--paper-page); }
 .crow--ruled .crow__name { color: var(--ink-text); }
 @media (hover: hover) { .crow__main:hover .crow__name { text-decoration: underline; } }
@@ -973,8 +979,8 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .crit__name { font-weight: 700; color: var(--ink-navy); line-height: 1.3; }
 .crit__line { font-size: var(--fs-sm); color: var(--ink-text-2); }
 .crit__kind { justify-self: start; }
-.crit--yesno { border-style: dashed; }
-.crit--yesno .crit__kind { border-style: dashed; }
+.crit--yesno { border: var(--b-notyet); padding: 9px 7px 9px 9px; }
+.crit--yesno .crit__kind { border-style: var(--dots-style); }
 .crit__move { min-width: 44px; min-height: 44px; display: grid; place-items: center; border: 0; border-radius: var(--r-btn); background: transparent; color: var(--ink-navy); cursor: pointer; --od-icon-size: 20px; }
 .crit.is-dragging { transform: rotate(-1deg) translateY(-2px); box-shadow: var(--shadow-lift); border-color: var(--ink-navy); }
 .crit.is-focused { outline: 2px solid var(--k-focus); outline-offset: 2px; }
@@ -982,18 +988,18 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .pile { display: grid; gap: 8px; align-content: start; min-height: 120px; padding: 12px; border: 1px solid var(--line-hair); border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); }
 .pile__head { display: flex; align-items: center; gap: 8px; }
 .pile__title { font-weight: 700; color: var(--ink-navy); }
-.pile__empty { padding: 16px 8px; border: 1px dashed var(--line-hair); border-radius: var(--r-btn); color: var(--ink-text-2); font-size: var(--fs-sm); text-align: center; }
-.pile.is-target { border: 2px dashed var(--ink-navy); background: var(--tint-focus); }
+.pile__empty { padding: 15px 7px; border: var(--dots-w) var(--dots-style) var(--line-hair); border-radius: var(--r-btn); color: var(--ink-text-2); font-size: var(--fs-sm); text-align: center; }
+.pile.is-target { border: var(--dots-w) var(--dots-style) var(--ink-navy); padding: 11px; background: var(--tint-focus); }
 .pile--non .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px solid var(--ink-navy); background: var(--ink-navy); vertical-align: 0; }
 .pile--important .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px solid var(--ink-navy); vertical-align: 0; }
-.pile--nice .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px dashed var(--ink-navy); vertical-align: 0; }
+.pile--nice .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px var(--dots-style) var(--ink-navy); vertical-align: 0; }
 .pile--unused { background: var(--paper-page); box-shadow: none; }
-.na-line { display: grid; gap: 4px; padding: 12px 16px; border: 2px dashed var(--line-edge); border-radius: var(--r-card); background: var(--paper-card); }
+.na-line { display: grid; gap: 4px; padding: 12px 16px; border: var(--b-notyet); border-radius: var(--r-card); background: var(--paper-card); }
 .na-line__list { display: flex; flex-wrap: wrap; gap: 6px; }
 
 /* ── Household member card ── */
 .mcard { display: grid; gap: 10px; padding: 16px; border: 1px solid var(--line-hair); border-left: 4px solid var(--ink-navy); border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); }
-.mcard--incomplete { border-left-style: dashed; border-left-color: var(--ink-partly); }
+.mcard--incomplete { border-left-style: var(--dots-style); border-left-color: var(--ink-partly); }
 .mcard__head { display: flex; align-items: center; gap: 8px; }
 .mcard__role { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-h2); line-height: 1; color: var(--ink-navy); }
 .mcard dl { display: grid; gap: 6px; margin: 0; }
@@ -1012,7 +1018,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 16px; border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); color: var(--ink-navy); --od-icon-size: 20px; }
 .banner__txt { display: flex; align-items: flex-start; gap: 8px; flex: 1 1 240px; min-width: 0; }
 .banner__txt > .od-icon { margin-top: 2px; flex: none; }
-.banner--prov { border: 2px dashed var(--ink-evidence); }
+.banner--prov { border: var(--dots-w) var(--dots-style) var(--ink-evidence); }
 .banner--upd { border-left: 4px solid var(--ink-evidence); }
 .banner__changes { flex-basis: 100%; display: grid; gap: 4px; padding-left: 28px; font-size: var(--fs-sm); color: var(--ink-text); }
 .appfoot { display: grid; gap: 4px; padding: 12px 16px; background: var(--paper-card); border-top: 1px solid var(--line-hair); font-size: var(--fs-sm); color: var(--ink-text-2); }
@@ -1110,9 +1116,9 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .g-pad > * { min-width: 0; }
 .cmp-wrap { max-width: 100%; }
 /* Compact plan rail (phone): smaller legs; below 340px the Plan leg wraps to a second line */
-.f-rail--compact .f-step { padding: 0 8px 0 4px; gap: 6px; }
+.f-rail--compact .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .f-rail--compact .f-step__n { width: 24px; height: 24px; }
-.f-rail--compact .f-step__soon { padding: 0 6px; }
+.f-rail--compact .f-step__soon { padding: 3px 7px; }
 .f-rail--compact li + li::before { width: 6px; margin: 0; }
 .f-railrow:has(.f-rail--compact) { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 339px) { .f-rail--compact ol { flex-wrap: wrap; row-gap: 0; } }
@@ -1268,7 +1274,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .smenu__empty { padding: 12px; color: var(--ink-text-2); font-size: var(--fs-sm); }
 
 /* Criterion cards: the one question, asked on the card once it is picked */
-.crit__ask { display: grid; gap: 6px; margin-top: 8px; padding-top: 10px; border-top: 1px dashed var(--line-edge); }
+.crit__ask { display: grid; gap: 6px; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--line-hair); }
 .crit__ask .field__label { font-size: var(--fs-sm); }
 .chk-chips { margin: 0; padding: 0; border: 0; display: grid; gap: 6px; min-width: 0; }
 .chk-chips legend { padding: 0; margin-bottom: 6px; }
@@ -1335,8 +1341,212 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* Password strength: clear space below the field, so the meter never meets the field or its focus ring */
 .pw + .strength { margin-top: 10px; }
 .strength { gap: 6px; }
+/* ══ D1 round 5: the not-yet mark, the app header on every screen, the footers, and Start (B2) ══════ */
+
+/* The desktop header on every screen: wordmark, plan rail, the inline links, "More", and the one action.
+   "Menu" exists on phone only. The hint sits under the button so the row holds on one line at 1440. */
+.f-head--desk { min-height: 88px; height: auto; align-items: center; }
+.f-toplinks { display: flex; align-items: center; gap: 4px; margin-right: 4px; }
+.f-toplinks a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; color: var(--ink-navy); font-weight: 600; font-size: var(--fs-sm); text-decoration: none; border-radius: var(--r-btn); white-space: nowrap; }
+.f-toplinks a:hover, .f-toplinks a:focus-visible { text-decoration: underline; }
+.f-next--head { display: flex; flex-direction: column; align-items: flex-end; gap: 0; }
+.f-next--head .f-next__hint { max-width: 260px; text-align: right; font-size: var(--fs-xs); line-height: 1.3; }
+.f-next--head .f-next__btn { white-space: nowrap; }
+/* From 1024 to 1279px the inline links fold into "More" (they are there in any case), so the row holds on one line */
+@container app (max-width: 1279px) { .f-toplinks { display: none; } }
+
+/* The compact rail on a narrow phone (360): no letter-spacing, tighter legs and tag, so the three steps hold one line */
+@container rail (max-width: 359px) { .f-rail--compact ol { gap: 3px; } .f-rail--compact .f-step { letter-spacing: 0; gap: 4px; } .f-rail--compact .f-step__soon { padding: 3px 6px; } }
+
+/* Footers: the disclaimer line, the sentence with the Terms of use link, on every screen, phone included */
+.appfoot .disc { font-size: var(--fs-xs); line-height: 1.5; }
+.appfoot .disc a { display: inline; min-height: 0; min-width: 0; }
+.appfoot--desk { justify-content: space-between; }
+.appfoot__legal { display: grid; gap: 4px; min-width: 0; flex: 1 1 520px; }
+.appfoot__legal .disc { font-size: var(--fs-sm); }
+.appfoot__promise { color: var(--ink-text-2); }
+.appfoot__meta { display: flex; align-items: center; gap: 16px; flex: none; white-space: nowrap; }
+.k-phone .appfoot { padding: 8px 16px 12px; gap: 2px; }
+.k-phone .appfoot .disc > .od-icon { margin-top: 2px; }
+.k-phone .appfoot .st-quiet__line { font-size: var(--fs-xs); }
+
+/* Phone: compact page header on every screen. Condensed title, "What happens next" as a small info button beside it */
+.f-titleblock--compact { gap: 8px; }
+.k-phone .f-titleblock--compact { padding: 12px 16px; }
+.f-titleblock--compact .f-title { font-size: var(--fs-h2); }
+.f-titlerow { display: flex; align-items: center; gap: 8px; }
+.f-titlerow .f-title { flex: 1 1 auto; min-width: 0; }
+.f-whatbtn { flex: none; color: var(--ink-evidence); }
+.f-whatbtn[aria-expanded="true"] { background: var(--tint-focus); }
+.f-whatfold { padding: 4px 0 0; font-size: var(--fs-sm); color: var(--ink-text); }
+/* Phone: a banner on one line */
+.banner--line { flex-wrap: nowrap; padding: 8px 16px; }
+.banner--line .banner__txt { flex: 1 1 0; }
+.banner--line .f-link { flex: none; min-height: 44px; }
+/* Phone: empty piles are small drop targets side by side, so the pile with the cards reaches the first screen */
+.k-phone .pile { min-height: 0; }
+.k-phone .d2-piles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.k-phone .d2-piles .pile:has(.d2-critlist) { grid-column: 1 / -1; }
+.k-phone .d2-piles .pile:not(:has(.d2-critlist)) { padding: 8px; gap: 4px; align-content: start; }
+.k-phone .d2-piles .pile:not(:has(.d2-critlist)) .pile__head { flex-wrap: wrap; gap: 4px 6px; }
+.k-phone .d2-piles .pile:not(:has(.d2-critlist)) .pile__title { font-size: var(--fs-sm); line-height: 1.2; }
+.k-phone .d2-piles .pile:not(:has(.d2-critlist)) .pile__empty { padding: 5px 3px; font-size: var(--fs-xs); line-height: 1.3; }
+
+/* ── Start (B2): the full photo as the stage, the papers card over its lower part, the boarding pass as the one object ── */
+.k-phone .st-screen--start { padding: 0 0 24px; gap: 0; }
+.k-desk .st-desk--start { height: 100%; box-sizing: border-box; padding: 0 0 24px; max-width: none; }
+.k-desk .st-screen--start { gap: 0; height: 100%; grid-template-rows: minmax(0, 1fr); }
+.k-phone:has(.st-screen--start) .od-scroll, .k-desk:has(.st-screen--start) .od-scroll { scrollbar-width: none; }
+.st-stage { display: grid; grid-template-columns: minmax(0, 1fr); }
+/* Desktop: the stage fills the scroll area; the card sits at its bottom, so its edge is 24px above the footer whatever its height */
+.k-desk .st-stage { position: relative; height: 100%; grid-template-rows: minmax(0, 1fr) auto; }
+.d2-full .f-desk__main { grid-column: 1 / -1; }
+.st-cover { margin: 0; overflow: hidden; border-radius: var(--r-card); background: var(--photo-fill); }
+.st-cover__img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.k-desk .st-cover__img { object-position: var(--obj-desk, 50% 40%); }
+.k-phone .st-cover__img { object-position: var(--obj-phone, 50% 40%); }
+.st-cover--stage { grid-column: 1; grid-row: 1; width: 100%; border-radius: 0; }
+.k-phone .st-cover--stage { height: 420px; }
+.k-desk .st-cover--stage { position: absolute; inset: 0; height: auto; min-height: 0; }
+@keyframes st-drift { from { transform: scale(1) translateY(0); } to { transform: scale(1.06) translateY(-2%); } }
+.st-cover--drift .st-cover__img { transform-origin: 50% 40%; animation: st-drift 20s ease-in-out infinite alternate; }
+@media (prefers-reduced-motion: reduce) { .st-cover--drift .st-cover__img { animation: none; } }
+/* The card: on desktop its bottom edge sits 24px above the footer with the journey row fully visible */
+.st-card--b2 { grid-column: 1; grid-row: 2; z-index: 2; }
+.k-phone .st-card--b2 { margin: -211px 16px 0; }
+.k-desk .st-card--b2 { width: 1000px; margin: 0 auto; align-self: end; }
+.st-card--b2 .st-band { border-bottom: 1px solid var(--line-hair); }
+.k-phone .st-card--b2 .st-band { border-bottom: 0; border-top: 1px solid var(--line-hair); }
+.st-grid--b2 { display: grid; gap: 16px; }
+.k-phone .st-card--b2 .st-grid--b2 { padding: 32px 16px 20px; gap: 8px; }
+.k-desk .st-card--b2 .st-grid--b2 { grid-template-columns: minmax(0, 1fr) 484px; grid-template-areas: "lead pass" "legs legs" "proof proof"; column-gap: 40px; row-gap: 20px; padding: 32px 48px 24px; align-items: start; }
+.st-col { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.k-desk .st-col--lead { grid-area: lead; gap: 12px; }
+.k-desk .st-col--pass { grid-area: pass; gap: 12px; }
+.k-desk .st-col--legs { grid-area: legs; }
+.k-desk .st-col--proof { grid-area: proof; }
+.k-phone .st-col--lead { gap: 6px; }
+.k-phone .st-col--pass { gap: 16px; }
+.st-headline { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; font-size: var(--fs-h1); }
+.k-desk .st-grid--b2 .st-headline { font-size: 3.5rem; }
+.k-phone .st-grid--b2 .st-headline { font-size: clamp(26px, 8.2cqw, 32px); }
+.st-rational { font-size: var(--fs-body); line-height: 1.5; color: var(--ink-text); max-width: 44ch; }
+.k-phone .st-rational { font-size: var(--fs-sm); }
+.st-acts { display: grid; gap: 4px; justify-items: start; }
+.st-main { width: 100%; }
+.k-desk .st-grid--b2 .st-acts { gap: 8px; justify-items: stretch; }
+.k-desk .st-grid--b2 .st-main { width: 100%; min-width: 0; white-space: nowrap; }
+.k-desk .st-grid--b2 .st-import { justify-self: start; white-space: nowrap; }
+.st-import { color: var(--ink-text-2); font-weight: 600; font-size: var(--fs-sm); }
+.st-quiet { display: grid; gap: 4px; }
+.st-quiet__line { display: flex; align-items: flex-start; gap: 8px; font-size: var(--fs-xs); line-height: 1.5; color: var(--ink-text-2); --od-icon-size: 16px; }
+.st-quiet__line > .od-icon { margin-top: 1px; flex: none; }
+.st-quiet__line a { color: var(--ink-evidence); position: relative; }
+.st-quiet__line a::after { content: ""; position: absolute; left: 0; right: 0; top: -15px; bottom: -15px; }
+.st-proof { margin: 0; font-family: var(--f-mono); font-stretch: 75%; font-weight: 500; font-size: var(--fs-sm); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-text-2); }
+.k-phone .st-proof { font-size: var(--fs-xs); }
+.st-last { margin: 0; font-size: var(--fs-sm); color: var(--ink-navy); font-weight: 700; }
+/* The journey legs: clean typography; a column of three on phone, a row of three on desktop; dividers are plain hairlines */
+.st-legs { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: 0; background: transparent; }
+.st-leg { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 8px 0; align-items: start; }
+.st-leg__n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; color: var(--ink-navy); }
+.st-leg--soon .st-leg__n { border: var(--b-notyet); color: var(--ink-text-2); }
+.st-leg__body { display: grid; gap: 2px; min-width: 0; }
+.st-leg__title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-lg); line-height: 1; color: var(--ink-navy); }
+.st-leg--soon .st-leg__title { color: var(--ink-text-2); }
+.st-leg__text { font-size: var(--fs-xs); color: var(--ink-text); }
+@keyframes st-leg-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.st-legs--anim .st-leg { animation: st-leg-in 280ms var(--k-ease-out, ease-out) both; animation-delay: calc(var(--i) * 160ms + 120ms); }
+@media (prefers-reduced-motion: reduce) { .st-legs--anim .st-leg { animation: none; } }
+.k-phone .st-col--legs { border-top: 0; padding-top: 0; }
+.k-phone .st-leg { padding: 6px 0; }
+.k-phone .st-card--b2 .st-leg + .st-leg { padding-top: 13px; border-top: 1px solid var(--line-hair); margin-top: 6px; }
+.k-desk .st-card--b2 .st-legs { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line-hair); padding-top: 16px; counter-reset: leg; }
+.k-desk .st-card--b2 .st-leg { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "text"; gap: 6px 10px; padding: 0 20px 0 0; }
+.k-desk .st-card--b2 .st-leg + .st-leg { border-left: 1px solid var(--line-hair); padding-left: 20px; }
+.k-desk .st-card--b2 .st-leg__n { display: none; }
+.k-desk .st-card--b2 .st-leg__body { display: contents; }
+.k-desk .st-card--b2 .st-leg__title { grid-area: head; display: flex; align-items: center; gap: 8px; font-size: var(--fs-lg); line-height: 24px; }
+.k-desk .st-card--b2 .st-leg__title::before { content: counter(leg); counter-increment: leg; display: inline-grid; place-items: center; width: 24px; height: 24px; padding-bottom: 2px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; font-size: var(--fs-xs); line-height: 1; color: var(--ink-navy); }
+.k-desk .st-card--b2 .st-leg--soon .st-leg__title::before { border: var(--b-notyet); color: var(--ink-text-2); }
+.k-desk .st-card--b2 .st-leg__text { grid-area: text; font-size: var(--fs-xs); line-height: 1.5; }
+/* The boarding pass at ticket size: tinted paper, half-circle notches with the outline following the curve, a hole
+   perforation, its shadow following the outline. On desktop the pass is about 15% larger than on phone-size tickets. */
+.st-pass-wrap { filter: drop-shadow(0 1px 1px rgba(20, 33, 61, 0.16)) drop-shadow(0 6px 12px rgba(20, 33, 61, 0.16)); }
+.st-pass { --notch: 12px; --stub: 112px; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) var(--stub); background: var(--line-edge); border-radius: var(--r-card);
+  -webkit-mask: radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch));
+  -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
+.st-pass::before { content: ""; position: absolute; inset: 1px; background: var(--tint-focus); border-radius: calc(var(--r-card) - 1px); z-index: 0;
+  -webkit-mask: radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) -1px, #0000 var(--notch), #000 calc(var(--notch) + 1px)), radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) calc(100% + 1px), #0000 var(--notch), #000 calc(var(--notch) + 1px));
+  -webkit-mask-composite: source-in; mask: radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) -1px, #0000 var(--notch), #000 calc(var(--notch) + 1px)), radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) calc(100% + 1px), #0000 var(--notch), #000 calc(var(--notch) + 1px)); mask-composite: intersect; }
+.st-pass > * { position: relative; background: transparent; border: 0; z-index: 1; }
+.st-pass__main { display: grid; gap: 6px; padding: 10px 16px 12px 16px; }
+.st-pass__kicker { font-stretch: 112.5%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--fs-xs); color: var(--ink-label); }
+.st-pass__rows { display: grid; gap: 3px; margin: 0; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); }
+.st-pass__rows > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); column-gap: 12px; align-items: baseline; }
+.st-pass__rows dt { text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-text-2); font-size: var(--fs-xs); }
+.st-pass__rows dd { margin: 0; color: var(--ink-navy); font-weight: 600; white-space: nowrap; }
+/* The destination: no box. "???" in navy on a dotted underline, the not-yet mark */
+.st-pass__blank { display: inline-grid; place-items: center; min-width: 72px; padding: 0 6px 2px; border: 0; border-bottom: var(--b-notyet); color: var(--ink-navy); font-weight: 600; letter-spacing: 0; text-align: center; }
+.st-pass__fill { color: var(--ink-navy); font-weight: 600; }
+.st-pass__stub { display: grid; align-content: space-between; justify-items: center; text-align: center; padding: 10px 12px 12px 14px; overflow: hidden; }
+.st-pass__code { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; font-size: 2.75rem; line-height: 1; color: var(--ink-action-text); letter-spacing: 0; white-space: nowrap; }
+.st-pass__perf { position: absolute; top: calc(var(--notch) + 8px); bottom: calc(var(--notch) + 8px); left: calc(100% - var(--stub) - 4px); width: 8px; background-clip: border-box;
+  background-image: radial-gradient(circle 2px at 4px 4.3px, var(--paper-card) 2px, #0000 2.6px), radial-gradient(circle 2.1px at 4px 3.7px, rgba(20, 33, 61, 0.28) 2.1px, #0000 2.8px);
+  background-size: 8px 8px; background-repeat: round; background-position: 0 0; }
+.k-phone .st-pass { --stub: 88px; }
+.k-phone .st-pass__code { font-size: 2rem; }
+.k-phone .st-pass__main { padding: 8px 14px 10px 12px; }
+.k-phone .st-pass__rows { gap: 2px; font-size: var(--fs-xs); }
+.k-phone .st-pass__rows > div { grid-template-columns: 4.75rem minmax(0, 1fr); column-gap: 8px; }
+.k-phone .st-pass__blank { min-width: 60px; }
+/* Desktop: the pass about 15% larger (type, spacing, stub, notches), on whole pixels */
+.k-desk .st-pass { --notch: 14px; --stub: 129px; }
+.k-desk .st-pass__main { gap: 7px; padding: 12px 18px 14px 18px; }
+.k-desk .st-pass__kicker { font-size: var(--fs-sm); }
+.k-desk .st-pass__rows { gap: 4px; font-size: var(--fs-body); }
+.k-desk .st-pass__rows > div { grid-template-columns: 7.5rem minmax(0, 1fr); column-gap: 14px; }
+.k-desk .st-pass__rows dt { font-size: var(--fs-sm); }
+.k-desk .st-pass__blank { min-width: 83px; }
+.k-desk .st-pass__stub { padding: 12px 14px 14px 16px; }
+.k-desk .st-pass__code { font-size: 3.1875rem; }
+.k-desk .st-pass__perf { top: calc(var(--notch) + 9px); bottom: calc(var(--notch) + 9px); }
+/* The split-flap: each change of the destination code is a short flip */
+.st-flap { display: inline-block; transform-origin: 50% 50%; backface-visibility: hidden; }
+.st-pass__blank.st-flap { display: inline-grid; }
+.st-flap.is-flip { animation: st-flip 120ms ease-out; }
+@keyframes st-flip { from { transform: rotateX(90deg); opacity: 0.4; } to { transform: rotateX(0); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .st-flap.is-flip { animation: none; } }
+/* The Start footers carry the cover credit */
+.st-footcredit { font-size: var(--fs-sm); color: var(--ink-text-2); }
+.k-desk .st-footcredit { white-space: nowrap; }
+.st-phonefoot { margin-top: 0; }
+.k-phone .st-phonefoot { padding: 16px; gap: 8px; }
+/* Terms and first load take the card over: one column, the one button */
+.d2-termsgrid { display: grid; gap: 16px; padding: 32px 40px 36px; }
+.k-phone .d2-termsgrid { padding: 24px 16px 24px; gap: 12px; }
+.st-col--terms, .st-col--load { display: grid; gap: 12px; justify-items: start; min-width: 0; }
+.d2-termsgrid .st-acts { justify-items: stretch; width: 100%; }
+.d2-termsgrid .st-main { width: 100%; }
+.k-desk .d2-termsgrid .st-main { width: auto; min-width: 320px; }
+.k-desk .st-card--b2 .d2-termsgrid .st-headline { font-size: var(--fs-h1); }
+.k-phone .st-card--b2 .d2-termsgrid .st-headline { font-size: var(--fs-h2); }
+/* The band cap: the one line that says why a Strong count shows as Partial */
+.eband--capped { flex-wrap: wrap; white-space: normal; }
+.eband__cap { flex-basis: 100%; display: block; font-size: var(--fs-xs); color: var(--ink-text-2); }
+/* Country page on phone: the compact card alone, the crop as its photo, the title row with the info button, the
+   fields in two columns, the photo credit as a field */
+.k-phone .cp--compact { margin: 0; }
+.cp--compact .cp__title .f-title { font-size: var(--fs-h2); }
+.cp--compact .cp__answer .f-whatfold { padding-top: 8px; }
+.k-phone .cp--compact .cp__body { padding: 12px 16px 14px; gap: 8px 12px; }
+.k-phone .cp--compact .cp__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+.k-phone .cp--compact .cp__fields > div { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
+.k-phone .cp--compact .cp__fields > div.cp__credit { grid-column: 1 / -1; }
+/* The D1 gallery shows the Start artboards the way D2 does: the desktop one scaled to fit its column */
+.g-boards .k-boards { margin-top: 4px; }
 </style>
-<style data-od-inline-asset="./d2-screens.css?v=20261026v">/* The Emigrant — D2 screen composition layer.
+<style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
  * sizes or component looks: every value references a design-system token. Whole pixels, 1px or 2px borders. */
 
@@ -1346,7 +1556,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone { container: phone / inline-size; }
 
 /* The prototype-only state switcher, clearly marked */
-.d2-states { display: grid; gap: 8px; margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--ink-evidence); }
+.d2-states { display: grid; gap: 8px; margin-top: 8px; padding-top: 12px; border-top: 1px var(--dots-style) var(--ink-evidence); }
 .d2-states__tag { display: inline-flex; align-items: center; gap: 6px; justify-self: start; color: var(--ink-evidence); font-stretch: 112.5%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--fs-xs); --od-icon-size: 16px; }
 .d2-states__row { display: flex; flex-wrap: wrap; gap: 8px; }
 .d2-state { min-height: 44px; padding: 0 14px; border: 1px solid var(--ink-evidence); border-radius: 999px; background: var(--paper-card); color: var(--ink-evidence); font-weight: 600; font-size: var(--fs-sm); cursor: pointer; }
@@ -1359,7 +1569,6 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .d2-offline { display: flex; align-items: flex-start; gap: 8px; padding: 8px 16px; background: var(--paper-card); border-bottom: 2px solid var(--ink-navy); color: var(--ink-navy); font-size: var(--fs-sm); --od-icon-size: 20px; }
 .d2-offline > .od-icon { margin-top: 2px; flex: none; }
 .k-desk .d2-offline { padding: 8px 40px; }
-.d2-full .f-desk__main { grid-column: 1 / -1; }
 .f-screen > .alert, .f-screen > .d2-tickets > .alert { background: var(--paper-card); box-shadow: var(--shadow-card); }
 .f-head--desk .f-next--head .f-next__hint { max-width: 260px; }
 
@@ -1431,9 +1640,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-desk .cp__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .k-phone .cp__fields { grid-template-columns: minmax(0, 1fr); }
 
-/* Results on phone: compact header, one-line banner, folded filters */
-.k-phone .d2-titleblock--compact { gap: 8px; }
-.k-phone .d2-titleblock--compact .f-title { font-size: var(--fs-h2); }
+/* Phone: folded filters (the compact title block and the one-line banner are D1 shell rules now) */
 .d2-whatfold { display: grid; }
 .d2-whatfold__btn { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; color: var(--ink-navy); font-weight: 700; font-size: var(--fs-sm); text-align: left; --od-icon-size: 20px; }
 .d2-whatfold__btn .k-chev { margin-left: auto; }
@@ -1452,302 +1659,16 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 @media (max-width: 430px) { .wrap { padding: 0 8px; } .k-board { width: 100%; } .k-phone { max-width: 100%; } }
 
 /* Results on phone: the provisional note lives in the counts card, so the first rows reach the first screen */
-.k-phone .d2-titleblock--compact { padding: 12px 16px; }
 .d2-status__link { color: var(--ink-evidence); font-weight: 700; position: relative; }
 .d2-status__link::after { content: ""; position: absolute; left: 0; right: 0; top: -15px; bottom: -15px; }
 
-/* Results on phone, tighter: the title row carries a small "what happens next" button; the bottom bar is lighter */
-.d2-titlerow { display: flex; align-items: center; gap: 8px; }
-.d2-titlerow .f-title { flex: 1 1 auto; min-width: 0; }
-.d2-whatbtn { flex: none; color: var(--ink-evidence); }
-.d2-whatbtn[aria-expanded="true"] { background: var(--tint-focus); }
-.k-phone .d2-titleblock--compact .d2-whatfold__body { padding: 4px 0 0; }
+/* Results on phone, tighter: the bottom bar is lighter */
 .k-phone .d2-status--line .f-status__note { font-size: var(--fs-xs); }
 .k-phone .d2-bottom .appfoot { padding: 6px 16px 10px; }
-.k-phone .d2-bottom .disc { font-size: var(--fs-xs); line-height: 1.5; }
-.k-phone.cover-phone .opening { grid-template-rows: auto 176px auto; }
 /* At a 390px window the phone artboard is exactly 390px wide: no page margin, no side border */
 @media (max-width: 430px) { .wrap { padding: 0; } .k-artboard.k-phone { border-left: 0; border-right: 0; border-radius: 0; } .board-label { margin-left: 8px; } }
-/* Phone bottom: the disclaimer runs full width under its icon, three lines at most */
-.k-phone .d2-bottom .disc { display: block; }
-.k-phone .d2-bottom .disc > .od-icon { float: left; margin: 2px 6px 0 0; }
 .k-phone .f-screen { gap: 12px; padding-top: 12px; }
 .k-phone .f-band__btn { min-height: 56px; padding: 10px 0 8px; }
-
-/* ── Start (B2) inside the app artboards ───────────────────────────────── */
-/* the full photo as the stage, the papers card over its lower part, the boarding pass as the one object */
-.k-phone .st-screen--start { padding: 0 0 24px; gap: 0; }
-.k-desk .st-desk--start { padding: 0 0 40px; max-width: none; }
-.k-desk .st-screen--start { gap: 0; }
-.k-phone:has(.st-screen--start) .od-scroll, .k-desk:has(.st-screen--start) .od-scroll { scrollbar-width: none; }
-.st-stage { display: grid; grid-template-columns: minmax(0, 1fr); }
-.st-cover { margin: 0; overflow: hidden; border-radius: var(--r-card); background: var(--photo-fill); }
-.st-cover__img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
-.k-desk .st-cover__img { object-position: var(--obj-desk, 50% 40%); }
-.k-phone .st-cover__img { object-position: var(--obj-phone, 50% 40%); }
-.st-cover--stage { grid-column: 1; grid-row: 1; width: 100%; border-radius: 0; }
-.k-phone .st-cover--stage { height: 420px; }
-.k-desk .st-cover--stage { height: 612px; }
-@keyframes st-drift { from { transform: scale(1) translateY(0); } to { transform: scale(1.06) translateY(-2%); } }
-.st-cover--drift .st-cover__img { transform-origin: 50% 40%; animation: st-drift 20s ease-in-out infinite alternate; }
-@media (prefers-reduced-motion: reduce) { .st-cover--drift .st-cover__img { animation: none; } }
-.st-card--b2 { grid-column: 1; grid-row: 2; z-index: 2; }
-.k-phone .st-card--b2 { margin: -94px 16px 0; }
-.k-desk .st-card--b2 { width: 960px; margin: -200px auto 0; }
-.st-card--b2 .st-band { border-bottom: 1px solid var(--line-hair); }
-.k-phone .st-card--b2 .st-band { border-bottom: 0; border-top: 1px solid var(--line-hair); }
-.st-grid--b2 { display: grid; gap: 16px; }
-.k-phone .st-grid--b2 { padding: 32px 16px 20px; gap: 8px; }
-.k-desk .st-grid--b2 { grid-template-columns: minmax(0, 1fr) 420px; grid-template-areas: "lead pass" "legs legs" "proof proof"; column-gap: 40px; row-gap: 8px; padding: 48px 40px 20px; align-items: start; }
-.st-col { display: grid; gap: 16px; align-content: start; min-width: 0; }
-.k-desk .st-col--lead { grid-area: lead; gap: 10px; }
-.k-desk .st-col--pass { grid-area: pass; gap: 8px; }
-.k-desk .st-col--legs { grid-area: legs; }
-.k-desk .st-col--proof { grid-area: proof; }
-.k-desk .st-col--quiet { grid-area: quiet; }
-.k-phone .st-col--lead { gap: 6px; }
-.k-phone .st-col--pass { gap: 6px; }
-.st-headline { font-family: "Archivo", "Arial Narrow", sans-serif; font-stretch: 62%; font-weight: 800; font-size: var(--fs-h1); }
-.k-desk .st-headline { font-size: 2.75rem; }
-.k-phone .st-grid--b2 .st-headline { font-size: clamp(26px, 8.2cqw, 32px); }
-.st-rational { font-size: var(--fs-body); line-height: 1.5; color: var(--ink-text); max-width: 44ch; }
-.k-phone .st-rational { font-size: var(--fs-sm); }
-.st-acts { display: grid; gap: 4px; justify-items: start; }
-.st-main { width: 100%; }
-.k-desk .st-grid--b2 .st-acts { display: flex; align-items: center; gap: 16px; }
-.k-desk .st-grid--b2 .st-main { flex: 1 1 auto; width: auto; white-space: nowrap; }
-.k-desk .st-grid--b2 .st-import { flex: none; white-space: nowrap; }
-.st-import { color: var(--ink-text-2); font-weight: 600; font-size: var(--fs-sm); }
-.st-quiet { display: grid; gap: 4px; }
-.st-quiet__line { display: flex; align-items: flex-start; gap: 8px; font-size: var(--fs-xs); line-height: 1.5; color: var(--ink-text-2); --od-icon-size: 16px; }
-.st-quiet__line > .od-icon { margin-top: 1px; flex: none; }
-.st-quiet__line a { color: var(--ink-evidence); position: relative; }
-.st-quiet__line a::after { content: ""; position: absolute; left: 0; right: 0; top: -15px; bottom: -15px; }
-.st-proof { margin: 0; font-family: var(--f-mono); font-stretch: 75%; font-weight: 500; font-size: var(--fs-sm); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-text-2); }
-.k-phone .st-proof { font-size: var(--fs-xs); }
-.st-last { margin: 0; font-size: var(--fs-sm); color: var(--ink-navy); font-weight: 700; }
-/* the journey legs: clean typography, one row of three on desktop, arriving one after another */
-.st-legs { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: 0; background: transparent; }
-.st-leg { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 8px 0; align-items: start; }
-.st-leg__n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; color: var(--ink-navy); }
-.st-leg--soon .st-leg__n { border-style: dashed; color: var(--ink-text-2); border-color: var(--line-edge); }
-.st-leg__body { display: grid; gap: 2px; min-width: 0; }
-.st-leg__title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-lg); line-height: 1; color: var(--ink-navy); }
-.st-leg--soon .st-leg__title { color: var(--ink-text-2); }
-.st-leg__text { font-size: var(--fs-xs); color: var(--ink-text); }
-@keyframes st-leg-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.st-legs--anim .st-leg { animation: st-leg-in 280ms var(--k-ease-out, ease-out) both; animation-delay: calc(var(--i) * 160ms + 120ms); }
-@media (prefers-reduced-motion: reduce) { .st-legs--anim .st-leg { animation: none; } }
-.k-phone .st-col--legs { border-top: 0; padding-top: 0; }
-.k-phone .st-leg { padding: 6px 0; }
-.k-desk .st-card--b2 .st-legs { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line-hair); padding-top: 10px; counter-reset: leg; }
-.k-desk .st-card--b2 .st-leg { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "text"; gap: 2px; padding: 0 20px 0 0; }
-.k-desk .st-card--b2 .st-leg + .st-leg { border-left: 2px dashed var(--line-edge); padding-left: 20px; }
-.k-desk .st-card--b2 .st-leg__n { display: none; }
-.k-desk .st-card--b2 .st-leg__body { display: contents; }
-.k-desk .st-card--b2 .st-leg__title { grid-area: head; display: flex; align-items: center; gap: 8px; font-size: var(--fs-lg); line-height: 24px; }
-.k-desk .st-card--b2 .st-leg__title::before { content: counter(leg); counter-increment: leg; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--ink-navy); font-family: var(--f-mono); font-stretch: 75%; font-weight: 600; font-size: var(--fs-xs); color: var(--ink-navy); }
-.k-desk .st-card--b2 .st-leg--soon .st-leg__title::before { border-style: dashed; border-color: var(--line-edge); color: var(--ink-text-2); }
-.k-desk .st-card--b2 .st-leg__text { grid-area: text; font-size: var(--fs-xs); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-/* the boarding pass at ticket size: tinted paper, half-circle notches with the outline following the
-   curve, a hole perforation, its shadow following the outline */
-.st-pass-wrap { filter: drop-shadow(0 1px 1px rgba(20, 33, 61, 0.16)) drop-shadow(0 6px 12px rgba(20, 33, 61, 0.16)); }
-.st-pass { --notch: 12px; --stub: 112px; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) var(--stub); background: var(--line-edge); border-radius: var(--r-card);
-  -webkit-mask: radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch));
-  -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
-.st-pass::before { content: ""; position: absolute; inset: 1px; background: var(--tint-focus); border-radius: calc(var(--r-card) - 1px);
-  -webkit-mask: radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) -1px, #0000 var(--notch), #000 calc(var(--notch) + 1px)), radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) calc(100% + 1px), #0000 var(--notch), #000 calc(var(--notch) + 1px));
-  -webkit-mask-composite: source-in; mask: radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) -1px, #0000 var(--notch), #000 calc(var(--notch) + 1px)), radial-gradient(circle calc(var(--notch) + 1px) at calc(100% - var(--stub) + 1px) calc(100% + 1px), #0000 var(--notch), #000 calc(var(--notch) + 1px)); mask-composite: intersect; }
-.st-pass > * { position: relative; background: transparent; border: 0; z-index: 1; }
-.st-pass__main { display: grid; gap: 6px; padding: 10px 16px 12px 16px; }
-.st-pass__kicker { font-stretch: 112.5%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--fs-xs); color: var(--ink-label); }
-.st-pass__rows { display: grid; gap: 3px; margin: 0; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); }
-.st-pass__rows > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); column-gap: 12px; align-items: baseline; }
-.st-pass__rows dt { text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-text-2); font-size: var(--fs-xs); }
-.st-pass__rows dd { margin: 0; color: var(--ink-navy); font-weight: 600; white-space: nowrap; }
-.st-pass__blank { display: inline-grid; place-items: center; min-width: 72px; min-height: 24px; padding: 0 10px; border: 2px dashed var(--ink-evidence); border-radius: var(--r-sm); color: var(--ink-evidence); font-weight: 600; letter-spacing: 0.1em; }
-.st-pass__fill { color: var(--ink-navy); font-weight: 600; }
-.st-pass__stub { display: grid; align-content: space-between; justify-items: start; padding: 10px 12px 12px 14px; overflow: hidden; }
-.st-pass__code { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; font-size: 2.75rem; line-height: 1; color: var(--ink-action-text); letter-spacing: 0; white-space: nowrap; }
-.st-pass__perf { position: absolute; top: calc(var(--notch) + 8px); bottom: calc(var(--notch) + 8px); left: calc(100% - var(--stub) - 4px); width: 8px; background-clip: border-box;
-  background-image: radial-gradient(circle 2px at 4px 4.3px, var(--paper-card) 2px, #0000 2.6px), radial-gradient(circle 2.1px at 4px 3.7px, rgba(20, 33, 61, 0.28) 2.1px, #0000 2.8px);
-  background-size: 8px 8px; background-repeat: round; background-position: 0 0; }
-.k-phone .st-pass { --stub: 88px; }
-.k-phone .st-pass__code { font-size: 2rem; }
-.k-phone .st-pass__main { padding: 8px 14px 10px 12px; }
-.k-phone .st-pass__rows { gap: 2px; font-size: var(--fs-xs); }
-.k-phone .st-pass__rows > div { grid-template-columns: 5.5rem minmax(0, 1fr); column-gap: 8px; }
-.k-phone .st-pass__blank { min-height: 24px; min-width: 60px; }
-/* the split-flap: each change of the destination code is a short flip */
-.st-flap { display: inline-block; transform-origin: 50% 50%; backface-visibility: hidden; }
-.st-flap.is-flip { animation: st-flip 120ms ease-out; }
-@keyframes st-flip { from { transform: rotateX(90deg); opacity: 0.4; } to { transform: rotateX(0); opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .st-flap.is-flip { animation: none; } }
-/* the Start desktop header: main links inline, the rest under "More"; the phone footer carries the credit */
-.st-toplinks { display: flex; align-items: center; gap: 4px; margin-right: 8px; }
-.st-toplinks a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; color: var(--ink-navy); font-weight: 600; font-size: var(--fs-sm); text-decoration: none; border-radius: var(--r-btn); }
-.st-toplinks a:hover, .st-toplinks a:focus-visible { text-decoration: underline; }
-.st-footcredit { font-size: var(--fs-sm); color: var(--ink-text-2); }
-.st-phonefoot { margin-top: 0; }
-/* Terms and first load take the card over: one column, the one button */
-.d2-termsgrid { display: grid; gap: 16px; padding: 32px 40px 36px; }
-.k-phone .d2-termsgrid { padding: 24px 16px 24px; gap: 12px; }
-.st-col--terms, .st-col--load { display: grid; gap: 12px; justify-items: start; min-width: 0; }
-.d2-termsgrid .st-acts { justify-items: stretch; width: 100%; }
-.d2-termsgrid .st-main { width: 100%; }
-.k-desk .d2-termsgrid .st-main { width: auto; min-width: 320px; }
-.k-desk .st-card--b2 .d2-termsgrid .st-headline { font-size: var(--fs-h1); }
-.k-phone .st-card--b2 .d2-termsgrid .st-headline { font-size: var(--fs-h2); }
-
-/* ── B2 Start, round 5: full-width action, quiet import below, air between the blocks ──
-   Desktop only: the button spans its column, the import link drops under it as a quiet link,
-   the areas get room to breathe so the card reads in clear steps instead of one dense block. */
-.k-desk .st-grid--b2 .st-acts { display: grid; justify-items: stretch; gap: 8px; }
-.k-desk .st-grid--b2 .st-main { width: 100%; min-width: 0; }
-.k-desk .st-grid--b2 .st-import { justify-self: start; }
-.k-desk .st-card--b2 .st-grid--b2 { row-gap: 24px; padding: 48px 48px 32px; }
-.k-desk .st-col--lead { gap: 16px; }
-.k-desk .st-col--pass { gap: 12px; }
-.k-desk .st-card--b2 .st-legs { padding-top: 20px; }
-.k-desk .st-card--b2 .st-leg { gap: 6px 10px; }
-.k-desk .st-card--b2 .st-leg__text { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.5; }
-.k-desk .st-card--b2 .st-quiet { gap: 8px; }
-
-/* Center the destination box: the flap class sets the blank to inline-block, so the box hugs the text and
-   the ??? / codes read off-center. The blank must be a fixed, truly centered box instead. */
-.st-pass__blank { display: inline-grid; place-items: center; text-align: center; letter-spacing: 0; }
-
-/* Stub: the label and the code centered horizontally within the stub section */
-.st-pass__stub { justify-items: center; text-align: center; }
-/* The destination box: finer dashes (1px, so the dash segments stay short) */
-.st-pass__blank { border-width: 1px; }
-
-/* Destination box: a drawn dashed ring instead of a CSS dashed border. The dash pattern follows the
-   rounded path continuously, so the corners read clean instead of showing odd partial dashes. */
-.st-pass__blank { position: relative; border: 0; }
-.st-pass__blank::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: var(--ink-evidence);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.7'%20y='0.7'%20width='70.6'%20height='26.6'%20rx='8'%20fill='none'%20stroke='white'%20stroke-width='1.4'%20stroke-dasharray='4%203.6'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.7'%20y='0.7'%20width='70.6'%20height='26.6'%20rx='8'%20fill='none'%20stroke='white'%20stroke-width='1.4'%20stroke-dasharray='4%203.6'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-
-/* ── Dashed lines, drawn like the boarding-pass ring, 1px everywhere ── */
-
-/* Destination box: the ring at 1px */
-.st-pass__blank::before {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='71'%20height='27'%20rx='8'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%203.6'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='71'%20height='27'%20rx='8'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%203.6'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-
-/* Desktop step circles: the number is its own layer (baseline-corrected), the ring its own layer */
-.k-desk .st-card--b2 .st-leg__title { position: relative; }
-.k-desk .st-card--b2 .st-leg__title::before { border: 0; line-height: 1; padding-bottom: 2px; }
-.k-desk .st-card--b2 .st-leg__title::after {
-  content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-  width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--ink-navy); pointer-events: none;
-}
-.k-desk .st-card--b2 .st-leg--soon .st-leg__title::before { color: var(--ink-text-2); }
-.k-desk .st-card--b2 .st-leg--soon .st-leg__title::after {
-  border: 0; background: var(--line-edge);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12'%20cy='12'%20r='11.4'%20pathLength='71.5'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='3.25%203.25'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12'%20cy='12'%20r='11.4'%20pathLength='71.5'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='3.25%203.25'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-
-/* Phone step 3: the drawn ring instead of the CSS dashed border */
-.st-leg__n { position: relative; }
-.st-leg--soon .st-leg__n { border: 2px solid transparent; }
-.st-leg--soon .st-leg__n::after {
-  content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--line-edge); pointer-events: none;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20'%20cy='20'%20r='19.4'%20pathLength='120'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='3%203'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20'%20cy='20'%20r='19.4'%20pathLength='120'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='3%203'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-
-/* Leg dividers, round two: the raw gradient dashes read as stray dots, not a deliberate line.
-   Replaced with the same round-capped dash tile used everywhere else (destination box, step rings),
-   so the divider between the journey steps matches the house dash style, on desktop and on phone. */
-.k-desk .st-card--b2 .st-leg + .st-leg { border-left: 0; background: none; position: relative; }
-.k-desk .st-card--b2 .st-leg + .st-leg::before {
-  content: ""; position: absolute; left: 0; top: 2px; bottom: 2px; width: 2px;
-  background: var(--line-edge);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='2'%20height='10'%3E%3Cline%20x1='1'%20y1='1'%20x2='1'%20y2='5'%20stroke='white'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") left top / 2px 10px repeat-y;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='2'%20height='10'%3E%3Cline%20x1='1'%20y1='1'%20x2='1'%20y2='5'%20stroke='white'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") left top / 2px 10px repeat-y;
-}
-.k-phone .st-card--b2 .st-leg + .st-leg { padding-top: 16px; position: relative; }
-.k-phone .st-card--b2 .st-leg + .st-leg::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px;
-  background: var(--line-edge);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='10'%20height='2'%3E%3Cline%20x1='1'%20y1='1'%20x2='5'%20y2='1'%20stroke='white'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") left top / 10px 2px repeat-x;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='10'%20height='2'%3E%3Cline%20x1='1'%20y1='1'%20x2='5'%20y2='1'%20stroke='white'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") left top / 10px 2px repeat-x;
-}
-
-/* Phone: more air between the boarding pass and the button */
-.k-phone .st-col--pass { gap: 12px; }
-
-/* A touch more air between the boarding pass and the button */
-.k-phone .st-col--pass { gap: 16px; }
-.k-desk .st-col--pass { gap: 16px; }
-
-/* Phone footer: a bit more padding, and more room between the two legal links */
-.k-phone .st-phonefoot { padding: 16px; gap: 8px; }
-.st-quiet__links { gap: 12px; }
-
-/* Footer layout, round two. Two fixes:
-   1 · Phone: the separator dot sat at the top of the links' 44px touch-target box while the
-      link text itself was centered lower inside that box, so the dot floated above the row
-      and read as a stray mark. Centering the row's cross-axis aligns the dot with the text.
-   2 · Desktop: links, the privacy promise, the cover credit and the data version used to sit
-      in one flat row with no grouping. Split into two clusters — legal (links + promise) on
-      the left, metadata (credit, version) on the right — so related things sit together. */
-.st-quiet__links { align-items: center; }
-.appfoot--desk { justify-content: space-between; }
-.appfoot__legal { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
-.appfoot__promise { color: var(--ink-text-2); }
-.appfoot__meta { display: flex; align-items: center; gap: 16px; flex: none; white-space: nowrap; }
-.k-desk .st-footcredit { white-space: nowrap; }
-
-/* Desktop: the title fills the column (the space below the subtitle is gone) */
-.k-desk .st-grid--b2 .st-headline { font-size: 3.75rem; }
-
-/* Destination box ring: 3px */
-.st-pass__blank::before {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='71'%20height='27'%20rx='8'%20fill='none'%20stroke='white'%20stroke-width='3'%20stroke-dasharray='4%203.6'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='71'%20height='27'%20rx='8'%20fill='none'%20stroke='white'%20stroke-width='3'%20stroke-dasharray='4%203.6'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-
-/* Panel raised so the journey legs stay in the first viewport (through "Route") */
-.k-desk .st-card--b2 { margin-top: -296px; }
-.k-phone .st-card--b2 { margin-top: -130px; }
-
-/* Panel raised further: all three steps visible in the first viewport */
-.k-desk .st-card--b2 { margin-top: -320px; }
-.k-phone .st-card--b2 { margin-top: -190px; }
-
-/* Panel position, final: the legs row was still cut off at the bottom on phone (overflowing the
-   visible 774px scroll area by ~17px, so the last leg's text was sliced mid-line). On desktop the
-   true clipping edge is not the 900px frame but the scrollable area above the separate footer
-   (about 743px) -- the legs row was overflowing that by ~59px and rendering underneath the footer,
-   invisible. Phone raised further and desktop raised to this corrected boundary, so on both the
-   legs row is the last thing visible, with the proof line safely past the edge, hidden. */
-.k-desk .st-card--b2 { margin-top: -304px; }
-.k-phone .st-card--b2 { margin-top: -211px; }
-
-/* Dashed rings, round three: one canonical weight for every hand-drawn dashed ring in the design —
-   stroke-width 2, dasharray "4 8" — with each shape's pathLength corrected to match its own real
-   perimeter (182 for the box, 72 for the small circle, 122 for the large circle), so the same raw
-   numbers produce the same visual ~6px dash / ~6px gap everywhere, not just the same-looking code. */
-.st-pass__blank::before {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='71'%20height='27'%20rx='8'%20pathLength='182'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2072%2028'%20preserveAspectRatio='none'%3E%3Crect%20x='0.5'%20y='0.5'%20width='71'%20height='27'%20rx='8'%20pathLength='182'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-.k-desk .st-card--b2 .st-leg--soon .st-leg__title::after {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12'%20cy='12'%20r='11.4'%20pathLength='72'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12'%20cy='12'%20r='11.4'%20pathLength='72'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-.st-leg--soon .st-leg__n::after {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20'%20cy='20'%20r='19.4'%20pathLength='122'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20'%20cy='20'%20r='19.4'%20pathLength='122'%20fill='none'%20stroke='white'%20stroke-width='2'%20stroke-dasharray='4%206'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
 </head>
@@ -1757,18 +1678,19 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
   <span class="strip__title">The Emigrant — D2 · Reading pages and system states</span>
   <span class="sample">Sample data</span>
   <nav aria-label="Deliveries">
-    <a href="./d2-shortlist.html">D2 · Shortlist screens</a>
-    <a href="./d2-plan.html">D2 · Move Plan and data</a>
-    <a href="./d2-reading.html" aria-current="page">D2 · Reading and system states</a>
-    <a href="./d1-design-system.html">D1 · Design system</a>
-    <a href="./d1-components.html">D1 · Components</a>
-    <a href="./transit-papers-base.html">Base · Transit Papers</a>
+    <a href="./the-emigrant_directions_d2-shortlist.html">D2 · Shortlist screens</a>
+    <a href="./the-emigrant_directions_d2-plan.html">D2 · Travel folder and data</a>
+    <a href="./the-emigrant_directions_d2-reading.html" aria-current="page">D2 · Reading and system states</a>
+    <a href="./the-emigrant_directions_d1-design-system.html">D1 · Design system</a>
+    <a href="./the-emigrant_directions_d1-components.html">D1 · Components</a>
+    <a href="./the-emigrant_directions_start-study-self.html">Start study</a>
+    <a href="./the-emigrant_directions_transit-papers-base.html">Base · Transit Papers</a>
   </nav>
 </div>
 <main id="main" class="wrap">
   <section aria-labelledby="pTitle" style="margin-top:32px">
     <div class="dep"><div class="dep__row"><span class="dep__no">D2</span><h1 class="cond" id="pTitle" style="font-size:var(--fs-h1)">Reading pages and system states</h1></div>
-      <p>Screens 14 to 17 of the brief: the full terms, Privacy, How the evidence works, and the five system states. Every screen is shown as a phone artboard (390 × 844) and a desktop artboard (1440 × 900, scaled to fit) with the full shell: wordmark, plan rail, menu, one next action, the disclaimer line. The switcher under each title is prototype-only and reaches every state the brief lists, plus loading, offline and data updated. Screens are designed in light; dark stays tokens. Nothing is frozen until you approve it.</p>
+      <p>Screens 14 to 17 of the brief: the full terms, Privacy, How the evidence works, and the five system states. Every screen is shown as a phone artboard (390 × 844) and a desktop artboard (1440 × 900, scaled to fit) with the full shell: wordmark, plan rail, the inline links and More on desktop, the Menu on phone, one next action, the disclaimer line in the footer. The switcher under each title is prototype-only and reaches every state the brief lists, plus loading, offline and data updated. Screens are designed in light; dark stays tokens. Nothing is frozen until you approve it.</p>
       <nav class="g-toc" id="toc" aria-label="Screens on this page"></nav></div>
   </section>
   <div id="screens"></div>
@@ -2141,18 +2063,27 @@ function shownNotCounted(value, level) {
 const dataYear = x => (x && x !== 'None' ? String(x).slice(0, 4) : 'Not yet');
 function staleNote(from) { return `<span class="f-iconline f-stale">${icon('clock-rotate-right')}<span>Data from ${dataYear(from)}, may be out of date</span></span>`; }
 
-/* Coverage marks: one box per criterion the household selected */
+/* Coverage marks: one box per criterion the household selected.
+   The band cap: a country never shows Strong while one of the household's Non-negotiables is unknown.
+   It is shown as Partial, with the one line that says why (opts.cap = the unknown Non-negotiable's name). */
+function bandWord(known, total, cap) {
+  const r = known / total, byCount = r >= 0.8 ? 'strong' : r >= 0.5 ? 'partial' : 'thin';
+  return cap && byCount === 'strong' ? 'partial' : byCount;
+}
+/* The Non-negotiable that caps a country's band, if any (sample data: a Possible country's open question) */
+function bandCap(c) { return c.band === 'possible' && c.unknownCrit && PILES.non.includes(c.unknownCrit) ? critBy(c.unknownCrit).topic : null; }
+const capLine = cap => `<span class="eband__cap">Capped at Partial: ${esc(cap)} is a Non-negotiable and not known yet.</span>`;
 function coverage(known, total, opts = {}) {
-  const band = known / total >= 0.8 ? 'Strong' : known / total >= 0.5 ? 'Partial' : 'Thin';
+  const band = { strong: 'Strong', partial: 'Partial', thin: 'Thin' }[bandWord(known, total, opts.cap)];
   const boxes = `<span class="cov__boxes" aria-hidden="true">${Array.from({ length: total }, (_, i) => `<i class="${i < known ? 'on' : ''}"></i>`).join('')}</span>`;
-  const txt = `<span class="cov__txt">${known} of ${total} known${opts.band === false ? '' : ` · ${band}`}</span>`;
+  const txt = `<span class="cov__txt">${known} of ${total} known${opts.band === false ? '' : ` · ${band}`}</span>${opts.cap ? capLine(opts.cap) : ''}`;
   return opts.button === false ? `<span class="cov">${boxes}${txt}</span>`
     : `<button type="button" class="cov cov--btn" data-toast="${known} of your ${total} criteria are known for this country. The unknown ones are listed on the country page.">${boxes}${txt}<span class="sr-only">. Show which criteria are known</span></button>`;
 }
-function eband(known, total) {
-  const r = known / total, band = r >= 0.8 ? 'strong' : r >= 0.5 ? 'partial' : 'thin';
+function eband(known, total, opts = {}) {
+  const band = bandWord(known, total, opts.cap);
   const word = { strong: 'Strong', partial: 'Partial', thin: 'Thin' }[band];
-  return `<span class="eband eband--${band}"><span class="eband__bars" aria-hidden="true"><i></i><i></i><i></i></span><span><b>${word}</b> · ${known} of ${total} known</span></span>`;
+  return `<span class="eband eband--${band}${opts.cap ? ' eband--capped' : ''}"><span class="eband__bars" aria-hidden="true"><i></i><i></i><i></i></span><span><b>${word}</b> · ${known} of ${total} known</span>${opts.cap ? capLine(opts.cap) : ''}</span>`;
 }
 function score(value, opts = {}) {
   return value ? `<span class="f-score">${opts.hl ? hl(value) : value}<small> / 10</small></span>` : '<span class="f-score f-score--absent">No score yet</span>';
@@ -2211,7 +2142,7 @@ function mapCard(iso, opts = {}) {
   </figure>`;
 }
 
-/* ── Ticket: what the household chose (shortlist, Compare, Move Plan, top of the country page) ── */
+/* ── Ticket: what the household chose (shortlist, Compare, the travel folder, top of the country page) ── */
 function topFact(c) {
   const crit = critBy(TOP_CRITERION), v = (VALUES[c.iso] || {})[TOP_CRITERION];
   if (!v || !v[0]) return `<dt>${critName(crit)}</dt><dd><span class="f-iconline f-val--unknown">${icon('help-circle')}<span>Not known yet</span></span></dd>`;
@@ -2223,7 +2154,7 @@ function ticket(iso, opts = {}) {
   const facts = `<dl class="f-facts">
       <div><dt>Score</dt><dd>${score(c.score, { hl: true })}</dd><dd class="f-facts__sub">Known criteria only</dd></div>
       <div><dt>Route check</dt><dd>${routeDone ? `<span class="mres-list">${routeDone.map(([r, k]) => memberResult(r, k)).join('')}</span>` : routeCheck(c.routeCheck)}</dd></div>
-      <div><dt>Evidence</dt><dd>${coverage(c.known, c.total)}</dd><dd>${evButton(({ AUT: 'langAUT', DEU: 'langDEU', CRI: 'routeCRI' })[iso] || 'langAUT', { compact: true })}</dd></div>
+      <div><dt>Evidence</dt><dd>${coverage(c.known, c.total, { cap: bandCap(c) })}</dd><dd>${evButton(({ AUT: 'langAUT', DEU: 'langDEU', CRI: 'routeCRI' })[iso] || 'langAUT', { compact: true })}</dd></div>
       <div>${topFact(c)}</div>
     </dl>`;
   const acts = opts.acts === false ? '' : `<div class="f-entry__acts"><button type="button" class="btn btn--secondary" data-toast="Opens the country page for ${esc(c.name)}.">See details<span class="sr-only"> for ${esc(c.name)}</span></button>${opts.remove ? `<button type="button" class="btn btn--ghost" data-toast="${esc(c.name)} removed from your shortlist.">${icon('minus')}<span>Remove</span></button>` : ''}</div>`;
@@ -2240,7 +2171,7 @@ function countryRow(c, opts = {}) {
   const add = c.band === 'ruled' ? '' : `<button type="button" class="crow__add" data-add="${c.iso}" aria-pressed="${state === 'added'}"${state === 'full' ? ' data-full="true"' : ''}>${icon(state === 'added' ? 'check' : 'plus')}<span class="crow__addtxt">${state === 'added' ? 'On shortlist' : 'Add'}</span><span class="sr-only"> ${esc(c.name)}</span></button>`;
   const detail = c.band === 'ruled'
     ? `<span class="crow__ruled">Ruled out by: <b>${critName(critBy(c.ruledBy))}</b></span>`
-    : `<span class="crow__facts">${score(c.score)}${eband(c.known, c.total)}</span>`;
+    : `<span class="crow__facts">${score(c.score)}${eband(c.known, c.total, { cap: opts.cap ?? bandCap(c) })}</span>`;
   return `<li class="crow crow--${c.band}${state === 'full' ? ' crow--full' : ''}${c.routeCheck === 'none' ? ' crow--noroute' : ''}">
     ${pstamp(c, 'sm')}
     <a class="crow__main" href="#" data-toast="Opens the country page for ${esc(c.name)}."><span class="crow__name">${esc(c.name)}</span><span class="crow__meta">${c.iso} · ${esc(c.region)}</span></a>
@@ -2276,8 +2207,11 @@ function disclaimerLine(opts = {}) {
 }
 
 /* ── Shell ─────────────────────────────────────────────────────────── */
+/* The plan rail. state: 'shortlist' | 'route' | 'plan' | 'none'. On a neutral page (reading pages, system
+   states, the travel folder while empty) the state is 'none': no step is marked as current. */
 function rail(state = 'shortlist', opts = {}) {
-  const st = { shortlist: state === 'shortlist' ? 'now' : 'done', route: state === 'route' ? 'now' : state === 'plan' ? 'done' : 'todo' };
+  const st = state === 'none' ? { shortlist: 'todo', route: 'todo' }
+    : { shortlist: state === 'shortlist' ? 'now' : 'done', route: state === 'route' ? 'now' : state === 'plan' ? 'done' : 'todo' };
   const step = (n, label, key, s) => {
     const markN = s === 'done' ? icon('check') : n;
     const status = s === 'now' ? 'current step' : s === 'done' ? 'done' : 'not started';
@@ -2285,16 +2219,157 @@ function rail(state = 'shortlist', opts = {}) {
   };
   return `<nav class="f-rail${opts.compact ? ' f-rail--compact' : ''}" aria-label="Your progress"><ol>${step(1, 'Shortlist', 'shortlist', st.shortlist)}${step(2, 'Route', 'route', st.route)}<li><span class="f-step" data-state="later" aria-disabled="true"><span class="f-step__n" aria-hidden="true">3</span><span class="f-step__label">Plan</span><span class="f-step__soon">coming</span><span class="sr-only">, coming in a later release</span></span></li></ol></nav>`;
 }
-function nextBar(where, opts = {}) {
-  const hint = opts.hint || 'Step 1 of 3 · 2 countries on your shortlist';
-  const btn = opts.disabled ? `<button type="button" class="btn btn--primary f-next__btn" disabled>${opts.label || 'Compare your shortlist'}</button>`
-    : `<button type="button" class="btn btn--primary f-next__btn" data-toast="${opts.label || 'Compare your shortlist'}">${opts.label || 'Compare your shortlist'}</button>`;
-  return `<div class="f-next f-next--${where}"><span class="f-next__hint${opts.disabled ? ' f-next__reason' : ''}">${hint}</span>${btn}</div>`;
+/* The next-action bar: exactly one primary action, with the reason when it is not possible yet.
+   n: { label, hint, disabled, act, toast }; null means no next action (reading pages). */
+function nextBar(where, n) {
+  if (!n) return '';
+  const btn = n.disabled ? `<button type="button" class="btn btn--primary f-next__btn" disabled>${n.label}</button>`
+    : `<button type="button" class="btn btn--primary f-next__btn" ${n.act ? `data-act="${esc(n.act)}"` : `data-toast="${esc(n.toast || n.label)}"`}>${n.label}</button>`;
+  return `<div class="f-next f-next--${where}" data-next><span class="f-next__hint${n.disabled ? ' f-next__reason' : ''}">${n.hint || ''}</span>${btn}</div>`;
 }
-function menuList(ctx) {
-  const group = (label, items) => `<div class="f-mgroup" role="group" aria-label="${label}"><span class="f-mlabel" aria-hidden="true">${label}</span>${items.map(m => `<button type="button" class="f-mi" role="menuitem">${m}</button>`).join('')}</div>`;
-  return `<div class="k-menu f-menu" id="menu-${ctx}" role="menu" aria-label="Menu">${group('Your plan', ['Move Plan', 'Export', 'Import'])}${group('Help', ['How the evidence works'])}${group('About', ['Terms of use', 'Privacy'])}<div class="f-mgroup" role="group" aria-label="Your data"><button type="button" class="f-mi f-mi--danger" role="menuitem">Delete my data</button></div></div>`;
+/* The menu: "Folder" leads to the travel folder (screen 10). On desktop it sits under "More"; on phone it is the Menu. */
+const MENU_ITEMS = {
+  folder: ['Folder', 'Opens your travel folder (screen 10).'], save: ['Save your travel folder', 'Opens Save your travel folder (screen 11).'], open: ['Open a travel folder', 'Opens Open a travel folder (screen 12).'],
+  evidence: ['How the evidence works', 'Opens How the evidence works (screen 16).'], terms: ['Terms of use', 'Opens the full terms (screen 14).'], privacy: ['Privacy', 'Opens Privacy (screen 15).'], delete: ['Delete your travel folder', 'Opens Delete your travel folder (screen 13).']
+};
+function appMenu(ctx, opts = {}) {
+  const mi = ([m, t]) => `<button type="button" class="f-mi" role="menuitem" data-toast="${esc(t)}">${m}</button>`;
+  const group = (label, keys) => `<div class="f-mgroup" role="group" aria-label="${label}"><span class="f-mlabel" aria-hidden="true">${label}</span>${keys.map(k => mi(MENU_ITEMS[k])).join('')}</div>`;
+  const folder = opts.start ? ['open'] : ['folder', 'save', 'open'];
+  return `<div class="k-menu f-menu" id="menu-${ctx}" role="menu" aria-label="${opts.more ? 'More' : 'Menu'}"${opts.open ? '' : ' hidden'}>${group('Your travel folder', folder)}${group('Help', ['evidence'])}${group('About', ['terms', 'privacy'])}${opts.start ? '' : `<div class="f-mgroup" role="group" aria-label="Your data"><button type="button" class="f-mi f-mi--danger" role="menuitem" data-toast="${esc(MENU_ITEMS.delete[1])}">${MENU_ITEMS.delete[0]}</button></div>`}</div>`;
 }
+const menuList = ctx => appMenu(ctx, { open: true });
+const menuBtn = ctx => `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}">${icon('menu')}<span>Menu</span></button>`;
+const moreBtn = ctx => `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}"><span>More</span>${icon('nav-arrow-down')}</button>`;
+const topLinks = () => `<nav class="f-toplinks" aria-label="Main links"><a href="#" data-toast="${esc(MENU_ITEMS.evidence[1])}">How the evidence works</a><a href="#" data-toast="${esc(MENU_ITEMS.privacy[1])}">Privacy</a><a href="#" data-toast="${esc(MENU_ITEMS.open[1])}">Import a plan</a></nav>`;
+/* The desktop header on every screen: wordmark, plan rail (none on Start), the inline links, "More", the one action */
+function deskHeader(p = {}) {
+  const railPart = p.rail === false ? '<span class="od-fill"></span>' : `<div class="od-fill f-head__rail">${rail(p.rail || 'shortlist')}</div>`;
+  return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${topLinks()}${moreBtn(p.ctx || 'desktop')}${nextBar('head', p.next)}</header>`;
+}
+/* The footers: the disclaimer line (the sentence with the Terms of use link) on every screen, phone included */
+function phoneFoot(p = {}) {
+  return `<div class="appfoot${p.cls ? ` ${p.cls}` : ''}">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p>${disclaimerLine()}</div>`;
+}
+function deskFoot(p = {}) {
+  return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal">${disclaimerLine()}<span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<span class="mono">${DATA_VERSION}</span></div></footer>`;
+}
+/* Desktop artboards shown scaled to fit their column */
+function fitDesks() {
+  document.querySelectorAll('[data-fit]').forEach(fit => {
+    const w = Math.min(1440, Math.floor(fit.parentElement.clientWidth)), s = w / 1440;
+    fit.firstElementChild.style.transform = `scale(${s})`; fit.style.width = `${w}px`; fit.style.height = `${Math.round(900 * s)}px`;
+    const lbl = fit.parentElement.querySelector('[data-fit-label]'); if (lbl) lbl.textContent = `1440 × 900, shown at ${Math.round(s * 100)}%`;
+  });
+}
+
+/* ── Start (B2), screen 1 with 1a ─────────────────────────────────────
+   The full photo as the stage, the papers card over its lower part, the headline about the life, the rational
+   line, the boarding pass as the one object, and the three journey legs. One implementation for D1, D2 and the
+   study. The cover is provisional and comes from one setting, START.cover. */
+const START = {
+  cover: {
+    provisional: true,
+    src: './assets/photos/cover-houses-sears.jpg', small: './assets/photos/cover-houses-sears-1200.jpg',
+    alt: 'Houses nestled near a mountain with palm trees',
+    credit: 'Photo: Cole Sears / Unsplash',
+    place: 'Cover: [place name] · [latitude] (sample)',
+    objDesk: '50% 40%', objPhone: '50% 40%'
+  },
+  headline: 'Somewhere, your next home is waiting.',
+  rational: 'Find countries that fit all of you, and check whether you could legally live there.',
+  proof: '193 countries · every fact with its source and date',
+  legs: [['1', 'Shortlist', 'Find countries that fit all of you.', false], ['2', 'Route', 'Check if all of you could legally live there.', false], ['3', 'Plan', 'Turn one of them into a step-by-step plan.', true]],
+  flapCodes: ['LIS', 'SJO', 'VIE', 'MRU', 'AKL', 'CPT', 'YVR', 'TLV']
+};
+function startCover() {
+  const cv = START.cover;
+  return `<figure class="ph st-cover st-cover--stage st-cover--drift" style="--obj-desk:${cv.objDesk};--obj-phone:${cv.objPhone}"><img class="st-cover__img" src="${cv.src}" srcset="${cv.small} 1200w, ${cv.src} 2400w" sizes="(max-width: 480px) 390px, 1240px" alt="${esc(cv.alt)}" width="2400" height="1800"></figure>`;
+}
+/* The card band carries the place line of the cover, never "Start" alone */
+const startBand = () => `<div class="cp__band st-band"><span class="cp__label">Start${START.cover.provisional ? ' · provisional cover' : ''}</span><span class="ph__credit" data-place>${esc(START.cover.place)}</span></div>`;
+/* The boarding pass: first visit shows a blank destination that flips through codes like a departure board
+   on arrival and settles on ???; a returning household sees its shortlist codes instead, without the flip. */
+function startPass(dest = '???', opts = {}) {
+  const flapCls = opts.flap ? ' st-flap' : '';
+  const flapAttr = opts.flap ? ' data-flap' : '';
+  const destEl = opts.flap
+    ? `<span class="st-pass__blank${flapCls}"${flapAttr} aria-label="not yet known">${dest}</span>`
+    : `<span class="st-pass__fill">${dest}</span>`;
+  return `<div class="st-pass-wrap"><div class="st-pass" role="group" aria-label="Boarding pass: passengers, your household; from, here; to, ${opts.flap ? 'not yet known' : esc(dest)}">
+    <div class="st-pass__main"><span class="st-pass__kicker">Boarding pass</span><dl class="st-pass__rows"><div><dt>Passengers</dt><dd>your household</dd></div><div><dt>From</dt><dd>Here</dd></div><div><dt>To</dt><dd>${destEl}</dd></div></dl></div>
+    <span class="st-pass__perf" aria-hidden="true"></span>
+    <div class="st-pass__stub" aria-hidden="true"><span class="stub__label">Stub</span><span class="st-pass__code${flapCls}"${flapAttr}>${opts.stub || '???'}</span></div>
+  </div></div>`;
+}
+function runStartFlaps(root, force = false) {
+  const els = [...root.querySelectorAll('[data-flap]')]; if (!els.length) return;
+  if (!force && matchMedia('(prefers-reduced-motion: reduce)').matches) { els.forEach(e => { e.textContent = '???'; }); return; }
+  let i = 0; const steps = 8;
+  const tick = () => {
+    const code = i < steps ? START.flapCodes[i % START.flapCodes.length] : '???';
+    els.forEach(e => { e.classList.remove('is-flip'); void e.offsetWidth; e.classList.add('is-flip'); e.textContent = code; });
+    if (i++ < steps) setTimeout(tick, 120);
+  };
+  setTimeout(tick, 300);
+}
+/* Arrival = the boards coming into view, not the page load. sec: the section that holds the boards */
+const START_OBS = new Map();
+function armStartFlaps(sec, boards) {
+  if (!sec) return;
+  if (START_OBS.has(sec)) START_OBS.get(sec).disconnect();
+  const io = new IntersectionObserver(entries => {
+    if (entries.some(en => en.isIntersecting)) { boards().forEach(b => runStartFlaps(b, false)); io.disconnect(); }
+  }, { threshold: 0.05 });
+  START_OBS.set(sec, io); io.observe(sec);
+}
+function startLegs() {
+  return `<ol class="st-legs st-legs--anim" aria-label="The journey in three steps">
+  ${START.legs.map(([n, t, s, soon], i) => `<li class="st-leg${soon ? ' st-leg--soon' : ''}" style="--i:${i}"><span class="st-leg__n" aria-hidden="true">${n}</span><span class="st-leg__body"><span class="st-leg__title">${t}${soon ? `<span class="f-step__soon">coming</span><span class="sr-only">, coming in a later release</span>` : ''}</span><span class="st-leg__text">${s}</span></span></li>`).join('')}</ol>`;
+}
+const startImport = () => `<a class="f-link st-import" href="#" data-toast="${esc(MENU_ITEMS.open[1])}">${icon('upload')}<span>Open a travel folder</span></a>`;
+/* variant: 'first' | 'returning' | 'terms' | 'changed' | 'firstload' */
+function startB2(variant, ctx) {
+  const phone = ctx === 'phone';
+  let inner;
+  if (variant === 'terms' || variant === 'changed') {
+    inner = `<div class="st-col st-col--terms"><span class="lbl">${variant === 'changed' ? 'The terms changed since you accepted them' : 'Before you start'}</span><h2 class="f-title st-headline" tabindex="-1">Terms of use</h2>
+      ${variant === 'changed' ? '<p class="f-muted">Last accepted 2026-06-02. What changed: server logs are now kept for seven days. Please read and accept again.</p>' : ''}
+      <ul class="start-card__terms">${['We take no responsibility for the accuracy, completeness or currency of the information.', 'Our liability is limited as far as the law allows.', 'This is not legal advice.', 'Confirm with the authority or an adviser.', 'Your data stays on your device.'].map(t => `<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul>
+      <a class="f-link" href="#" data-toast="Opens the full terms (screen 14).">${icon('journal-page')}<span>Read the full terms</span></a><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-act="accept">Accept</button></div></div>`;
+  } else if (variant === 'firstload') {
+    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Downloading the data for the first time</span><span class="mono">40%</span></div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
+  } else {
+    const returning = variant === 'returning';
+    const lead = `<div class="st-col st-col--lead"><h1 class="f-title st-headline" tabindex="-1">${esc(START.headline)}</h1><p class="st-rational">${esc(START.rational)}</p></div>`;
+    const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
+      ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
+      : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
+    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
+  }
+  const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
+  return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
+    <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
+}
+/* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
+   in the footers. The disclaimer line appears once, in the footer. parts: { body, offline, menuId } */
+function startShell(ctx, parts) {
+  const id = parts.menuId || ctx;
+  const credit = `Cover: ${esc(START.cover.credit)}`;
+  const menu = appMenu(id, { start: true, more: ctx !== 'phone' });
+  if (ctx === 'phone') {
+    return `<div class="od-screen">
+      <div class="f-top"><header class="f-head">${WORDMARK}<span class="od-fill"></span>${menuBtn(id)}</header>${parts.offline ? offlineLine() : ''}</div>
+      <div class="od-scroll" data-scroll><main class="f-screen st-screen st-screen--start">${parts.body}</main>${phoneFoot({ credit, cls: 'st-phonefoot' })}</div>
+    </div>${menu}`;
+  }
+  return `<div class="od-screen">
+    <header class="f-head f-head--desk">${WORDMARK}<span class="od-fill"></span>${topLinks()}${moreBtn(id)}</header>${parts.offline ? offlineLine() : ''}
+    <div class="od-scroll" data-scroll><div class="f-desk d2-full st-desk st-desk--start"><main class="f-desk__main f-screen st-screen st-screen--start">${parts.body}</main></div></div>
+    ${deskFoot({ credit })}
+  </div>${menu}`;
+}
+const offlineLine = () => `<div class="d2-offline" role="status">${icon('wifi-off')}<span><b>You are offline.</b> Everything works from the data stored on this device. Error reports wait until you are back online.</span></div>`;
 
 /* ── Select menu: Nuxt UI USelectMenu ──────────────────────────────────
    Every dropdown is a select menu, never a native select. Lists longer than seven options get the
@@ -2518,19 +2593,27 @@ const nid = p => `${p}-${++uid}`;
 /* ── Pieces shared by several screens ────────────────────────────────── */
 const what = txt => `<p class="f-what"><b>What happens next:</b> ${txt}</p>`;
 const titleBlock = (title, kicker, next) => `<div class="f-titleblock">${kicker ? `<span class="f-pagekind">${kicker}</span>` : ''}<h1 class="f-title" tabindex="-1">${title}</h1>${next ? what(next) : ''}</div>`;
-/* Compact title for phone lists: smaller title, "What happens next" folded into one line */
-function titleCompact(title, kicker, next) { const id = nid('wn'); return `<div class="f-titleblock d2-titleblock--compact"><div class="d2-titlerow"><h1 class="f-title" tabindex="-1">${title}</h1><button type="button" class="f-iconbtn d2-whatbtn" data-disclose aria-expanded="false" aria-controls="${id}" aria-label="What happens next">${icon('info-circle')}</button></div><p class="d2-whatfold__body" id="${id}" hidden><b>What happens next:</b> ${next}</p></div>`; }
+/* Compact page header on phone, every screen: condensed title, "What happens next" as a small info button beside it */
+function titleCompact(title, next) {
+  const id = nid('wn');
+  const btn = next ? `<button type="button" class="f-iconbtn f-whatbtn" data-disclose aria-expanded="false" aria-controls="${id}" aria-label="What happens next">${icon('info-circle')}</button>` : '';
+  const fold = next ? `<p class="f-whatfold" id="${id}" hidden><b>What happens next:</b> ${next}</p>` : '';
+  return `<div class="f-titleblock f-titleblock--compact d2-titleblock--compact"><div class="f-titlerow"><h1 class="f-title" tabindex="-1">${title}</h1>${btn}</div>${fold}</div>`;
+}
+const pageTitle = (ctx, title, kicker, next) => ctx === 'phone' ? titleCompact(title, next) : titleBlock(title, kicker, next);
 const back = (label, act = 'back') => `<button type="button" class="f-back" data-act="${esc(act)}">${icon('nav-arrow-left')}<span>Back to ${label}</span></button>`;
-const fine = () => `<p class="f-fine">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="Opens the full terms of use (screen 14).">Terms of use</a></span></p>`;
 const provBanner = (compact) => compact
-  ? `<div class="banner banner--prov d2-banner--line" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional</b> until you set your priorities.</span></span><button type="button" class="f-link" data-toast="Opens the criteria sort (screen 3).">Set them</button></div>`
+  ? `<div class="banner banner--prov banner--line" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional</b> until you set your priorities.</span></span><button type="button" class="f-link" data-toast="Opens the criteria sort (screen 3).">Set them</button></div>`
   : `<div class="banner banner--prov" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional.</b> Set your priorities to make this ranking yours.</span></span><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the criteria sort (screen 3).">Set priorities</button></div>`;
-function updBanner() {
+function updBanner(compact) {
   const id = nid('upd');
-  return `<div class="banner banner--upd" role="status"><span class="banner__txt">${icon('refresh')}<span><b>Data updated, your results were recalculated.</b> 3 changes.</span></span><button type="button" class="btn btn--ghost btn--sm" data-disclose aria-expanded="false" aria-controls="${id}">Show changes</button><div class="banner__changes" id="${id}" hidden><span>Austria · Cost · Price level: 102 → 104</span><span>Costa Rica moved from Possible to Matches</span><span>Germany · Internet · Speed tests: now E1, was unknown</span></div></div>`;
+  const changes = `<div class="banner__changes" id="${id}" hidden><span>Austria · Cost · Price level: 102 → 104</span><span>Costa Rica moved from Possible to Matches</span><span>Germany · Internet · Speed tests: now E1, was unknown</span></div>`;
+  return compact
+    ? `<div class="banner banner--upd banner--line" role="status"><span class="banner__txt">${icon('refresh')}<span><b>Data updated,</b> results recalculated. 3 changes.</span></span><button type="button" class="f-link" data-disclose aria-expanded="false" aria-controls="${id}">Show</button>${changes}</div>`
+    : `<div class="banner banner--upd" role="status"><span class="banner__txt">${icon('refresh')}<span><b>Data updated, your results were recalculated.</b> 3 changes.</span></span><button type="button" class="btn btn--ghost btn--sm" data-disclose aria-expanded="false" aria-controls="${id}">Show changes</button>${changes}</div>`;
 }
 const staleAlert = () => `<div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>Some facts are out of date.</b>3 values come from 2021 or earlier. They are marked on each country page.</div></div>`;
-const offlineBar = () => `<div class="d2-offline" role="status">${icon('wifi-off')}<span><b>You are offline.</b> Everything works from the data stored on this device. Error reports wait until you are back online.</span></div>`;
+const offlineBar = offlineLine;
 const storageAlert = () => `<div class="alert alert--warning" role="note">${icon('database-restore')}<div><b>Nothing can be kept on this device.</b>Private browsing or blocked storage: the app works, but your plan is gone when you close this tab. Export it to keep it.</div></div>`;
 const skeleton = () => `<div class="f-titleblock"><div class="skel" aria-busy="true" aria-label="Loading"><i></i><i></i><i></i></div></div><div class="f-section"><div class="skel" aria-busy="true" aria-label="Loading"><i></i><i></i><i></i><i></i></div></div><div class="f-section"><div class="skel" aria-busy="true" aria-label="Loading"><i></i><i></i></div></div>`;
 function keyBody() {
@@ -2540,49 +2623,38 @@ function keyBody() {
     <li><span class="f-keymark">${coverage(9, 11, { button: false })}</span><p><b>Coverage.</b> One box per criterion you selected; filled when the value is known.</p></li></ul>`;
 }
 function keyFold() { const id = nid('key'); return `<div class="f-key"><button type="button" class="f-key__btn" data-disclose aria-expanded="false" aria-controls="${id}">${icon('info-circle')}<span>How to read this</span><span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="f-key__body" id="${id}" hidden>${keyBody()}</div></div>`; }
-const findCard = (items) => `<section class="f-card"><h2 class="f-card__title">Where to find things</h2><ul class="f-find">${(items || [['Your progress', 'The steps at the top.'], ['Sources', 'The note mark next to every fact.'], ['Export, import, help', 'The menu, top right.']]).map(([b, s]) => `<li><b>${b}</b><span>${s}</span></li>`).join('')}</ul></section>`;
+const findCard = (items) => `<section class="f-card"><h2 class="f-card__title">Where to find things</h2><ul class="f-find">${(items || [['Your progress', 'The steps at the top.'], ['Sources', 'The note mark next to every fact.'], ['Your travel folder, help', 'The links at the top, and More.']]).map(([b, s]) => `<li><b>${b}</b><span>${s}</span></li>`).join('')}</ul></section>`;
 const keyCard = () => `<section class="f-card"><h2 class="f-card__title">How to read this</h2>${keyBody()}</section>`;
 const privacyCard = () => `<section class="f-card"><h2 class="f-card__title">Nothing leaves this device</h2><p class="f-find">${PRIVACY}</p></section>`;
 const statusCard = (matches = 12, possible = 41, ruled = 140, note = 'All 193 countries, checked against your criteria.', compact = false, link = '') => compact
   ? `<div class="f-status d2-status--line"><p class="f-status__counts"><span>${matches ? hl(`<b>${matches}</b>`) : `<b>${matches}</b>`} match</span><span><b>${possible}</b> possible</span><span><b>${ruled}</b> ruled out</span></p><p class="f-status__note">${note}${link}</p></div>`
   : `<div class="f-status"><p class="f-status__counts"><span>${matches ? hl(`<b>${matches}</b>`) : `<b>${matches}</b>`} match</span><span><b>${possible}</b> possible, need checking</span><span><b>${ruled}</b> ruled out</span></p><p class="f-status__note">${note}</p></div>`;
 
-/* Next bar: exactly one primary action, with the reason when it is not possible yet */
-function nextBarD2(where, n) {
-  if (!n) return '';
-  const btn = n.disabled ? `<button type="button" class="btn btn--primary f-next__btn" disabled>${n.label}</button>`
-    : `<button type="button" class="btn btn--primary f-next__btn" ${n.act ? `data-act="${esc(n.act)}"` : `data-toast="${esc(n.toast || n.label)}"`}>${n.label}</button>`;
-  return `<div class="f-next f-next--${where}" data-next><span class="f-next__hint${n.disabled ? ' f-next__reason' : ''}">${n.hint || ''}</span>${btn}</div>`;
-}
-function menuHtml(ctx, open) {
-  const group = (label, items) => `<div class="f-mgroup" role="group" aria-label="${label}"><span class="f-mlabel" aria-hidden="true">${label}</span>${items.map(([m, t]) => `<button type="button" class="f-mi" role="menuitem" data-toast="${esc(t)}">${m}</button>`).join('')}</div>`;
-  return `<div class="k-menu f-menu" id="menu-${ctx}" role="menu" aria-label="Menu"${open ? '' : ' hidden'}>${group('Your plan', [['Move Plan', 'Opens your Move Plan (screen 10).'], ['Export', 'Opens Export (screen 11).'], ['Import', 'Opens Import (screen 12).']])}${group('Help', [['How the evidence works', 'Opens How the evidence works (screen 16).']])}${group('About', [['Terms of use', 'Opens the full terms (screen 14).'], ['Privacy', 'Opens Privacy (screen 15).']])}<div class="f-mgroup" role="group" aria-label="Your data"><button type="button" class="f-mi f-mi--danger" role="menuitem" data-toast="Opens Delete my data (screen 13).">Delete my data</button></div></div>`;
-}
-
 /* ── The artboard shell ──────────────────────────────────────────────── */
 /* parts: rail ('shortlist' | 'route' | 'plan'), body, side (desktop column), next, noFine, full (desktop main spans
    all columns), overlay (html placed over the screen), offline, updated, loading */
+/* The shell. Phone: header with the Menu, the compact rail, the screen, the one action, the footer with the disclaimer
+   line. Desktop: the header on every screen (wordmark, rail, inline links, More, the one action), the screen with its
+   help column, the footer with the disclaimer line. The disclaimer appears once per screen, in the footer. */
 function shell(ctx, p) {
-  const menuBtn = `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}">${icon('menu')}<span>Menu</span></button>`;
-  const body = p.loading ? skeleton() : `${p.updated ? updBanner() : ''}${p.body}`;
-  const fineLine = p.noFine || p.loading ? '' : fine();
+  const body = p.loading ? skeleton() : `${p.updated ? updBanner(ctx === 'phone') : ''}${p.body}`;
   const next = p.loading ? { label: 'Loading…', hint: 'One moment.', disabled: true } : p.next;
-  const menu = menuHtml(ctx, false);
+  const railState = p.rail || 'shortlist';
   if (ctx === 'phone') {
     return `<div class="od-screen">
-      <div class="f-top"><header class="f-head">${WORDMARK}<span class="od-fill"></span>${menuBtn}</header><div class="f-railrow">${rail(p.rail || 'shortlist', { compact: true })}</div>${p.offline ? offlineBar() : ''}</div>
-      <div class="od-scroll" data-scroll><main class="f-screen">${body}${fineLine}</main></div>
-      <div class="d2-bottom">${nextBarD2('phone', next)}<div class="appfoot"><p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p><p class="st-quiet__line st-quiet__links"><a href="#" data-toast="Opens the full terms of use (screen 14).">Disclaimer</a><span aria-hidden="true">·</span><a href="#" data-toast="Opens the full terms of use (screen 14).">Terms of use</a></p></div></div>
-    </div>${menu}${p.overlay || ''}`;
+      <div class="f-top"><header class="f-head">${WORDMARK}<span class="od-fill"></span>${menuBtn(ctx)}</header><div class="f-railrow">${rail(railState, { compact: true })}</div>${p.offline ? offlineBar() : ''}</div>
+      <div class="od-scroll" data-scroll><main class="f-screen">${body}</main></div>
+      <div class="d2-bottom">${nextBar('phone', next)}${phoneFoot()}</div>
+    </div>${appMenu(ctx)}${p.overlay || ''}`;
   }
   return `<div class="od-screen">
-    <div class="f-top"><header class="f-head f-head--desk">${WORDMARK}<div class="od-fill f-head__rail">${rail(p.rail || 'shortlist')}</div>${nextBarD2('head', next)}${menuBtn}</header>${p.offline ? offlineBar() : ''}</div>
-    <div class="od-scroll" data-scroll><div class="f-desk${p.full ? ' d2-full' : ''}"><main class="f-desk__main f-screen">${body}${fineLine}</main>${p.full || p.loading ? '' : `<aside class="f-side" aria-label="Help on this screen">${p.side || `${keyCard()}${findCard()}`}</aside>`}</div></div>
-    <footer class="appfoot appfoot--desk"><div class="appfoot__legal"><a href="#" data-toast="Opens the full terms of use (screen 14).">Disclaimer</a><a href="#" data-toast="Opens the full terms of use (screen 14).">Terms of use</a><span class="appfoot__promise">${PRIVACY}</span></div><span class="mono appfoot__meta">${DATA_VERSION}</span></footer>
-  </div>${menu}${p.overlay || ''}`;
+    <div class="f-top">${deskHeader({ rail: railState, next, ctx })}${p.offline ? offlineBar() : ''}</div>
+    <div class="od-scroll" data-scroll><div class="f-desk${p.full ? ' d2-full' : ''}"><main class="f-desk__main f-screen">${body}</main>${p.full || p.loading ? '' : `<aside class="f-side" aria-label="Help on this screen">${p.side || `${keyCard()}${findCard()}`}</aside>`}</div></div>
+    ${deskFoot()}
+  </div>${appMenu(ctx, { more: true })}${p.overlay || ''}`;
 }
 /* overlays: a sheet (phone) or side panel (desktop), and a dialog */
-const sheet = (title, inner, titleId) => `<div class="k-scrim" data-close></div><div class="k-panel k-panel--overlay d2-sheetpanel" role="dialog" aria-modal="true" aria-labelledby="${titleId}"><div class="f-panel__top"><div class="f-panel__grab" aria-hidden="true"></div><div class="f-panel__head"><div class="f-panel__titles"><span class="f-panel__kicker">Move Plan · your own papers</span><h2 class="f-panel__title" id="${titleId}" tabindex="-1">${title}</h2></div><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div></div><div class="k-panel__body f-panel__body d2-sheet">${inner}</div></div>`;
+const sheet = (title, inner, titleId) => `<div class="k-scrim" data-close></div><div class="k-panel k-panel--overlay d2-sheetpanel" role="dialog" aria-modal="true" aria-labelledby="${titleId}"><div class="f-panel__top"><div class="f-panel__grab" aria-hidden="true"></div><div class="f-panel__head"><div class="f-panel__titles"><span class="f-panel__kicker">Your travel folder · your own papers</span><h2 class="f-panel__title" id="${titleId}" tabindex="-1">${title}</h2></div><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div></div><div class="k-panel__body f-panel__body d2-sheet">${inner}</div></div>`;
 const dialog = inner => `<div class="k-scrim" data-close></div><div class="dlg dlg--static" role="dialog" aria-modal="true">${inner}</div>`;
 
 /* ── Screen registry ─────────────────────────────────────────────────── */
@@ -2591,111 +2663,9 @@ const SYSTEM_STATES = [['loading', 'Loading'], ['offline', 'Offline'], ['updated
 const SCREENS = {};
 const defState = () => ({ list: new Set(), country: 'AUT', search: '', region: 'All regions', coveredOnly: false, sort: JSON.parse(JSON.stringify(PILES)), second: null });
 
-/* 1 · Start, with 1a Terms — the chosen B2 direction: the full photo as the stage, the papers card over
-   its lower part, the headline about the life, the rational line, the boarding pass as the one object,
-   and the three journey legs. The cover is provisional and comes from one setting, START_COVER. */
-const START_COVER = {
-  provisional: true,
-  src: './assets/photos/cover-houses-sears.jpg', small: './assets/photos/cover-houses-sears-1200.jpg',
-  alt: 'Houses nestled near a mountain with palm trees',
-  credit: 'Photo: Cole Sears / Unsplash',
-  place: 'Cover: [place name] · [latitude] (sample)',
-  objDesk: '50% 40%', objPhone: '50% 40%'
-};
-const START_HEADLINE = 'Somewhere, your next home is waiting.';
-const START_RATIONAL = 'Find countries that fit all of you, and check whether you could legally live there.';
-const START_PROOF = '193 countries · every fact with its source and date';
-const START_LEGS = [['1', 'Shortlist', 'Find countries that fit all of you.', false], ['2', 'Route', 'Check if all of you could legally live there.', false], ['3', 'Plan', 'Turn one of them into a step-by-step plan.', true]];
-const FLAP_CODES = ['LIS', 'SJO', 'VIE', 'MRU', 'AKL', 'CPT', 'YVR', 'TLV'];
-
-function startCover() {
-  return `<figure class="ph st-cover st-cover--stage st-cover--drift" style="--obj-desk:${START_COVER.objDesk};--obj-phone:${START_COVER.objPhone}"><img class="st-cover__img" src="${START_COVER.src}" srcset="${START_COVER.small} 1200w, ${START_COVER.src} 2400w" sizes="(max-width: 480px) 390px, 1240px" alt="${START_COVER.alt}" width="2400" height="1800"></figure>`;
-}
-const startBand = () => `<div class="cp__band st-band"><span class="cp__label">Start · provisional cover</span></div>`;
-/* The boarding pass: first visit shows a blank destination that flips through codes like a departure board
-   on arrival and settles on ???; a returning household sees its shortlist codes instead, without the flip. */
-function startPass(dest = '???', opts = {}) {
-  const flapCls = opts.flap ? ' st-flap' : '';
-  const flapAttr = opts.flap ? ' data-flap' : '';
-  const destEl = opts.flap
-    ? `<span class="st-pass__blank${flapCls}"${flapAttr} aria-label="not yet known">${dest}</span>`
-    : `<span class="st-pass__fill">${dest}</span>`;
-  return `<div class="st-pass-wrap"><div class="st-pass" role="group" aria-label="Boarding pass: passengers, your household; from, here; to, ${opts.flap ? 'not yet known' : esc(dest)}">
-    <div class="st-pass__main"><span class="st-pass__kicker">Boarding pass</span><dl class="st-pass__rows"><div><dt>Passengers</dt><dd>your household</dd></div><div><dt>From</dt><dd>Here</dd></div><div><dt>To</dt><dd>${destEl}</dd></div></dl></div>
-    <span class="st-pass__perf" aria-hidden="true"></span>
-    <div class="st-pass__stub" aria-hidden="true"><span class="stub__label">Stub</span><span class="st-pass__code${flapCls}"${flapAttr}>${opts.stub || '???'}</span></div>
-  </div></div>`;
-}
-function runStartFlaps(root, force = false) {
-  const els = [...root.querySelectorAll('[data-flap]')]; if (!els.length) return;
-  if (!force && matchMedia('(prefers-reduced-motion: reduce)').matches) { els.forEach(e => { e.textContent = '???'; }); return; }
-  let i = 0; const steps = 8;
-  const tick = () => {
-    const code = i < steps ? FLAP_CODES[i % FLAP_CODES.length] : '???';
-    els.forEach(e => { e.classList.remove('is-flip'); void e.offsetWidth; e.classList.add('is-flip'); e.textContent = code; });
-    if (i++ < steps) setTimeout(tick, 120);
-  };
-  setTimeout(tick, 300);
-}
-const START_OBS = {};
-function armStartFlaps(id) {
-  if (START_OBS[id]) START_OBS[id].disconnect();
-  const sec = document.getElementById('s-start'); if (!sec) return;
-  START_OBS[id] = new IntersectionObserver(entries => {
-    if (entries.some(en => en.isIntersecting)) { $$(`[data-pair="${id}"]`).forEach(b => runStartFlaps(b, false)); START_OBS[id].disconnect(); }
-  }, { threshold: 0.05 });
-  START_OBS[id].observe(sec);
-}
-function startLegs() {
-  return `<ol class="st-legs st-legs--anim" aria-label="The journey in three steps">
-  ${START_LEGS.map(([n, t, s, soon], i) => `<li class="st-leg${soon ? ' st-leg--soon' : ''}" style="--i:${i}"><span class="st-leg__n" aria-hidden="true">${n}</span><span class="st-leg__body"><span class="st-leg__title">${t}${soon ? `<span class="f-step__soon">coming</span><span class="sr-only">, coming in a later release</span>` : ''}</span><span class="st-leg__text">${s}</span></span></li>`).join('')}</ol>`;
-}
-const startImport = () => `<a class="f-link st-import" href="#" data-toast="Opens Import (screen 12).">${icon('upload')}<span>Import a plan file</span></a>`;
-function startB2(variant, ctx) {
-  const phone = ctx === 'phone';
-  let inner;
-  if (variant === 'terms' || variant === 'changed') {
-    inner = `<div class="st-col st-col--terms"><span class="lbl">${variant === 'changed' ? 'The terms changed since you accepted them' : 'Before you start'}</span><h2 class="f-title st-headline" tabindex="-1">Terms of use</h2>
-      ${variant === 'changed' ? '<p class="f-muted">Last accepted 2026-06-02. What changed: server logs are now kept for seven days. Please read and accept again.</p>' : ''}
-      <ul class="start-card__terms">${['We take no responsibility for the accuracy, completeness or currency of the information.', 'Our liability is limited as far as the law allows.', 'This is not legal advice.', 'Confirm with the authority or an adviser.', 'Your data stays on your device.'].map(t => `<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul>
-      <a class="f-link" href="#" data-toast="Opens the full terms (screen 14).">${icon('journal-page')}<span>Read the full terms</span></a><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-act="accept">Accept</button></div></div>`;
-  } else if (variant === 'firstload') {
-    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Downloading the data for the first time</span><span class="mono">40%</span></div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
-  } else {
-    const returning = variant === 'returning';
-    const lead = `<div class="st-col st-col--lead"><h1 class="f-title st-headline" tabindex="-1">${START_HEADLINE}</h1><p class="st-rational">${START_RATIONAL}</p></div>`;
-    const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
-      ? `<p class="st-last">Your plan · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens your Move Plan (screen 10).">Continue your plan</button>${startImport()}</div>`
-      : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
-    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${START_PROOF}">${START_PROOF}</p></div>`;
-  }
-  const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
-  return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
-    <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
-}
-/* The Start shell: no plan rail (the visitor has not started), desktop inline links with "More", and the
-   cover credit in the footers. The disclaimer appears once, as the quiet line under the button. */
-function startShell(ctx, parts) {
-  const menuBtn = `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}">${icon('menu')}<span>Menu</span></button>`;
-  const menu = menuHtml(ctx, false);
-  const creditFoot = `<span class="st-footcredit">Cover: ${START_COVER.credit}</span>`;
-  if (ctx === 'phone') {
-    return `<div class="od-screen">
-      <div class="f-top"><header class="f-head">${WORDMARK}<span class="od-fill"></span>${menuBtn}</header>${parts.offline ? offlineBar() : ''}</div>
-      <div class="od-scroll" data-scroll><main class="f-screen st-screen st-screen--start">${parts.body}</main><footer class="appfoot st-phonefoot">${creditFoot}<p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p><p class="st-quiet__line st-quiet__links"><a href="#" data-toast="Opens the full terms of use (screen 14).">Disclaimer</a><span aria-hidden="true">·</span><a href="#" data-toast="Opens the full terms of use (screen 14).">Terms of use</a></p></footer></div>
-    </div>${menu}`;
-  }
-  const moreBtn = `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}"><span>More</span>${icon('nav-arrow-down')}</button>`;
-  const links = `<nav class="st-toplinks" aria-label="Main links"><a href="#" data-toast="Opens How the evidence works (screen 16).">How the evidence works</a><a href="#" data-toast="Opens Privacy (screen 15).">Privacy</a><a href="#" data-toast="Opens Import (screen 12).">Import a plan</a></nav>`;
-  return `<div class="od-screen">
-    <header class="f-head f-head--desk">${WORDMARK}<span class="od-fill"></span>${links}${moreBtn}</header>${parts.offline ? offlineBar() : ''}
-    <div class="od-scroll" data-scroll><div class="f-desk d2-full st-desk st-desk--start"><main class="f-desk__main f-screen st-screen st-screen--start">${parts.body}</main></div></div>
-    <footer class="appfoot appfoot--desk"><div class="appfoot__legal"><a href="#" data-toast="Opens the full terms of use (screen 14).">Disclaimer</a><a href="#" data-toast="Opens the full terms of use (screen 14).">Terms of use</a><span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${creditFoot}<span class="mono">${DATA_VERSION}</span></div></footer>
-  </div>${menu}`;
-}
 SCREENS.start = {
   no: '1 · 1a', title: 'Start, with Terms of use',
-  note: 'The first impression, in the chosen B2 direction: the full photo as the stage, the papers card over its lower part with the headline about the life, the rational line, the boarding pass as the one object, and the three journey legs. Terms of use (1a) take the card over until accepted; then the only button is "Accept". The cover is provisional and comes from one setting, START_COVER. The footers keep the acceptable minimum on every screen: the privacy promise and the Disclaimer and Terms of use links.',
+  note: 'The first impression, in the chosen B2 direction: the full photo as the stage, the papers card over its lower part with the headline about the life, the rational line, the boarding pass as the one object, and the three journey legs. Terms of use (1a) take the card over until accepted; then the only button is "Accept". The cover is provisional and comes from one setting, START.cover, in the D1 engine; D1\'s "Cover with the papers card" is this same component. The footers carry the privacy promise and the disclaimer line with the Terms of use link, once.',
   states: [['first', 'First visit'], ['terms', 'Terms not accepted'], ['changed', 'Terms changed'], ['returning', 'Returning with a plan'], ['firstload', 'Data loading for the first time']],
   system: [['offline', 'Offline']],
   render(ctx, S) {
@@ -2715,7 +2685,7 @@ SCREENS.profile = {
   render(ctx, S) {
     const a = S.state === 'complete' ? 3 : S.state === 'partly' ? 1 : 0;
     const chips = a >= 2 ? ['German', 'Portuguese', 'English'] : [];
-    const body = `${titleBlock('A few quick questions', 'Quick profile', 'three short questions, then your first ranking. Skip any of them; we use a sensible default.')}
+    const body = `${pageTitle(ctx, 'A few quick questions', 'Quick profile', 'three short questions, then your first ranking. Skip any of them; we use a sensible default.')}
       <div class="f-status"><p class="f-status__counts" role="status"><span><b>${a}</b> of 3 answered</span></p><p class="f-status__note">${a === 3 ? 'Ready for your first ranking.' : 'All three can be skipped; we use a sensible default.'}</p></div>
       ${question(1, 3, 'Where do you live now?', 'to compare prices from where you are.', selectMenu({ ariaLabel: 'Where do you live now?', items: COUNTRY_ITEMS(), value: a >= 1 ? 'Austria' : '', placeholder: 'Choose a country', searchPlaceholder: 'Type a country' }), '<button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. We use no home country for prices.">Skip</button>')}
       ${question(2, 3, 'Which languages does your household speak?', '"Language · Official languages" checks whether a country\'s official language is one of these.', `${selectMenu({ ariaLabel: 'Languages your household speaks', items: LANGUAGES, value: chips, multiple: true, icon: 'language', placeholder: 'Add a language', searchPlaceholder: 'Type a language' })}<div class="chips" data-chips>${chips.map(l => `<button type="button" class="chip-x" data-lang="${l}"><span>${l}</span>${icon('xmark')}<span class="sr-only"> remove</span></button>`).join('')}</div>`, `<span class="field__why" data-lang-count aria-live="polite">${chips.length} languages chosen</span><button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. Language · Official languages then counts as not known for you.">Skip</button>`)}
@@ -2754,7 +2724,7 @@ function sortSummary(S, compact) {
 }
 SCREENS.criteria = {
   no: '3', title: 'Criteria sort',
-  note: 'Four piles. Yes/no cards have a dashed edge, scored cards a solid one. Move a card by its move button and a pile menu, or focus it and press 1 to 4; every move is announced and the counts update. Time zone, Driving side and Climate zone ask their one question on the card once picked.',
+  note: 'Four piles. Yes/no cards have a dotted edge, scored cards a solid one. Move a card by its move button and a pile menu, or focus it and press 1 to 4; every move is announced and the counts update. Time zone, Driving side and Climate zone ask their one question on the card once picked.',
   states: [['provisional', 'Provisional'], ['sorted', 'Sorted'], ['nomatch', 'A Non-negotiable leaves no Match'], ['unknownall', 'A criterion unknown for every country']],
   init(S) {
     if (S.state === 'provisional') S.sort = { non: [], important: [], nice: [], unused: CRITERIA.map(c => c.id) };
@@ -2766,8 +2736,8 @@ SCREENS.criteria = {
     const [m] = sortCounts(S);
     const alert = S.state === 'nomatch' ? `<div class="alert alert--info" role="status">${icon('info-circle')}<div><b>No country meets all your Non-negotiables.</b><p>EU member rules out 166 countries on its own. Move it to Important to see matches again; nothing is lost.</p></div></div>`
       : S.state === 'unknownall' ? `<div class="alert alert--info" role="status">${icon('help-circle')}<div><b>Community · People born abroad is not known for any country yet.</b><p>No usable source: the figures we found may not be used under their license. It counts neither for nor against any country until a source is found.</p></div></div>` : '';
-    const body = `${titleBlock('What matters to you?', 'Criteria sort', 'sort each criterion into a pile. The ranking updates after every move. Drag a card, tap its move button, or focus it and press 1 to 4.')}
-      ${S.state === 'provisional' ? provBanner() : ''}${alert}${ctx === 'phone' ? sortSummary(S, true) : ''}${pilesHtml(S)}
+    const body = `${pageTitle(ctx, 'What matters to you?', 'Criteria sort', 'sort each criterion into a pile. The ranking updates after every move. Drag a card, tap its move button, or focus it and press 1 to 4.')}
+      ${S.state === 'provisional' ? provBanner(ctx === 'phone') : ''}${alert}${ctx === 'phone' ? sortSummary(S, true) : ''}${pilesHtml(S)}
       <div class="na-line"><p class="f-iconline">${icon('help-circle')}<b>Not available yet</b></p><p class="f-muted">No source we may legally use yet, unless the line says otherwise.</p><div class="na-line__list">${naTags()}</div></div>
       <p class="sr-only" role="status" aria-live="polite" data-sortlive></p>`;
     const next = { label: 'See results', hint: m ? `Step 1 of 3 · ${m} matches so far` : 'Step 1 of 3 · no matches yet, results still open', toast: 'Opens Results (screen 4).' };
@@ -2781,6 +2751,13 @@ function resultRows(S, band) {
   return COUNTRIES.filter(c => c.band === band && (!q || c.name.toLowerCase().includes(q)) && (S.region === 'All regions' || c.region === S.region) && (!S.coveredOnly || c.routeCheck !== 'none'));
 }
 function rowState(S, c) { return S.list.has(c.iso) ? 'added' : S.list.size >= 3 ? 'full' : 'idle'; }
+/* The band cap, shown: in the "Band capped" state the first Possible country has every criterion but Safety known,
+   so by count it would be Strong; Safety is a Non-negotiable, so it shows Partial with the one line that says why. */
+const CAP_DEMO = { iso: 'VCT', known: 10, cap: 'Safety' };
+function capRow(S, c) {
+  if (S.state !== 'capped' || c.iso !== CAP_DEMO.iso) return countryRow(c, { state: rowState(S, c) });
+  return countryRow({ ...c, known: CAP_DEMO.known, score: '7.1', unknownCrit: 'safety' }, { state: rowState(S, c), cap: CAP_DEMO.cap });
+}
 function resultBands(S) {
   const nm = S.state === 'nomatch';
   const total = BANDS.reduce((n, b) => n + resultRows(S, b.id).length, 0);
@@ -2788,10 +2765,10 @@ function resultBands(S) {
   return `<div class="f-bands">${BANDS.map(b => {
     let rows = resultRows(S, b.id);
     if (nm && b.id === 'match') rows = [];
-    const id = nid('rb'), open = b.id !== 'ruled' && (rows.length > 0 || nm);
+    const id = nid('rb'), open = b.id !== 'ruled' && (rows.length > 0 || nm) && !(S.state === 'capped' && b.id === 'match');
     const empty = b.id === 'match' && !rows.length && nm ? `<div class="f-unknown"><p class="f-iconline f-unknown__title">${icon('help-circle')}<span>No country meets all your Non-negotiables</span></p><p class="f-unknown__why">EU member rules out 166 countries on its own. Move it to Important in the sort to see matches again.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the criteria sort (screen 3).">Loosen a Non-negotiable</button></div>` : '';
     return `<section class="f-band f-band--${b.id}"><button type="button" class="f-band__btn" data-disclose aria-expanded="${open}" aria-controls="${id}"><span class="f-band__title">${b.title}</span><span class="f-band__count">${rows.length}</span><span class="k-chev">${icon('nav-arrow-down')}</span><span class="f-band__means">${b.means}</span></button>
-      <div class="f-band__body" id="${id}"${open ? '' : ' hidden'}>${empty}${rows.length ? `<ul class="clist">${rows.map(c => countryRow(c, { state: rowState(S, c) })).join('')}</ul>` : ''}</div></section>`;
+      <div class="f-band__body" id="${id}"${open ? '' : ' hidden'}>${empty}${rows.length ? `<ul class="clist">${rows.map(c => capRow(S, c)).join('')}</ul>` : ''}</div></section>`;
   }).join('')}</div>`;
 }
 function filters(S, ctx) {
@@ -2807,14 +2784,15 @@ function resultsNext(S) {
 SCREENS.results = {
   no: '4', title: 'Results',
   note: 'All 193 countries in three bands, Ruled out collapsed. Compact country rows: postage stamp, name, score, evidence band, and the quiet route-check tag only where a check is available or partly available. Add up to three; the fourth explains the limit. No rank numbers.',
-  states: [['provisional', 'Provisional'], ['sorted', 'Priorities set'], ['nomatch', 'No Matches'], ['emptyfilter', 'A filter leaves nothing'], ['stale', 'Some facts out of date'], ['full', 'Shortlist full']],
-  init(S) { S.search = S.state === 'emptyfilter' ? 'Zzz' : ''; S.region = 'All regions'; S.coveredOnly = false; S.list = new Set(S.state === 'full' ? ['AUT', 'CRI', 'DEU'] : S.state === 'sorted' ? ['AUT'] : []); },
+  states: [['provisional', 'Provisional'], ['sorted', 'Priorities set'], ['nomatch', 'No Matches'], ['emptyfilter', 'A filter leaves nothing'], ['stale', 'Some facts out of date'], ['full', 'Shortlist full'], ['capped', 'Band capped']],
+  init(S) { S.search = S.state === 'emptyfilter' ? 'Zzz' : ''; S.region = 'All regions'; S.coveredOnly = false; S.list = new Set(S.state === 'full' ? ['AUT', 'CRI', 'DEU'] : ['sorted', 'capped'].includes(S.state) ? ['AUT'] : []); },
   render(ctx, S) {
     const nm = S.state === 'nomatch';
     const counts = nm ? [0, 23, 170] : [12, 41, 140];
     const phone = ctx === 'phone';
-    const body = `${(phone ? titleCompact : titleBlock)('Where could you go?', 'Results', 'add up to three countries to your shortlist. Then compare them side by side.')}
-      ${S.state === 'provisional' && !phone ? provBanner() : ''}${S.state === 'stale' ? staleAlert() : ''}
+    const capAlert = S.state === 'capped' ? `<div class="alert alert--info" role="note">${icon('info-circle')}<div><b>The evidence band is capped while a Non-negotiable is unknown.</b>Saint Vincent and the Grenadines has 10 of 11 criteria known, which would read Strong. Safety is one of your Non-negotiables and not known yet, so the band shows Partial, with the reason on the row.</div></div>` : '';
+    const body = `${pageTitle(ctx, 'Where could you go?', 'Results', 'add up to three countries to your shortlist. Then compare them side by side.')}
+      ${S.state === 'provisional' && !phone ? provBanner() : ''}${S.state === 'stale' ? staleAlert() : ''}${capAlert}
       ${statusCard(...counts, nm ? 'All 193 countries. EU member rules out 166 of them on its own.' : S.state === 'provisional' ? (phone ? 'Provisional until you set your priorities. ' : 'All 193 countries. The order is provisional until you set your priorities.') : 'All 193 countries, checked against your 11 criteria.', phone, phone && S.state === 'provisional' ? '<a href="#" class="d2-status__link" data-toast="Opens the criteria sort (screen 3).">Set them</a>' : '')}
       ${filters(S, ctx)}<div data-bands>${resultBands(S)}</div>${phone ? keyFold() : ''}`;
     return { body, next: resultsNext(S), side: `${keyCard()}${findCard([['Add to shortlist', 'The Add button on every row, up to three.'], ['Ruled out', 'Collapsed at the bottom, each with the reason.'], ['Route check', 'The quiet tag: where we can run the check.']])}` };
@@ -2829,24 +2807,31 @@ function factRow(iso, id, opts = {}) {
   const from = v[5] || d.dataFrom || v[4], stale = d.stale || dataYear(from) < '2024';
   return `<li class="d2-fact"><span class="d2-fact__name">${critName(c)}</span><div class="d2-fact__body">${valButton(note, `<span class="f-val__n">${esc(v[0])}</span>${v[1] ? `<span class="f-val__u">${esc(v[1])}</span>` : ''}`, critName(c))}${evButton(note, { compact: true, level: v[2], risk: v[3], flagged: d.flagged, machineTranslation: !!d.machineTranslation })}</div><div class="d2-fact__meta">${stale ? staleNote(from) : `<span class="mono">Last checked ${v[4]}</span>`}${d.machineTranslation ? `<span class="f-iconline f-flag">${icon('translate')}<span>Via machine translation</span></span>` : ''}${report}</div></li>`;
 }
-function countryHero(c) {
+/* The country page card. Desktop: the print above, the card over its lower edge. Phone: the compact card alone
+   (the crop is the photo), the "what happens next" info button beside the title, so the facts reach the first screen. */
+function countryHero(c, ctx, next) {
   const dateOf = Object.values(VALUES[c.iso] || {}).map(v => v[4]).filter(d => d && d !== 'None').sort().pop() || 'Not yet';
   const dms = `${Math.abs(c.lat).toFixed(0)}°${c.lat >= 0 ? 'N' : 'S'} ${Math.abs(c.lon).toFixed(0)}°${c.lon >= 0 ? 'E' : 'W'}`;
   const mrz = mrzLines(c);
-  return `<div class="hero"><figure class="ph ph--print hero__photo">${phImg(c, 'print')}</figure>
-    <section class="cp hero__card" aria-label="Country page for ${esc(c.name)}">
-      <div class="cp__band"><span class="cp__label">Country page · your own notes</span><span class="ph__credit">${credit(c)}</span></div>
+  const phone = ctx === 'phone';
+  const id = nid('wn');
+  const title = phone
+    ? `<div class="f-titlerow cp__title"><h1 class="f-title" tabindex="-1">${esc(c.name)}</h1><button type="button" class="f-iconbtn f-whatbtn" data-disclose aria-expanded="false" aria-controls="${id}" aria-label="What happens next">${icon('info-circle')}</button></div>`
+    : `<h1 class="f-title cp__title" tabindex="-1">${esc(c.name)}</h1>`;
+  const card = `<section class="cp hero__card${phone ? ' cp--compact' : ''}" aria-label="Country page for ${esc(c.name)}">
+      ${phone ? '' : `<div class="cp__band"><span class="cp__label">Country page · your own notes</span><span class="ph__credit">${credit(c)}</span></div>`}
       <div class="cp__body"><div class="cp__crop ph">${phImg(c, 'crop', false)}</div>
-        <h1 class="f-title cp__title" tabindex="-1">${esc(c.name)}</h1>
-        <div class="cp__answer">${answerLine(c)}<span class="f-entry__code">${c.iso}${c.capital ? ` · ${esc(c.capital[0])}` : ''} · ${esc(c.region)}</span><div class="d2-cp-marks">${coverage(c.known, c.total)}${routeCheck(c.routeCheck)}</div></div>
+        ${title}
+        <div class="cp__answer">${answerLine(c)}<span class="f-entry__code">${c.iso}${c.capital ? ` · ${esc(c.capital[0])}` : ''} · ${esc(c.region)}</span><div class="d2-cp-marks">${coverage(c.known, c.total, { cap: bandCap(c) })}${routeCheck(c.routeCheck)}</div>${phone ? `<p class="f-whatfold" id="${id}" hidden><b>What happens next:</b> ${next}</p>` : ''}</div>
         <dl class="cp__fields">
           <div><dt>Score</dt><dd class="d2-nowrap">${c.band === 'ruled' ? 'Ruled out' : c.score ? `<span class="mono">${hl(c.score)}</span> / 10` : 'No score yet'}</dd></div>
           <div><dt>Capital</dt><dd>${c.capital ? `${esc(c.capital[0])} · <span class="mono">${c.capital[1]}</span>` : '–'}</dd></div>
           <div><dt>Position</dt><dd class="mono">${dms}</dd></div>
-          <div><dt>Last checked</dt><dd class="mono">${esc(dateOf)}</dd></div>
+          <div><dt>Last checked</dt><dd class="mono">${esc(dateOf)}</dd></div>${phone ? `<div class="cp__credit"><dt>Photo</dt><dd class="ph__credit">${credit(c)}</dd></div>` : ''}
         </dl></div>
       <div class="mrz" aria-hidden="true">${mrz[0]}<br>${mrz[1]}</div>
-    </section></div>`;
+    </section>`;
+  return phone ? card : `<div class="hero"><figure class="ph ph--print hero__photo">${phImg(c, 'print')}</figure>${card}</div>`;
 }
 SCREENS.country = {
   no: '5', title: 'Country',
@@ -2855,13 +2840,14 @@ SCREENS.country = {
   init(S) { S.country = ['partly', 'stale', 'mt'].includes(S.state) ? 'CRI' : S.state === 'noroute' ? 'NLD' : 'AUT'; S.list = new Set(S.state === 'in' ? ['AUT'] : S.state === 'full' ? ['CRI', 'DEU', 'PRT'] : []); },
   render(ctx, S) {
     const c = countryBy(S.country), sel = SELECTED, unknown = sel.filter(id => !((VALUES[c.iso] || {})[id] || [])[0]);
-    const body = `${back('your results', 'toast:Opens Results (screen 4).')}${countryHero(c)}
-      ${what(S.list.has(c.iso) ? `${esc(c.name)} is on your shortlist. Compare it with the others, or check the route${c.routeCheck === 'none' ? ' once it is available' : ''}.` : `if ${esc(c.name)} looks right, add it to your shortlist. Then we check whether all of you can live there.`)}
-      ${ctx === 'phone' ? keyFold() : ''}
-      ${c.routeCheck === 'none' ? `<div class="alert alert--info" role="note">${icon('circle')}<div><b>Route check not available yet for ${esc(c.name)}.</b>We have no verified residence rules for it in this release. You can still shortlist and compare it.</div></div>` : ''}
-      ${ctx === 'phone' ? mapCard(c.iso, { size: 'sm' }) : ''}
+    const phone = ctx === 'phone';
+    const nextTxt = S.list.has(c.iso) ? `${esc(c.name)} is on your shortlist. Compare it with the others, or check the route${c.routeCheck === 'none' ? ' once it is available' : ''}.` : `if ${esc(c.name)} looks right, add it to your shortlist. Then we check whether all of you can live there.`;
+    const noRoute = c.routeCheck === 'none' ? `<div class="alert alert--info" role="note">${icon('circle')}<div><b>Route check not available yet for ${esc(c.name)}.</b>We have no verified residence rules for it in this release. You can still shortlist and compare it.</div></div>` : '';
+    const body = `${back('your results', 'toast:Opens Results (screen 4).')}${countryHero(c, ctx, nextTxt)}
+      ${phone ? '' : what(nextTxt)}${noRoute}
       <div class="f-section"><h2 class="f-h2">Your criteria, with their sources</h2><p class="f-muted">${sel.length - unknown.length} of ${sel.length} known. Tap a value or an evidence mark to open its source note.</p><ul class="d2-facts">${sel.filter(id => !unknown.includes(id)).map(id => factRow(c.iso, id)).join('')}</ul></div>
       ${unknown.length ? `<div class="f-section"><h2 class="f-h2">Not known yet</h2><p class="f-muted">These count neither for nor against ${esc(c.name)}.</p><ul class="d2-facts">${unknown.map(id => factRow(c.iso, id, id === 'health' ? { decide: 'The next World Bank release.' } : {})).join('')}</ul></div>` : ''}
+      ${phone ? `${mapCard(c.iso, { size: 'sm' })}${keyFold()}` : ''}
       <div class="f-section"><h2 class="f-h2">Facts you did not select</h2><p class="f-muted">Shown for completeness. They do not count in the ranking.</p>${OTHER_GROUPS.map(([g, ids]) => `<h3 class="lbl d2-group">${g}</h3><ul class="d2-facts">${ids.map(id => factRow(c.iso, id)).join('')}</ul>`).join('')}</div>`;
     const on = S.list.has(c.iso), full = !on && S.list.size >= 3;
     const next = full ? { label: `Add ${esc(c.name)}`, hint: `Your shortlist already has three countries. Remove one to add ${esc(c.name)}.`, disabled: true }
@@ -2894,99 +2880,99 @@ SCREENS.compare = {
   init(S) { S.list = new Set({ one: ['AUT'], two: ['AUT', 'CRI'], three: ['AUT', 'CRI', 'DEU'], allunknown: ['AUT', 'VCT'], empty: [] }[S.state] || ['AUT']); S.second = null; },
   render(ctx, S) {
     const isos = [...S.list];
-    if (!isos.length) return { body: `${titleBlock('Your shortlist', 'Shortlist', 'add up to three countries from your results to compare them side by side.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Your shortlist is empty</p><p>Add up to three countries from your results to compare them.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See results</button></div>`, next: { label: 'Check whether all of you can live there', hint: 'Add at least one country to your shortlist first.', disabled: true }, side: findCard([['Add countries', 'From Results, the Add button on a row.'], ['Remove', 'On each ticket.']]) };
+    if (!isos.length) return { body: `${pageTitle(ctx, 'Your shortlist', 'Shortlist', 'add up to three countries from your results to compare them side by side.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Your shortlist is empty</p><p>Add up to three countries from your results to compare them.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See results</button></div>`, next: { label: 'Check whether all of you can live there', hint: 'Add at least one country to your shortlist first.', disabled: true }, side: findCard([['Add countries', 'From Results, the Add button on a row.'], ['Remove', 'On each ticket.']]) };
     const second = S.second && isos.includes(S.second) ? S.second : isos[1];
     const phoneCols = isos.length === 1 ? isos : [isos[0], second];
     const sw = isos.length === 3 && ctx === 'phone' ? `<div class="cmp-switch"><span class="lbl">Second column</span><div class="segc" role="group" aria-label="Second country" data-cmp-switch>${isos.slice(1).map(i => `<button type="button" aria-pressed="${i === second}" data-iso="${i}">${countryBy(i).name}</button>`).join('')}</div></div>` : '';
     const allUnknown = isos.find(i => !VALUES[i] || !Object.values(VALUES[i]).some(v => v[0]));
-    const body = `${titleBlock('Your shortlist', 'Shortlist and compare', `compare ${plural(isos.length, 'country', 'countries')} criterion by criterion. Then we check whether all of you can legally live there.`)}
+    const body = `${pageTitle(ctx, 'Your shortlist', 'Shortlist and compare', `compare ${plural(isos.length, 'country', 'countries')} criterion by criterion. Then we check whether all of you can legally live there.`)}
       ${allUnknown ? `<div class="alert alert--info" role="note">${icon('help-circle')}<div><b>Nothing is known yet for ${esc(countryBy(allUnknown).name)}.</b>We have no usable source for any of your criteria there. It stays on your shortlist; the column shows what is missing.</div></div>` : ''}
-      ${ctx === 'phone' ? keyFold() : ''}
       <div class="d2-tickets">${isos.map(i => ticket(i, { remove: true })).join('')}</div>
+      ${ctx === 'phone' ? keyFold() : ''}
       <div class="f-section"><h2 class="f-h2">Side by side</h2>${sw}<div data-cmp-table>${ctx === 'phone' ? compareTable(phoneCols, true) : compareTable(isos)}</div></div>`;
     return { body, next: { label: 'Check whether all of you can live there', hint: `Step 1 of 3 · ${plural(isos.length, 'country', 'countries')} on your shortlist`, toast: 'Opens Route (screen 7, delivery D3). The household is asked there.' }, side: `${keyCard()}${findCard([['Remove a country', 'On its ticket.'], ['A cell', 'Tap the evidence mark for its source.']])}` };
   }
 };
 
-/* 10 · Move Plan, with 11 Export, 12 Import and 13 Delete as sheets and dialogs over it */
-function planBody(S) {
+/* 10 · Your travel folder, with 11 Save, 12 Open and 13 Delete as sheets and dialogs over it */
+function planBody(S, ctx) {
   const routeDone = S.state === 'routedone' || S.state === 'updated';
   const isos = S.state === 'empty' ? [] : ['AUT', 'CRI'];
   const crits = `<section class="f-section"><h2 class="f-h2">Your criteria, in short</h2>${['non', 'important', 'nice'].map(p => `<p class="d2-critline"><span class="lbl">${PILE_NAMES[p]}</span><span>${PILES[p].map(id => critName(critBy(id))).join(' · ')}</span></p>`).join('')}<div><button type="button" class="btn btn--ghost btn--sm" data-toast="Opens the criteria sort (screen 3).">Change the sort</button></div></section>`;
   const version = `<section class="f-section"><h2 class="f-h2">Data version</h2><p><span class="mono">${DATA_VERSION}</span> · your results were calculated on it.</p>${S.state === 'updated' ? '<p class="f-muted">3 facts changed since your last visit, listed at the top.</p>' : '<p class="f-muted">Nothing changed since your last visit.</p>'}</section>`;
-  const data = `<section class="f-section"><h2 class="f-h2">Your data</h2><p class="f-muted">${PRIVACY}</p><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:export">${icon('download')}<span>Export</span></button><button type="button" class="btn btn--secondary" data-act="sheet:import">${icon('upload')}<span>Import</span></button><button type="button" class="btn btn--danger" data-act="dialog:delete">${icon('trash')}<span>Delete my data</span></button></div></section>`;
-  if (!isos.length) return `${titleBlock('Your Move Plan', 'Move Plan', 'your plan fills as you go: shortlist first, then the routes. Everything stays on this device.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Nothing in your plan yet</p><p>Find where you could go, or import a plan file you saved earlier.</p></div>${data}`;
-  return `${titleBlock('Your Move Plan', 'Move Plan', routeDone ? 'export your plan to keep it. Plan, the step-by-step part, comes in a later release.' : 'check whether all of you can legally live in the countries on your shortlist.')}
+  const data = `<section class="f-section"><h2 class="f-h2">Your data</h2><p class="f-muted">${PRIVACY}</p><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:export">${icon('download')}<span>Save your travel folder</span></button><button type="button" class="btn btn--secondary" data-act="sheet:import">${icon('upload')}<span>Open a travel folder</span></button><button type="button" class="btn btn--danger" data-act="dialog:delete">${icon('trash')}<span>Delete your travel folder</span></button></div></section>`;
+  if (!isos.length) return `${pageTitle(ctx, 'Your travel folder', 'Travel folder', 'your travel folder fills as you go: shortlist first, then the routes. Everything stays on this device.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Nothing in your travel folder yet</p><p>Find where you could go, or open a travel folder file you saved earlier.</p></div>${data}`;
+  return `${pageTitle(ctx, 'Your travel folder', 'Travel folder', routeDone ? 'save your travel folder to keep it. Plan, the step-by-step part, comes in a later release.' : 'check whether all of you can legally live in the countries on your shortlist.')}
     <section class="f-section"><h2 class="f-h2">Your shortlist · ${plural(isos.length, 'country', 'countries')}</h2><p class="f-muted">${routeDone ? 'Route checked for both. Each ticket shows what appears to apply per member.' : 'Route not checked yet. Each ticket shows whether a route check is available.'}</p></section>
     <div class="d2-tickets">${ticket('AUT', { routeDone: routeDone ? [['You', 'covered'], ['Partner', 'partly']] : null })}${ticket('CRI', { routeDone: routeDone ? [['You', 'covered'], ['Partner', 'covered']] : null })}</div>
     ${crits}${version}${data}`;
 }
 function exportSheet(st) {
   const pw = nid('pw');
-  const body = st === 'saved' ? `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Saved as our-move-2027.emigrant.</b><p>Keep the file somewhere safe. Import it on any device to continue.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Done</button></div>`
+  const body = st === 'saved' ? `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Saved as our-move-2027.emigrant.</b><p>Keep the travel folder file somewhere safe. Open it on any device to continue.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Done</button></div>`
     : st === 'failed' ? `<div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>The file could not be saved.</b><p>Your browser blocked the download. Nothing was sent anywhere. Try again, or allow downloads for this site.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="sheet:export">Try again</button><button type="button" class="btn btn--secondary" data-close>Close</button></div>`
       : `<div class="acc"><div class="acc__item"><button type="button" class="acc__btn" data-disclose aria-expanded="true" aria-controls="${pw}-what">What the file holds<span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="acc__body" id="${pw}-what">Your criteria and piles, your shortlist, your household if you entered it, your route results, and the data version. Nothing else.</div></div></div>
       <div class="field"><label class="field__label" for="${pw}">Password (optional)</label><span class="field__why">Protects the file if someone else finds it.</span><div class="pw"><input class="input" id="${pw}" type="password" value="${st === 'pw' ? 'olive-harbor-17' : ''}"><button type="button" class="f-iconbtn" data-toggle-pw="${pw}" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>
       <div class="strength" aria-live="polite"><span class="strength__bars" aria-hidden="true">${[1, 2, 3, 4].map(i => `<i class="${st === 'pw' && i <= 3 ? 'on' : ''}"></i>`).join('')}</span><span class="field__why">${st === 'pw' ? '<b>Good.</b> ' : ''}A lost password cannot be recovered. We cannot reset it.</span></div></div>
       ${disclaimerLine({ box: true })}<div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="export:save">${icon('download')}<span>Save</span></button></div>`;
-  return sheet('Export your Move Plan', body, nid('xt'));
+  return sheet('Save your travel folder', body, nid('xt'));
 }
 function importSheet(st) {
   const pw = nid('ipw');
-  const cmp = (newer) => `<div class="d2-copies"><div class="f-card${newer === 'file' ? ' is-newer' : ''}"><span class="lbl">The file</span><b>our-move-2027.emigrant</b><span class="mono">Saved ${newer === 'file' ? '2026-10-20' : '2026-09-30'}</span><span class="f-muted">3 countries, 1 route checked</span>${newer === 'file' ? '<span class="tagx">Newer</span>' : ''}</div><div class="f-card${newer === 'device' ? ' is-newer' : ''}"><span class="lbl">On this device</span><b>Your current plan</b><span class="mono">Changed 2026-10-12</span><span class="f-muted">2 countries, 1 route checked</span>${newer === 'device' ? '<span class="tagx">Newer</span>' : ''}</div></div>`;
-  const acts = '<div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:replace">Replace my plan with the file</button><button type="button" class="btn btn--secondary" data-close>Keep mine</button></div>';
+  const cmp = (newer) => `<div class="d2-copies"><div class="f-card${newer === 'file' ? ' is-newer' : ''}"><span class="lbl">The file</span><b>our-move-2027.emigrant</b><span class="mono">Saved ${newer === 'file' ? '2026-10-20' : '2026-09-30'}</span><span class="f-muted">3 countries, 1 route checked</span>${newer === 'file' ? '<span class="tagx">Newer</span>' : ''}</div><div class="f-card${newer === 'device' ? ' is-newer' : ''}"><span class="lbl">On this device</span><b>Your current travel folder</b><span class="mono">Changed 2026-10-12</span><span class="f-muted">2 countries, 1 route checked</span>${newer === 'device' ? '<span class="tagx">Newer</span>' : ''}</div></div>`;
+  const acts = '<div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:replace">Replace my travel folder with the file</button><button type="button" class="btn btn--secondary" data-close>Keep mine</button></div>';
   let body;
-  if (st === 'imported') body = `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Imported.</b><p>Your plan now matches the file: 3 countries, 1 route checked. Your results were recalculated on ${DATA_VERSION.toLowerCase()}.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Open my Move Plan</button></div>`;
-  else if (st === 'cant') body = `<div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}holiday-photos.zip</span><span class="field__error">Not a Move Plan file. Nothing was changed.</span></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be imported.</b><p>It is not a Move Plan file, it is damaged, or it comes from a newer version of the app. Your plan on this device is unchanged.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:import">Choose another file</button></div>`;
+  if (st === 'imported') body = `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Opened.</b><p>Your travel folder now matches the file: 3 countries, 1 route checked. Your results were recalculated on ${DATA_VERSION.toLowerCase()}.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Go to your travel folder</button></div>`;
+  else if (st === 'cant') body = `<div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}holiday-photos.zip</span><span class="field__error">Not a travel folder file. Nothing was changed.</span></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be opened.</b><p>It is not a travel folder file, it is damaged, or it comes from a newer version of the app. Your travel folder on this device is unchanged.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:import">Choose another file</button></div>`;
   else if (st === 'pwask' || st === 'wrongpw') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-10-20 · protected with a password</span></div>
       <div class="field"><label class="field__label" for="${pw}">Password for this file</label><div class="pw"><input class="input" id="${pw}" type="password" value="${st === 'wrongpw' ? 'olive-harbor-71' : ''}"${st === 'wrongpw' ? ` aria-invalid="true" aria-describedby="${pw}e"` : ''}><button type="button" class="f-iconbtn" data-toggle-pw="${pw}" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>${st === 'wrongpw' ? `<span class="field__error" id="${pw}e">That password does not open this file. Check it and try again; we cannot reset it.</span>` : ''}</div>
       <div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:unlock">Open the file</button><button type="button" class="btn btn--secondary" data-close>Cancel</button></div>`;
-  else if (st === 'older') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-09-30 · 3 countries, 1 route checked</span></div><div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>This file is older than the plan on this device.</b>Replacing would lose what you changed since 2026-09-30.</div></div>${cmp('device')}${acts}`;
+  else if (st === 'older') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-09-30 · 3 countries, 1 route checked</span></div><div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>This file is older than the travel folder on this device.</b>Replacing would lose what you changed since 2026-09-30.</div></div>${cmp('device')}${acts}`;
   else if (st === 'chosen') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-10-20 · 3 countries, 1 route checked</span></div><p class="f-muted">Before anything is replaced: which copy is newer?</p>${cmp('file')}${acts}`;
-  else body = `<div class="drop">${icon('upload')}<b>Drop a Move Plan file here</b><button type="button" class="btn btn--secondary btn--sm" data-act="import:chosen">Choose a file</button></div><p class="f-muted">Nothing is replaced until you say so. We show you which copy is newer first.</p>`;
-  return sheet('Import a Move Plan file', body, nid('it'));
+  else body = `<div class="drop">${icon('upload')}<b>Drop a travel folder file here</b><button type="button" class="btn btn--secondary btn--sm" data-act="import:chosen">Choose a file</button></div><p class="f-muted">Nothing is replaced until you say so. We show you which copy is newer first.</p>`;
+  return sheet('Open a travel folder', body, nid('it'));
 }
 function deleteDialog(st) {
-  const head = `<div class="dlg__head"><h2 class="dlg__title" tabindex="-1">Delete my data?</h2><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div>`;
-  if (st === 'deleted') return `${head}<div class="dlg__body"><div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Deleted.</b><p>Your Move Plan and the stored data are gone from this device. You are back at the start.</p></div></div></div><div class="dlg__foot"><button type="button" class="btn btn--primary" data-act="deleted:start">Back to Start</button></div>`;
-  return `${head}<div class="dlg__body"><p>This deletes your Move Plan and the stored data on this device: criteria, shortlist, household and route results.</p><div class="alert alert--warning">${icon('warning-triangle')}<div><b>This cannot be undone.</b>Export your plan first if you might want it back.</div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-act="sheet:export">${icon('download')}<span>Export first</span></button><button type="button" class="btn btn--danger-solid btn--primary" data-act="delete:confirm">${icon('trash')}<span>Delete</span></button></div>`;
+  const head = `<div class="dlg__head"><h2 class="dlg__title" tabindex="-1">Delete your travel folder?</h2><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div>`;
+  if (st === 'deleted') return `${head}<div class="dlg__body"><div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Deleted.</b><p>Your travel folder and the stored data are gone from this device. You are back at the start.</p></div></div></div><div class="dlg__foot"><button type="button" class="btn btn--primary" data-act="deleted:start">Back to Start</button></div>`;
+  return `${head}<div class="dlg__body"><p>This deletes your travel folder and the stored data on this device: criteria, shortlist, household and route results.</p><div class="alert alert--warning">${icon('warning-triangle')}<div><b>This cannot be undone.</b>Save your travel folder first if you might want it back.</div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-act="sheet:export">${icon('download')}<span>Save it first</span></button><button type="button" class="btn btn--danger-solid btn--primary" data-act="delete:confirm">${icon('trash')}<span>Delete</span></button></div>`;
 }
 SCREENS.plan = {
-  no: '10', title: 'Move Plan',
-  note: 'The plan rail, the shortlist with the route status per country, the chosen criteria in short, the data version and what changed, and Export, Import and Delete. Everything lives only in this browser.',
+  no: '10', title: 'Your travel folder',
+  note: 'The plan rail (no step current while the folder is empty), the shortlist with the route status per country, the chosen criteria in short, the data version and what changed, and Save, Open and Delete. Everything lives only in this browser. "Folder" in the menu and the desktop header leads here; the rail step keeps its name, Plan · coming.',
   states: [['empty', 'Empty'], ['shortlistdone', 'Shortlist done'], ['routedone', 'Route done for both'], ['updated', 'Data updated since last visit']],
   render(ctx, S) {
     const rd = S.state === 'routedone' || S.state === 'updated';
-    const next = S.state === 'empty' ? { label: 'Find where you could go', hint: 'Step 1 of 3 · nothing in your plan yet', toast: 'Opens the quick profile (screen 2).' }
-      : rd ? { label: 'Export my Move Plan', hint: 'Step 2 of 3 done · Plan comes in a later release', act: 'sheet:export' } : { label: 'Check routes for 2 countries', hint: 'Step 1 of 3 done · 2 countries on your shortlist', toast: 'Opens Route (screen 7, delivery D3).' };
-    return { body: planBody(S), rail: rd ? 'plan' : S.state === 'empty' ? 'shortlist' : 'route', updated: S.state === 'updated', next, side: `${findCard([['Export, Import, Delete', 'Under "Your data" and in the menu.'], ['Route status', 'On each ticket, per member.'], ['Data version', 'What your results were calculated on.']])}${privacyCard()}` };
+    const next = S.state === 'empty' ? { label: 'Find where you could go', hint: 'Nothing in your travel folder yet', toast: 'Opens the quick profile (screen 2).' }
+      : rd ? { label: 'Save your travel folder', hint: 'Step 2 of 3 done · Plan comes in a later release', act: 'sheet:export' } : { label: 'Check routes for 2 countries', hint: 'Step 1 of 3 done · 2 countries on your shortlist', toast: 'Opens Route (screen 7, delivery D3).' };
+    return { body: planBody(S, ctx), rail: rd ? 'plan' : S.state === 'empty' ? 'none' : 'route', updated: S.state === 'updated', next, side: `${findCard([['Save, open, delete', 'Under "Your data" and in the menu.'], ['Route status', 'On each ticket, per member.'], ['Data version', 'What your results were calculated on.']])}${privacyCard()}` };
   }
 };
 SCREENS.export = {
-  no: '11', title: 'Export', note: 'A sheet on the Move Plan (a bottom sheet on phone, a side panel on desktop): what the file holds, the optional password with its strength hint and the warning that a lost password cannot be recovered, the disclaimer, Save.',
+  no: '11', title: 'Save your travel folder', note: 'A sheet on the travel folder (a bottom sheet on phone, a side panel on desktop): what the file holds, the optional password with its strength hint and the warning that a lost password cannot be recovered, the disclaimer, Save.',
   states: [['nopw', 'Without password'], ['pw', 'With password'], ['saved', 'Saved'], ['failed', 'Failed']],
   render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'routedone' }); return { ...base, overlay: exportSheet(S.state) }; }
 };
 SCREENS.import = {
-  no: '12', title: 'Import', note: 'A sheet on the Move Plan, also reachable from Start: choose or drop a file, the password if the file has one, and before anything is replaced, which copy is newer, each with its date and a one-line summary.',
-  states: [['idle', 'Choose a file'], ['chosen', 'File chosen'], ['pwask', 'Password asked'], ['wrongpw', 'Wrong password'], ['cant', "Can't be imported"], ['older', 'File older than this device'], ['imported', 'Imported']],
+  no: '12', title: 'Open a travel folder', note: 'A sheet on the travel folder, also reachable from Start: choose or drop a file, the password if the file has one, and before anything is replaced, which copy is newer, each with its date and a one-line summary.',
+  states: [['idle', 'Choose a file'], ['chosen', 'File chosen'], ['pwask', 'Password asked'], ['wrongpw', 'Wrong password'], ['cant', "Can't be opened"], ['older', 'File older than this device'], ['imported', 'Opened']],
   render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'shortlistdone' }); return { ...base, overlay: importSheet(S.state) }; }
 };
 SCREENS.delete = {
-  no: '13', title: 'Delete my data', note: 'A dialog: what gets deleted, that it cannot be undone, a suggestion to export first. After deleting, the app is back at the first-visit Start.',
+  no: '13', title: 'Delete your travel folder', note: 'A dialog: what gets deleted, that it cannot be undone, a suggestion to save the folder first. After deleting, the app is back at the first-visit Start.',
   states: [['confirm', 'Confirm'], ['deleted', 'Deleted']],
   render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'routedone' }); return { ...base, overlay: dialog(deleteDialog(S.state)) }; }
 };
 
 /* 14–16 · Reading pages */
+/* Reading pages are neutral: a Back link at the top, no next action (oxblood is for real next steps), no current step */
 function reading(kicker, title, intro, sections, ctx) {
   const ids = sections.map(() => nid('rd'));
   const jump = `<nav class="d2-jump" aria-label="On this page"><span class="lbl">On this page</span>${sections.map((s, i) => `<a href="#${ids[i]}" data-jump="${ids[i]}">${s[0]}</a>`).join('')}</nav>`;
-  const body = `${titleBlock(title, kicker)}<p class="f-fine d2-version">${icon('calendar')}<span>Version 2026-10-24 · ${intro}</span></p>${ctx === 'phone' ? `<div class="f-section">${jump}</div>` : ''}${sections.map((s, i) => `<section class="f-section d2-read" id="${ids[i]}" tabindex="-1"><h2 class="f-h2">${s[0]}</h2>${s[1]}</section>`).join('')}`;
-  return { body, side: `<section class="f-card">${jump}</section>${findCard([['Back to your plan', 'The wordmark, top left.'], ['Questions', 'Every evidence mark links here.']])}` };
+  const body = `${back('where you were', 'toast:Returns to where you came from.')}${pageTitle(ctx, title, kicker)}<p class="f-fine d2-version">${icon('calendar')}<span>Version 2026-10-24 · ${intro}</span></p>${ctx === 'phone' ? `<div class="f-section">${jump}</div>` : ''}${sections.map((s, i) => `<section class="f-section d2-read" id="${ids[i]}" tabindex="-1"><h2 class="f-h2">${s[0]}</h2>${s[1]}</section>`).join('')}`;
+  return { body, rail: 'none', next: null, side: `<section class="f-card">${jump}</section>${findCard([['Back', 'The link at the top, or the wordmark.'], ['Questions', 'Every evidence mark links here.']])}` };
 }
 const P = t => `<p>${t}</p>`;
-const readingNext = { label: 'Back to your plan', hint: 'Reading page · nothing to decide here', toast: 'Returns to where you came from.' };
 SCREENS.terms = {
   no: '14', title: 'Terms of use, full text', note: 'Long-form reading: headings, jump links, the version date.', states: [['default', 'Reading']],
   render(ctx) {
@@ -2997,7 +2983,7 @@ SCREENS.terms = {
       ['4 · Route results are not decisions', P('A route result lists the conditions that appear to apply to your household. It is never an eligibility verdict. Only the authority decides, after its own procedure.')],
       ['5 · Your data', P('Your plan stays on this device. No profile or plan data is sent to our server. An error report carries only the fact and one fixed reason. See Privacy for what our server sees.')],
       ['6 · Changes to these terms', P('When these terms change, you are asked to read and accept them again before you continue. The version date is at the top of this page.')]
-    ], ctx), next: readingNext };
+    ], ctx) };
   }
 };
 SCREENS.privacy = {
@@ -3006,10 +2992,10 @@ SCREENS.privacy = {
     return { ...reading('Privacy', 'Privacy', 'what stays on your device, and what our server sees in release 1.', [
       ['What stays on this device', `${P('Everything you enter and everything the app works out: your quick profile, your criteria and piles, your shortlist, your household, your route results. It is stored in this browser only.')}<p class="start-card__promise">${icon('lock')}<span>${PRIVACY}</span></p>`],
       ['What our server sees', P('The app itself and the data file it downloads once. When you report an error: the fact and the reason you chose, nothing else. Server logs, with the usual connection data, are kept for seven days and then deleted.')],
-      ['Export and import', P('An export is a file you keep. If you set a password, the file is encrypted with it, and we cannot recover a lost password. Importing reads the file on this device only.')],
+      ['Saving and opening a travel folder', P('A saved travel folder is a file you keep. If you set a password, the file is encrypted with it, and we cannot recover a lost password. Opening a file reads it on this device only.')],
       ['Addresses', P('Nothing about your household ever appears in a web address. An address shows at most a country or route name.')],
-      ['Deleting your data', P('"Delete my data" removes your plan and the stored data from this device. It cannot be undone. Export first if you might want it back.')]
-    ], ctx), next: readingNext };
+      ['Deleting your data', P('"Delete your travel folder" removes your travel folder and the stored data from this device. It cannot be undone. Save it first if you might want it back.')]
+    ], ctx) };
   }
 };
 SCREENS.evidence = {
@@ -3023,7 +3009,7 @@ SCREENS.evidence = {
       ['The evidence band', `<div class="g-col">${eband(10, 11)}${eband(7, 11)}${eband(4, 11)}</div>${P('How many of the criteria you selected are known for a country: Strong from 80 percent, Partial from 50, Thin below.')}`],
       ['Why unknown never becomes a recommendation', `${unknownBlock('source')}${P('A value we do not know counts neither for nor against a country. We never fill a gap with a guess, an average or a zero. The reason is always shown.')}`],
       ['The machine-translation exception', `<div class="f-mt"><p class="f-iconline">${icon('translate')}<b>Verified through machine translation</b></p><p>Where a named person verified a source in a language we do not read, the note says so and quotes the key terms as written, for example <q>residencia temporal</q>.</p></div>`]
-    ], ctx), next: readingNext };
+    ], ctx) };
   }
 };
 
@@ -3034,7 +3020,7 @@ SCREENS.system = {
   system: [],
   render(ctx, S) {
     if (S.state === 'firstload') return { body: startB2('firstload', ctx), startShell: true, full: true, next: null };
-    if (S.state === 'notfound') return { body: `${titleBlock('This page does not exist', 'Not found', 'check the address, or go back to your plan. Nothing about your plan was lost.')}<div class="empty">${icon('search')}<p class="empty__title">We could not find that page</p><p>An address shows at most a country or route name, for example <span class="mono">/countries/austria</span>.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See your results</button></div>`, next: { label: 'Back to your plan', hint: 'Your plan is unchanged', toast: 'Opens your Move Plan (screen 10).' }, side: findCard() };
+    if (S.state === 'notfound') return { body: `${back('your travel folder', `toast:${MENU_ITEMS.folder[1]}`)}${pageTitle(ctx, 'This page does not exist', 'Not found', 'check the address, or go back to your travel folder. Nothing in it was lost.')}<div class="empty">${icon('search')}<p class="empty__title">We could not find that page</p><p>An address shows at most a country or route name, for example <span class="mono">/countries/austria</span>.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See your results</button></div>`, rail: 'none', next: null, side: findCard() };
     const res = SCREENS.results.render(ctx, { ...S, state: 'sorted', list: new Set(['AUT']), search: '', region: 'All regions', coveredOnly: false });
     if (S.state === 'storage') res.body = res.body.replace('<div class="f-status">', `${storageAlert()}<div class="f-status">`);
     return { ...res, updated: S.state === 'updated', offline: S.state === 'offline' };
@@ -3061,7 +3047,7 @@ function renderPair(id) {
     board.innerHTML = parts.startShell ? startShell(ctx, parts) : shell(ctx, parts);
     board.querySelectorAll('[data-smenu]').forEach(r => { if (!r.querySelector('.smenu__pop').hidden) smDraw(r); });
   });
-  if (S.screen === 'start' && S.state === 'first') armStartFlaps(id);
+  if (S.screen === 'start' && S.state === 'first') armStartFlaps($('#s-start'), () => $$(`[data-pair="${id}"]`));
   $$(`.d2-state[data-pair="${id}"]`).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.state === S.state)));
   fitDesks();
 }
@@ -3070,13 +3056,6 @@ function sectionHtml(id, key) {
   return `<section class="d2-screen" id="s-${key}" aria-labelledby="h-${key}"><div class="dep"><div class="dep__row"><span class="dep__no">${scr.no}</span><h2 class="cond" id="h-${key}">${scr.title}</h2></div><p>${scr.note || ''}</p>${stateButtons(id, scr)}</div>
     <div class="k-boards"><div class="k-board"><div class="board-label"><b>Phone</b><span>390 × 844</span><span class="sample">Sample data</span></div><div class="k-artboard k-phone" data-frame data-pair="${id}" data-ctx="phone"></div></div>
     <div class="k-board k-board--desktop"><div class="board-label"><b>Desktop</b><span data-fit-label>1440 × 900</span><span class="sample">Sample data</span></div><div class="k-fit k-artboard" data-fit><div class="k-desk" data-frame data-pair="${id}" data-ctx="desktop"></div></div></div></div></section>`;
-}
-function fitDesks() {
-  $$('[data-fit]').forEach(fit => {
-    const w = Math.min(1440, Math.floor(fit.parentElement.clientWidth)), s = w / 1440;
-    fit.firstElementChild.style.transform = `scale(${s})`; fit.style.width = `${w}px`; fit.style.height = `${Math.round(900 * s)}px`;
-    const lbl = fit.parentElement.querySelector('[data-fit-label]'); if (lbl) lbl.textContent = `1440 × 900, shown at ${Math.round(s * 100)}%`;
-  });
 }
 function pageInit(keys) {
   $('#toc').innerHTML = keys.map(k => `<a href="#s-${k}">${SCREENS[k].no} · ${SCREENS[k].title}</a>`).join('');
@@ -3090,7 +3069,7 @@ function pageInit(keys) {
 /* ── Behavior on top of initBehavior(): states, menus, shortlist, sort, filters, sheets ── */
 function refreshNext(board, S) {
   const scr = SCREENS[S.screen], parts = scr.render(board.dataset.ctx, S);
-  board.querySelectorAll('[data-next]').forEach(n => { n.outerHTML = nextBarD2(board.dataset.ctx === 'phone' ? 'phone' : 'head', parts.next); });
+  board.querySelectorAll('[data-next]').forEach(n => { n.outerHTML = nextBar(board.dataset.ctx === 'phone' ? 'phone' : 'head', parts.next); });
 }
 const clearOverlays = board => board.querySelectorAll('.k-scrim, .k-panel--overlay, .dlg--static').forEach(n => n.remove());
 function showOverlay(board, html, focusSel) { clearOverlays(board); board.insertAdjacentHTML('beforeend', html); const f = board.querySelector(focusSel); if (f) f.focus(); }
@@ -3129,7 +3108,7 @@ function wire() {
       if (act === 'export') { showOverlay(board, exportSheet('saved'), '.f-panel__title'); return; }
       if (act === 'import') { showOverlay(board, importSheet(arg === 'chosen' ? 'chosen' : arg === 'unlock' ? 'chosen' : 'imported'), '.f-panel__title'); return; }
       if (act === 'delete') { showOverlay(board, dialog(deleteDialog('deleted')), '.dlg__title'); return; }
-      if (act === 'deleted') { clearOverlays(board); toast('Back at the first-visit Start (screen 1). Your plan and data are gone from this device.'); return; }
+      if (act === 'deleted') { clearOverlays(board); toast('Back at the first-visit Start (screen 1). Your travel folder and data are gone from this device.'); return; }
     }
     if (t.matches('[data-jump]')) { e.preventDefault(); const el = board.querySelector(`#${t.dataset.jump}`); if (el) { el.scrollIntoView({ block: 'start' }); el.focus({ preventScroll: true }); } return; }
     const seg = t.closest('.segc button');
