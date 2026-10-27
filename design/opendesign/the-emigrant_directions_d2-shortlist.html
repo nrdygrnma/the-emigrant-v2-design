@@ -72,6 +72,10 @@ body { margin: 0; }
 h1, h2, h3, h4, h5, p, ul, ol, dl, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
 button { font: inherit; color: inherit; }
+/* Everything clickable shows the pointer; a disabled control says it cannot be used */
+button, [role="button"], [role="tab"], [role="option"], [role="menuitem"], a[href], summary, label.check, label.radio, label.switch, .chk-chip, .crit__grip, .d2-state { cursor: pointer; }
+button:disabled, .btn:disabled { cursor: not-allowed; }
+.f-step[data-state="later"], .f-step[data-state="later"] *, .f-band__btn[style*="default"] { cursor: default; }
 :focus-visible { outline: 2px solid var(--k-focus); outline-offset: 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .k-skip { position: absolute; left: 16px; top: -100px; z-index: 100; padding: 8px 16px; background: var(--k-surface); color: var(--k-ink); }
@@ -137,6 +141,7 @@ dialog.k-dialog::backdrop { background: var(--k-scrim); }
   --ink-on-action: #ffffff;
   --ink-covered: #2f6b3e;      /* entry green */
   --ink-partly: #b4400a;       /* signal orange: partly covered, out of date */
+  --ink-warning: #8a5a00;      /* amber: a warning, clearly apart from the oxblood of an error */
   --ink-highlight: #e6f45a;    /* citrus: highlighter only, never text */
   --ink-disabled: #dfe6f0;
   /* Lines */
@@ -160,6 +165,8 @@ dialog.k-dialog::backdrop { background: var(--k-scrim); }
   --tint-focus: #e7eefa;
   --tint-covered: #ecf4ee;
   --tint-partly: #fcefe7;
+  --tint-warning: #fbf3e3;
+  --tint-danger: #fbeaec;
   --tint-none: #f1f3f7;
   /* Current step on the journey legs */
   --step-now-bg: var(--ink-highlight);
@@ -721,6 +728,7 @@ b, strong { color: var(--ink-navy); }
   --ink-covered: #7fca98;
   --ink-on-covered: #0e1626;
   --ink-partly: #f2925a;
+  --ink-warning: #f0b25a;
   --ink-highlight: #d8e64a;
   --hl-text: #0e1626;
   --ink-disabled: #26334d;
@@ -735,6 +743,8 @@ b, strong { color: var(--ink-navy); }
   --tint-focus: #1e2c4a;
   --tint-covered: #173226;
   --tint-partly: #3a2519;
+  --tint-warning: #3a2f17;
+  --tint-danger: #3a1e26;
   --tint-none: #1d2639;
   --step-now-n-bg: #0e1626;
   --step-now-n-fg: #d8e64a;
@@ -867,8 +877,11 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .alert > .od-icon { margin-top: 2px; flex: none; }
 .alert b { display: block; }
 .alert--info { border-left-color: var(--ink-evidence); background: var(--tint-focus); }
-.alert--warning { border-left-color: var(--ink-partly); background: var(--tint-partly); }
-.alert--error { border-left-color: var(--ink-danger); border-left-style: double; border-left-width: 6px; background: var(--paper-card); }
+.alert--info > .od-icon { color: var(--ink-evidence); }
+.alert--warning { border-left-color: var(--ink-warning); background: var(--tint-warning); }
+.alert--warning > .od-icon { color: var(--ink-warning); }
+.alert--error { border-left-color: var(--ink-danger); background: var(--tint-danger); }
+.alert--error > .od-icon { color: var(--ink-danger); }
 
 /* Progress */
 .prog { display: grid; gap: 6px; }
@@ -881,8 +894,8 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* File drop zone */
 .drop { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; border: var(--b-notyet); border-radius: var(--r-card); background: var(--paper-page); text-align: center; color: var(--ink-text); --od-icon-size: 28px; }
 .drop.is-over { border-style: solid; border-color: var(--ink-navy); background: var(--tint-focus); }
-.drop.is-chosen { border-style: solid; background: var(--paper-card); }
-.drop.is-error { border-color: var(--ink-danger); }
+.drop.is-chosen { border-style: solid; border-color: var(--line-edge); background: var(--paper-card); }
+.drop.is-error { border-style: solid; border-color: var(--ink-danger); background: var(--paper-card); }
 .drop__file { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); }
 
 /* Empty state */
@@ -1540,19 +1553,32 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .cp--compact .cp__fields > div.cp__credit { grid-column: 1 / -1; }
 /* The D1 gallery shows the Start artboards the way D2 does: the desktop one scaled to fit its column */
 .g-boards .k-boards { margin-top: 4px; }
-/* ── The not-yet rings and the "coming" tag: drawn dots ──────────────────────────────────────────
-   A CSS dotted border cannot set the gap, so the ring is drawn: round dots 2.5px thick, 6.5px apart (a 4px gap),
-   in the control-edge ink, over a transparent border of the same width. One drawing per ring size. */
-.f-step[data-state="later"] .f-step__n { position: relative; border: 2px solid transparent; }
-.f-step[data-state="later"] .f-step__n::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--line-edge); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Ccircle%20cx='14.0'%20cy='14.0'%20r='12.75'%20pathLength='78.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2028%2028'%3E%3Ccircle%20cx='14.0'%20cy='14.0'%20r='12.75'%20pathLength='78.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-.k-phone .f-step[data-state="later"] .f-step__n::after, .f-rail--compact .f-step[data-state="later"] .f-step__n::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-.st-leg--soon .st-leg__n { position: relative; border: 2px solid transparent; color: var(--ink-text-2); }
-.st-leg--soon .st-leg__n::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--line-edge); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20.0'%20cy='20.0'%20r='18.75'%20pathLength='117.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20.0'%20cy='20.0'%20r='18.75'%20pathLength='117.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-.k-desk .st-card--b2 .st-leg--soon .st-leg__n::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Ccircle%20cx='12.0'%20cy='12.0'%20r='10.75'%20pathLength='65.0'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-.f-step__soon { position: relative; border: 0; padding: 5px 11px; }
-.f-step__soon::after { content: ""; position: absolute; inset: 0; border-radius: 999px; background: var(--ink-muted); pointer-events: none; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2065%2022'%20preserveAspectRatio='none'%3E%3Crect%20x='1.25'%20y='1.25'%20width='62.5'%20height='19.5'%20rx='9.75'%20pathLength='149.5'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2065%2022'%20preserveAspectRatio='none'%3E%3Crect%20x='1.25'%20y='1.25'%20width='62.5'%20height='19.5'%20rx='9.75'%20pathLength='149.5'%20fill='none'%20stroke='white'%20stroke-width='2.5'%20stroke-dasharray='0%206.5'%20stroke-linecap='round'%20vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
-.k-phone .f-step__soon, .f-rail--compact .f-step__soon { padding: 4px 8px; }
-@container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 4px 7px; } }
+/* ── The not-yet mark, drawn: real dots ─────────────────────────────────────────────────────────
+   A CSS dotted border smears into short dashes and cannot set the gap. So every not-yet mark keeps a transparent
+   border for its layout and gets a drawing of real circles over it, 3px dots 4px apart (2px dots 3px apart on the
+   small tags), placed evenly around its own rounded outline. The engine draws it to each element's exact size
+   (dotsWatch) and sets --dots-mask; the ink is --dots-ink. */
+.dots-box, .dots-line { position: relative; border-color: transparent !important; }
+.dots-box::before, .dots-line::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--dots-ink, currentColor); pointer-events: none; z-index: 0;
+  -webkit-mask: var(--dots-mask, none) center / 100% 100% no-repeat; mask: var(--dots-mask, none) center / 100% 100% no-repeat; }
+.dots-box > *, .dots-line > * { position: relative; z-index: 1; }
+.dots-box.dots-box--small { --dot: 2px; --pitch: 5px; }
+/* inks per mark */
+.f-unknown, .na-line, .nc, .drop, .crit--yesno, .pile__empty, .st-pass__blank, .f-step__n, .st-leg__n { --dots-ink: var(--line-edge); }
+.empty { --dots-ink: var(--line-hair); }
+.pile.is-target { --dots-ink: var(--ink-navy); }
+.banner--prov, .tagx--sample, .sample { --dots-ink: var(--ink-evidence); }
+.strip .sample { --dots-ink: var(--paper-page); }
+.f-step__soon, .stamp--e0 { --dots-ink: var(--ink-muted); }
+.crow--full .crow__add, .rtag--partly, .crit--yesno .crit__kind { --dots-ink: var(--line-edge); }
+/* the rings: a transparent border keeps the size, the drawing is the ring */
+.f-step[data-state="later"] .f-step__n { border: 2px solid transparent; }
+.st-leg--soon .st-leg__n { border: 2px solid transparent; color: var(--ink-text-2); }
+.f-step__soon { border: 1px solid transparent; padding: 4px 10px; }
+.k-phone .f-step__soon, .f-rail--compact .f-step__soon { padding: 3px 7px; }
+@container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 3px 6px; } }
+/* the destination: the dots run along the bottom edge only */
+.st-pass__blank { border-bottom: 2px solid transparent; }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
@@ -2473,6 +2499,71 @@ function watchLabels() {
   new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) labelCase(n); }))).observe(document.body, { childList: true, subtree: true });
 }
 
+/* ── The not-yet mark, drawn: real dots ──────────────────────────────
+   Every element in DOTS_SEL gets a mask of real circles at its own size: 3px dots, 4px apart (the --dot and --pitch
+   custom properties change that), placed evenly along its rounded outline. .dots-line marks get the dots along the
+   bottom edge only. Drawn on insertion and again on every resize. */
+const DOTS_SEL = '.stamp--e0, .f-unknown, .na-line, .nc, .drop:not(.is-over):not(.is-chosen):not(.is-error), .empty, .crit--yesno, .pile__empty, .pile.is-target, .banner--prov, .tagx--sample, .sample, .crow--full .crow__add, .rtag--partly, .crit--yesno .crit__kind, .f-step[data-state="later"] .f-step__n, .st-leg--soon .st-leg__n, .f-step__soon';
+const DOTS_SMALL = '.tagx--sample, .sample, .rtag--partly, .crit--yesno .crit__kind';
+const DOTS_LINE = '.st-pass__blank';
+function dotsSvg(w, h, pts, dot) {
+  const c = pts.map(([x, y]) => `<circle cx='${x.toFixed(2)}' cy='${y.toFixed(2)}' r='${dot}'/>`).join('');
+  return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' fill='white'>${c}</svg>`)}")`;
+}
+function dotsRing(w, h, r, dot, pitch) {
+  const rc = Math.max(0, Math.min(r, h / 2, w / 2) - dot), sx = Math.max(0, w - 2 * (dot + rc)), sy = Math.max(0, h - 2 * (dot + rc));
+  const per = 2 * sx + 2 * sy + 2 * Math.PI * rc, n = Math.max(4, Math.round(per / pitch)), step = per / n;
+  const q = Math.PI * rc / 2;
+  const at = d => {
+    if (d < sx) return [dot + rc + d, dot];
+    d -= sx; if (d < q) { const a = -Math.PI / 2 + d / rc; return [w - dot - rc + rc * Math.cos(a), dot + rc + rc * Math.sin(a)]; }
+    d -= q; if (d < sy) return [w - dot, dot + rc + d];
+    d -= sy; if (d < q) { const a = d / rc; return [w - dot - rc + rc * Math.cos(a), h - dot - rc + rc * Math.sin(a)]; }
+    d -= q; if (d < sx) return [w - dot - rc - d, h - dot];
+    d -= sx; if (d < q) { const a = Math.PI / 2 + d / rc; return [dot + rc + rc * Math.cos(a), h - dot - rc + rc * Math.sin(a)]; }
+    d -= q; if (d < sy) return [dot, h - dot - rc - d];
+    d -= sy; const a = Math.PI + d / rc; return [dot + rc + rc * Math.cos(a), dot + rc + rc * Math.sin(a)];
+  };
+  return dotsSvg(w, h, Array.from({ length: n }, (_, i) => at(i * step)), dot);
+}
+function dotsLine(w, h, dot, pitch) {
+  const n = Math.max(2, Math.round(w / pitch)), step = w / n;
+  return dotsSvg(w, h, Array.from({ length: n }, (_, i) => [step / 2 + i * step, h - dot]), dot);
+}
+function dotsDraw(el) {
+  const w = el.offsetWidth, h = el.offsetHeight; if (!w || !h) return;
+  const cs = getComputedStyle(el), dot = parseFloat(cs.getPropertyValue('--dot')) / 2 || 1.5, pitch = parseFloat(cs.getPropertyValue('--pitch')) || 7;
+  const r = parseFloat(cs.borderTopLeftRadius) || 0;
+  el.style.setProperty('--dots-mask', el.classList.contains('dots-line') ? dotsLine(w, h, dot, pitch) : dotsRing(w, h, r, dot, pitch));
+}
+let dotsRO = null;
+function dotsApply(root = document) {
+  const list = [...(root.matches && root.matches(`${DOTS_SEL}, ${DOTS_LINE}`) ? [root] : []), ...root.querySelectorAll(`${DOTS_SEL}, ${DOTS_LINE}`)];
+  list.forEach(el => {
+    if (el.dataset.dots) return;
+    el.dataset.dots = '1';
+    el.classList.add(el.matches(DOTS_LINE) ? 'dots-line' : 'dots-box');
+    if (el.matches(DOTS_SMALL)) el.classList.add('dots-box--small');
+    dotsDraw(el); dotsRO.observe(el);
+  });
+}
+function dotsWatch() {
+  dotsRO = new ResizeObserver(entries => entries.forEach(en => dotsDraw(en.target)));
+  dotsApply();
+  /* new nodes get their dots; a class change (a pile becoming a drop target, a row becoming "full") is re-read, but a
+     change we made ourselves (adding dots-box) is a no-op, since the element already matches and is marked */
+  new MutationObserver(ms => ms.forEach(m => {
+    m.addedNodes.forEach(n => { if (n.nodeType === 1) dotsApply(n); });
+    if (m.type === 'attributes' && m.target.nodeType === 1) {
+      const t = m.target, hit = t.matches(`${DOTS_SEL}, ${DOTS_LINE}`);
+      if (hit && !t.dataset.dots) dotsApply(t);
+      else if (!hit && t.dataset.dots) { delete t.dataset.dots; t.classList.remove('dots-box', 'dots-line', 'dots-box--small'); t.style.removeProperty('--dots-mask'); dotsRO.unobserve(t); }
+      t.querySelectorAll('[data-dots]').forEach(c => { if (!c.matches(`${DOTS_SEL}, ${DOTS_LINE}`)) { delete c.dataset.dots; c.classList.remove('dots-box', 'dots-line', 'dots-box--small'); c.style.removeProperty('--dots-mask'); dotsRO.unobserve(c); } });
+      if (hit || t.querySelector(`${DOTS_SEL}, ${DOTS_LINE}`)) dotsApply(t);
+    }
+  })).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+}
+
 /* ── Behavior ──────────────────────────────────────────────────────── */
 let toastTimer = 0;
 function toast(msg) {
@@ -2564,6 +2655,7 @@ function initBehavior() {
   document.getElementById('kToastClose').innerHTML = icon('xmark');
   initSelectMenus();
   watchLabels();
+  dotsWatch();
 }
 </script>
 <script>/* The Emigrant — D2 screen engine. Composes the brief's screens from the D1 components in
