@@ -307,9 +307,7 @@ b, strong { color: var(--ink-navy); }
 .f-railrow { padding: 4px 8px; background: var(--paper-card); border-bottom: 1px solid var(--line-hair); }
 .f-rail ol { display: flex; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .f-rail li { display: flex; align-items: center; }
-.f-rail li + li::before { content: ""; display: block; width: 24px; height: 1px; border-radius: 1px; background: var(--line-edge); margin: 0 6px; }
-/* the progress line: the connector after a finished step is solid green and 2px */
-.f-rail li:has(> .f-step[data-state="done"]) + li::before { height: 2px; background: var(--ink-covered); }
+.f-rail li + li::before { content: ""; display: block; flex: none; width: 16px; height: 16px; margin: 0 6px; background: var(--line-edge); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E") center / 16px 16px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E") center / 16px 16px no-repeat; }
 .f-step { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px 0 6px; border: 0; border-radius: 999px; background: transparent; cursor: pointer; color: var(--ink-text-2); font-weight: 700; font-stretch: 100%; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--fs-xs); white-space: nowrap; --od-icon-size: 16px;
   transition: background-color var(--k-fast) var(--k-ease-out); }
 .f-step__n { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 2px solid currentColor; border-radius: 50%; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0; }
@@ -325,9 +323,9 @@ b, strong { color: var(--ink-navy); }
 .k-phone .f-step__n { width: 24px; height: 24px; }
 .k-phone .f-step__soon { padding: 2px 6px; }
 .k-phone .f-railrow { padding: 4px; container: rail / inline-size; }
-@container rail (max-width: 359px) { .f-rail li + li::before { display: none; } .f-step { letter-spacing: 0; } }
+@container rail (max-width: 359px) { .f-rail li + li::before { width: 10px; -webkit-mask-size: 10px 10px; mask-size: 10px 10px; } .f-step { letter-spacing: 0; } }
 .k-phone .f-step[data-state="later"] { padding-right: 0; }
-.k-phone .f-rail li + li::before { width: 8px; margin: 0 1px; }
+.k-phone .f-rail li + li::before { width: 12px; height: 16px; margin: 0; -webkit-mask-size: 12px 12px; mask-size: 12px 12px; }
 @media (hover: hover) { .f-step:not([data-state="later"]):not([data-state="now"]):hover, .f-mi:hover, .f-back:hover, .f-key__btn:hover { background: var(--paper-page); } }
 .f-menu { background: var(--paper-card); border: 1px solid var(--line-hair); border-radius: var(--r-card); padding: 8px; display: grid; gap: 4px; }
 .k-phone .f-menu { border-radius: var(--r-card) var(--r-card) 0 0; padding-bottom: 32px; }
@@ -1131,10 +1129,10 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .g-pad > * { min-width: 0; }
 .cmp-wrap { max-width: 100%; }
 /* Compact plan rail (phone): smaller legs; below 340px the Plan leg wraps to a second line */
-.f-rail--compact .f-step { padding: 0 6px 0 4px; gap: 5px; }
+.f-rail--compact .f-step { padding: 0 5px 0 3px; gap: 5px; }
 .f-rail--compact .f-step__n { width: 24px; height: 24px; }
 .f-rail--compact .f-step__soon { padding: 2px 6px; }
-.f-rail--compact li + li::before { width: 8px; margin: 0 1px; }
+.f-rail--compact li + li::before { width: 12px; height: 16px; margin: 0; -webkit-mask-size: 12px 12px; mask-size: 12px 12px; }
 .f-railrow:has(.f-rail--compact) { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 339px) { .f-rail--compact ol { flex-wrap: wrap; row-gap: 0; } }
 .f-rail--compact ol { flex-wrap: wrap; }
@@ -1189,7 +1187,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
   .f-next--head .f-next__hint { max-width: none; font-size: var(--fs-xs); }
 }
 @container app (max-width: 1279px) {
-  .f-head--desk .f-rail li + li::before { width: 8px; margin: 0 2px; }
+  .f-head--desk .f-rail li + li::before { width: 14px; margin: 0 2px; -webkit-mask-size: 14px 14px; mask-size: 14px 14px; }
   .f-head--desk .f-step { padding: 0 10px 0 4px; }
   .f-head--desk .f-next__btn { padding-inline: 16px; }
 }
@@ -1628,6 +1626,44 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .qp__step, .crit__keys, .start-card__last { font-family: var(--f-text); font-stretch: 100%; }
 /* the proof line on the Start card: one chip */
 .st-proof { justify-self: start; font-size: var(--fs-xs) !important; padding: 2px 8px; border-radius: 4px; background: var(--paper-page); box-shadow: inset 0 0 0 1px var(--line-hair); }
+
+/* The compact rail: tight gaps between the legs, so the three steps hold one line on a phone */
+.f-rail--compact ol { gap: 2px; }
+/* The compact rail on a narrow phone (under 360): a smaller chevron and tighter legs, so the three steps hold one line */
+@container rail (max-width: 359px) {
+  .f-rail--compact ol { gap: 1px; }
+  .f-rail--compact li + li::before { width: 8px; -webkit-mask-size: 8px 8px; mask-size: 8px 8px; }
+  .f-rail--compact .f-step { padding: 0 4px 0 2px; }
+}
+/* Phone header: the hamburger stands alone, no circle around it */
+.k-phone .f-menubtn--icon, .g-phone .f-menubtn--icon { border: 0; background: transparent; }
+/* ── Condition list ────────────────────────────────────────────────────────────────────────────────
+   Per household member: the member as a header, then each condition as a row: the title with its status pill on
+   the right, one muted line for the reason or what would decide it, and a quiet two-column list for the
+   requirement, the document and the source note. One weight step only: the title is semibold, everything else
+   regular. Colour only on the pill. The second column starts at the same edge in every row and every list. */
+.cgroup { display: grid; }
+.cgroup + .cgroup { margin-top: 20px; }
+.cgroup__title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding-bottom: 8px; border-bottom: 2px solid var(--ink-navy); }
+.cgroup__role { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-lg); line-height: 1; color: var(--ink-navy); }
+.cgroup__who { font-size: var(--fs-sm); color: var(--ink-text-2); font-weight: 400; }
+.cgroup__list { display: grid; }
+.cl { --cl-label: 6.5rem; display: grid; gap: 6px; padding: 14px 0; border-top: 1px solid var(--line-hair); }
+.cl:first-child { border-top: 0; }
+.cl__head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 6px 12px; }
+.cl__title { flex: 1 1 180px; min-width: 0; font-weight: 600; color: var(--ink-navy); line-height: 1.4; }
+.cl__state { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border-radius: 999px; font-size: var(--fs-xs); font-weight: 500; line-height: 20px; white-space: nowrap; --od-icon-size: 16px; }
+.cl--met .cl__state { background: var(--tint-covered); color: var(--ink-covered); }
+.cl--notmet .cl__state { background: var(--tint-none); color: var(--ink-navy); box-shadow: inset 0 0 0 1px var(--line-edge); }
+.cl--unknown .cl__state { background: var(--paper-card); color: var(--ink-text-2); box-shadow: inset 0 0 0 1px var(--ink-notyet); }
+.cl__why { font-size: var(--fs-sm); color: var(--ink-text-2); max-width: 60ch; }
+.cl__meta { display: grid; grid-template-columns: var(--cl-label) minmax(0, 1fr); column-gap: 16px; row-gap: 4px; margin: 2px 0 0; align-items: baseline; }
+.cl__meta > div { display: contents; }
+.cl__meta dt, .cl__meta dt.lbl { font-family: var(--f-text); font-stretch: 100%; font-weight: 400; font-size: var(--fs-sm); letter-spacing: 0; text-transform: none; color: var(--ink-text-2); }
+.cl__meta dd { margin: 0; font-size: var(--fs-sm); color: var(--ink-text); }
+/* the note mark sits on the column edge like the text above it; its 44px hit area is invisible */
+.cl__meta .f-val { position: relative; min-height: 0; padding: 0; margin: 0; border-radius: 0; vertical-align: baseline; }
+.cl__meta .f-val::after { content: ""; position: absolute; left: -8px; right: -8px; top: -12px; bottom: -12px; }
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
 <style>
@@ -1745,7 +1781,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
       <div class="card"><h3>Spacing</h3><div class="space"><div><i style="width:4px;height:4px"></i>4</div><div><i style="width:8px;height:8px"></i>8</div><div><i style="width:12px;height:12px"></i>12</div><div><i style="width:16px;height:16px"></i>16</div><div><i style="width:20px;height:20px"></i>20</div><div><i style="width:24px;height:24px"></i>24</div><div><i style="width:32px;height:32px"></i>32</div><div><i style="width:48px;height:48px"></i>48</div><div><i style="width:64px;height:64px"></i>64</div></div><p class="g-note">Phone gutter 16, tablet 32, desktop 48. Content up to 1240 wide. Grid: 4 columns phone, 8 tablet, 12 desktop.</p></div>
       <div class="card"><h3>Shape and elevation</h3><div class="shapes"><div><i style="border-radius:6px"></i>6 · marks</div><div><i style="border-radius:8px"></i>8 · buttons, fields</div><div><i style="border-radius:12px;box-shadow:var(--shadow-card);border:0"></i>12 · cards</div><div><i style="border-radius:4px;box-shadow:var(--shadow-print);border:8px solid var(--print-border)"></i>print</div><div><i style="border-radius:12px;box-shadow:var(--shadow-lift);border:0"></i>sheet, dialog</div></div></div>
       <div class="card"><h3>Touch and focus</h3><ul class="rules"><li><span data-i="check"></span>Every control and every small mark (note marks, evidence marks, coverage marks, rail legs) has a hit area of at least 44 × 44px, even where the mark is smaller.</li><li><span data-i="check"></span>Visible 2px focus ring in stamp violet. Full keyboard use: criteria move with keys 1 to 4.</li><li><span data-i="check"></span>Nothing needs hover. Tooltips open on tap or focus.</li></ul></div>
-      <div class="card card--stretch"><h3>Not yet, unknown: the light mark</h3><p class="g-note">One mark for everything that is not there yet, system-wide: a light solid line in the hairline ink, never dashes or dots. Tokens <span class="mono">--ink-notyet</span>, <span class="mono">--b-notyet</span> (2px) and <span class="mono">--b-notyet-thin</span> (1px). Used by the E0 evidence mark, unknown values, the not-yet step circle, the "coming" tag, the boarding pass destination underline, yes/no criterion cards, empty piles, drop zones and empty states. The word on the mark carries the meaning; the line stays quiet. The plan rail's connectors are plain lines, solid green after a finished step.</p>
+      <div class="card card--stretch"><h3>Not yet, unknown: the light mark</h3><p class="g-note">One mark for everything that is not there yet, system-wide: a light solid line in the hairline ink, never dashes or dots. Tokens <span class="mono">--ink-notyet</span>, <span class="mono">--b-notyet</span> (2px) and <span class="mono">--b-notyet-thin</span> (1px). Used by the E0 evidence mark, unknown values, the not-yet step circle, the "coming" tag, the boarding pass destination underline, yes/no criterion cards, empty piles, drop zones and empty states. The word on the mark carries the meaning; the line stays quiet. The plan rail's steps are joined by a small chevron.</p>
         <div class="g-row" id="dotsDemo"></div></div>
     </div>
   </section>
@@ -2943,15 +2979,18 @@ S.criteria = () => `<div class="g-grid">
   <div class="k-menu f-menu" id="pileMenu" role="menu" aria-label="Move to" hidden style="position:fixed"></div></div>`;
 
 S.conditions = () => {
+  /* One condition: the title with its status pill, one muted line (the reason, or what would decide it), then the
+     requirement, the document and the source note as a quiet label and value list */
   const cond = (k, t, why, req, doc, note) => {
     const st = { met: ['check-circle', 'Appears met'], notmet: ['xmark-circle', 'Appears not met'], unknown: ['help-circle', 'Not known yet'] }[k];
-    return `<li class="f-cond f-cond--${k}">${icon(st[0])}<span class="f-cond__body"><span class="f-cond__text">${t}</span><b>${st[1]}</b>${why ? `<span class="f-muted">${why}</span>` : ''}<span class="f-cond__meta"><span><b>Requirement:</b> ${req}</span><span><b>Document:</b> ${doc}</span></span>${valButton(note, `<span>Source note ${NOTES[note].n}</span>`, 'Condition source', 'f-val--small')}</span></li>`;
+    return `<li class="cl cl--${k}"><div class="cl__head"><span class="cl__title">${t}</span><span class="cl__state">${icon(st[0])}<span>${st[1]}</span></span></div>${why ? `<p class="cl__why">${why}</p>` : ''}
+      <dl class="cl__meta"><div><dt>Requirement</dt><dd>${req}</dd></div><div><dt>Document</dt><dd>${doc}</dd></div><div><dt>Source</dt><dd>${valButton(note, '', `Source note for ${t}`, 'f-val--refonly')}</dd></div></dl></li>`;
   };
   return `<div class="g-grid">
-  ${item('Condition list · Austria', 'You (Austrian) and Partner (Brazilian, durable partnership)', `<div class="f-cgroup"><h4 class="f-cgroup__title">You<span>Austrian citizen</span></h4><ul>${cond('met', 'Hold Austrian citizenship', null, 'Citizenship of Austria', 'Passport', 'euRuleAUT')}</ul></div>
-    <div class="f-cgroup"><h4 class="f-cgroup__title">Partner<span>Brazilian citizen, durable partnership</span></h4><ul>${cond('notmet', 'Proof of a durable partnership of at least two years', 'You entered one year together.', 'Shared household for two years', 'Lease or registration records', 'partnerAUT')}${cond('unknown', 'Sufficient resources for both of you', 'What would decide it: your joint net income, which you have not entered.', 'Income above the reference rate', 'Income statements', 'partnerAUT')}</ul></div>`)}
-  ${item('Condition list · Costa Rica, rentista', 'You and Partner', `<div class="f-cgroup"><h4 class="f-cgroup__title">You<span>US citizen</span></h4><ul>${cond('met', 'A stable monthly income from abroad', null, 'At least the set amount for two years', 'Bank letter', 'routeCRI')}${cond('unknown', 'Clean criminal record', 'What would decide it: a record certificate from each country lived in.', 'No convictions', 'Apostilled certificate', 'routeCRI')}</ul></div>`)}
-  ${item('Condition list · Germany', 'a child (11), dual national', `<div class="f-cgroup"><h4 class="f-cgroup__title">Child<span>German and Indian citizen, 11</span></h4><ul>${cond('met', 'Hold German citizenship', null, 'Citizenship of Germany', 'Passport or certificate', 'euRuleAUT')}</ul></div>`)}
+  ${item('Condition list · Austria', 'You (Austrian) and Partner (Brazilian, durable partnership)', `<div class="cgroup"><h4 class="cgroup__title"><span class="cgroup__role">You</span><span class="cgroup__who">Austrian citizen</span></h4><ul class="cgroup__list">${cond('met', 'Hold Austrian citizenship', null, 'Citizenship of Austria', 'Passport', 'euRuleAUT')}</ul></div>
+    <div class="cgroup"><h4 class="cgroup__title"><span class="cgroup__role">Partner</span><span class="cgroup__who">Brazilian citizen, durable partnership</span></h4><ul class="cgroup__list">${cond('notmet', 'Proof of a durable partnership of at least two years', 'You entered one year together.', 'Shared household for two years', 'Lease or registration records', 'partnerAUT')}${cond('unknown', 'Sufficient resources for both of you', 'What would decide it: your joint net income, which you have not entered.', 'Income above the reference rate', 'Income statements', 'partnerAUT')}</ul></div>`)}
+  ${item('Condition list · Costa Rica, rentista', 'You and Partner', `<div class="cgroup"><h4 class="cgroup__title"><span class="cgroup__role">You</span><span class="cgroup__who">US citizen</span></h4><ul class="cgroup__list">${cond('met', 'A stable monthly income from abroad', null, 'At least the set amount for two years', 'Bank letter', 'routeCRI')}${cond('unknown', 'Clean criminal record', 'What would decide it: a record certificate from each country lived in.', 'No convictions', 'Apostilled certificate', 'routeCRI')}</ul></div>`)}
+  ${item('Condition list · Germany', 'a child (11), dual national', `<div class="cgroup"><h4 class="cgroup__title"><span class="cgroup__role">Child</span><span class="cgroup__who">German and Indian citizen, 11</span></h4><ul class="cgroup__list">${cond('met', 'Hold German citizenship', null, 'Citizenship of Germany', 'Passport or certificate', 'euRuleAUT')}</ul></div>`)}
 </div>`;
 };
 S.members = () => `<div class="g-grid">${HOUSEHOLDS.map((h, hi) => item(h.name, hi === 0 ? 'complete' : hi === 1 ? 'complete · two children' : hi === 2 ? 'one member' : 'dual nationality', h.members.map(m => `<div class="mcard"><div class="mcard__head"><span class="mcard__role">${m.role}</span>${m.nat.length > 1 ? '<span class="tagx">Dual nationality</span>' : ''}</div><dl><div><dt class="lbl">Nationalities</dt><dd>${m.nat.join(', ')}</dd></div>${m.relation ? `<div><dt class="lbl">Relationship</dt><dd>${m.relation}</dd></div>` : ''}${m.age !== undefined ? `<div><dt class="lbl">Age</dt><dd>${m.age}</dd></div>` : ''}</dl></div>`).join(''), 'g-item--plain')).join('')}
@@ -2973,7 +3012,7 @@ S.report = () => `<div class="g-grid">
 
 S.shell = () => `<div class="g-item"><div class="g-item__label"><b>Plan rail</b><span>current · done · not yet; Plan "coming"; neutral pages mark no step as current; 44px legs</span></div>
   ${frames(`<div class="f-railrow" style="border-radius:8px">${rail('shortlist', { compact: true })}</div><div class="f-railrow" style="border-radius:8px">${rail('route', { compact: true })}</div><div class="f-railrow" style="border-radius:8px">${rail('none', { compact: true })}</div>`, `<div class="g-desk--scroll" tabindex="0" aria-label="Desktop rail demo"><div class="g-col" style="min-width:420px">${rail('shortlist')}${rail('route')}${rail('none')}</div></div>`)}
-  <p class="g-note">The third row is the neutral rail: on reading pages, system states and the empty travel folder no step is current. The not-yet step has a light circle and "coming" a light tag. The connector after a finished step is a solid green line.</p></div>
+  <p class="g-note">The third row is the neutral rail: on reading pages, system states and the empty travel folder no step is current. The not-yet step has a light circle and "coming" a light tag. A small chevron between the steps shows the direction of travel.</p></div>
 <div class="g-item"><div class="g-item__label"><b>Phone: header, menu, next-action bar, footer</b><span>the compact title with the info button; the one action sticky at the bottom; the footer with the two links</span></div>
   <div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390</span><div class="g-phone" style="height:560px;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr)"><div class="f-top"><header class="f-head" style="height:68px;padding:8px 8px 0 16px">${WORDMARK}<span class="od-fill"></span><button type="button" class="f-iconbtn f-menubtn f-menubtn--icon" aria-label="Menu" data-tip-text="Menu" data-toast="Opens the menu.">${icon('menu')}</button></header><div class="f-railrow">${rail('shortlist', { compact: true })}</div></div><div class="g-pad"><div class="f-titleblock f-titleblock--compact" style="background:var(--paper-card);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow-card)"><div class="f-titlerow"><h3 class="f-title">Where could you go?</h3><button type="button" class="f-iconbtn f-whatbtn" data-disclose aria-expanded="false" aria-controls="whatDemo" aria-label="What happens next">${icon('info-circle')}</button></div><p class="f-whatfold" id="whatDemo" hidden><b>What happens next:</b> add up to three countries to your shortlist.</p></div></div><div>${nextBar('phone', { label: 'Compare your shortlist', hint: 'Step 1 of 3 · 2 countries on your shortlist' })}${phoneFoot()}</div></div></div>
   </div></div>

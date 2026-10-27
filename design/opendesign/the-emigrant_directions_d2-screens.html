@@ -307,9 +307,7 @@ b, strong { color: var(--ink-navy); }
 .f-railrow { padding: 4px 8px; background: var(--paper-card); border-bottom: 1px solid var(--line-hair); }
 .f-rail ol { display: flex; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .f-rail li { display: flex; align-items: center; }
-.f-rail li + li::before { content: ""; display: block; width: 24px; height: 1px; border-radius: 1px; background: var(--line-edge); margin: 0 6px; }
-/* the progress line: the connector after a finished step is solid green and 2px */
-.f-rail li:has(> .f-step[data-state="done"]) + li::before { height: 2px; background: var(--ink-covered); }
+.f-rail li + li::before { content: ""; display: block; flex: none; width: 16px; height: 16px; margin: 0 6px; background: var(--line-edge); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E") center / 16px 16px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E") center / 16px 16px no-repeat; }
 .f-step { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px 0 6px; border: 0; border-radius: 999px; background: transparent; cursor: pointer; color: var(--ink-text-2); font-weight: 700; font-stretch: 100%; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--fs-xs); white-space: nowrap; --od-icon-size: 16px;
   transition: background-color var(--k-fast) var(--k-ease-out); }
 .f-step__n { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 2px solid currentColor; border-radius: 50%; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0; }
@@ -325,9 +323,9 @@ b, strong { color: var(--ink-navy); }
 .k-phone .f-step__n { width: 24px; height: 24px; }
 .k-phone .f-step__soon { padding: 2px 6px; }
 .k-phone .f-railrow { padding: 4px; container: rail / inline-size; }
-@container rail (max-width: 359px) { .f-rail li + li::before { display: none; } .f-step { letter-spacing: 0; } }
+@container rail (max-width: 359px) { .f-rail li + li::before { width: 10px; -webkit-mask-size: 10px 10px; mask-size: 10px 10px; } .f-step { letter-spacing: 0; } }
 .k-phone .f-step[data-state="later"] { padding-right: 0; }
-.k-phone .f-rail li + li::before { width: 8px; margin: 0 1px; }
+.k-phone .f-rail li + li::before { width: 12px; height: 16px; margin: 0; -webkit-mask-size: 12px 12px; mask-size: 12px 12px; }
 @media (hover: hover) { .f-step:not([data-state="later"]):not([data-state="now"]):hover, .f-mi:hover, .f-back:hover, .f-key__btn:hover { background: var(--paper-page); } }
 .f-menu { background: var(--paper-card); border: 1px solid var(--line-hair); border-radius: var(--r-card); padding: 8px; display: grid; gap: 4px; }
 .k-phone .f-menu { border-radius: var(--r-card) var(--r-card) 0 0; padding-bottom: 32px; }
@@ -1131,10 +1129,10 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .g-pad > * { min-width: 0; }
 .cmp-wrap { max-width: 100%; }
 /* Compact plan rail (phone): smaller legs; below 340px the Plan leg wraps to a second line */
-.f-rail--compact .f-step { padding: 0 6px 0 4px; gap: 5px; }
+.f-rail--compact .f-step { padding: 0 5px 0 3px; gap: 5px; }
 .f-rail--compact .f-step__n { width: 24px; height: 24px; }
 .f-rail--compact .f-step__soon { padding: 2px 6px; }
-.f-rail--compact li + li::before { width: 8px; margin: 0 1px; }
+.f-rail--compact li + li::before { width: 12px; height: 16px; margin: 0; -webkit-mask-size: 12px 12px; mask-size: 12px 12px; }
 .f-railrow:has(.f-rail--compact) { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 339px) { .f-rail--compact ol { flex-wrap: wrap; row-gap: 0; } }
 .f-rail--compact ol { flex-wrap: wrap; }
@@ -1189,7 +1187,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
   .f-next--head .f-next__hint { max-width: none; font-size: var(--fs-xs); }
 }
 @container app (max-width: 1279px) {
-  .f-head--desk .f-rail li + li::before { width: 8px; margin: 0 2px; }
+  .f-head--desk .f-rail li + li::before { width: 14px; margin: 0 2px; -webkit-mask-size: 14px 14px; mask-size: 14px 14px; }
   .f-head--desk .f-step { padding: 0 10px 0 4px; }
   .f-head--desk .f-next__btn { padding-inline: 16px; }
 }
@@ -1628,6 +1626,44 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .qp__step, .crit__keys, .start-card__last { font-family: var(--f-text); font-stretch: 100%; }
 /* the proof line on the Start card: one chip */
 .st-proof { justify-self: start; font-size: var(--fs-xs) !important; padding: 2px 8px; border-radius: 4px; background: var(--paper-page); box-shadow: inset 0 0 0 1px var(--line-hair); }
+
+/* The compact rail: tight gaps between the legs, so the three steps hold one line on a phone */
+.f-rail--compact ol { gap: 2px; }
+/* The compact rail on a narrow phone (under 360): a smaller chevron and tighter legs, so the three steps hold one line */
+@container rail (max-width: 359px) {
+  .f-rail--compact ol { gap: 1px; }
+  .f-rail--compact li + li::before { width: 8px; -webkit-mask-size: 8px 8px; mask-size: 8px 8px; }
+  .f-rail--compact .f-step { padding: 0 4px 0 2px; }
+}
+/* Phone header: the hamburger stands alone, no circle around it */
+.k-phone .f-menubtn--icon, .g-phone .f-menubtn--icon { border: 0; background: transparent; }
+/* ── Condition list ────────────────────────────────────────────────────────────────────────────────
+   Per household member: the member as a header, then each condition as a row: the title with its status pill on
+   the right, one muted line for the reason or what would decide it, and a quiet two-column list for the
+   requirement, the document and the source note. One weight step only: the title is semibold, everything else
+   regular. Colour only on the pill. The second column starts at the same edge in every row and every list. */
+.cgroup { display: grid; }
+.cgroup + .cgroup { margin-top: 20px; }
+.cgroup__title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding-bottom: 8px; border-bottom: 2px solid var(--ink-navy); }
+.cgroup__role { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-lg); line-height: 1; color: var(--ink-navy); }
+.cgroup__who { font-size: var(--fs-sm); color: var(--ink-text-2); font-weight: 400; }
+.cgroup__list { display: grid; }
+.cl { --cl-label: 6.5rem; display: grid; gap: 6px; padding: 14px 0; border-top: 1px solid var(--line-hair); }
+.cl:first-child { border-top: 0; }
+.cl__head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 6px 12px; }
+.cl__title { flex: 1 1 180px; min-width: 0; font-weight: 600; color: var(--ink-navy); line-height: 1.4; }
+.cl__state { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border-radius: 999px; font-size: var(--fs-xs); font-weight: 500; line-height: 20px; white-space: nowrap; --od-icon-size: 16px; }
+.cl--met .cl__state { background: var(--tint-covered); color: var(--ink-covered); }
+.cl--notmet .cl__state { background: var(--tint-none); color: var(--ink-navy); box-shadow: inset 0 0 0 1px var(--line-edge); }
+.cl--unknown .cl__state { background: var(--paper-card); color: var(--ink-text-2); box-shadow: inset 0 0 0 1px var(--ink-notyet); }
+.cl__why { font-size: var(--fs-sm); color: var(--ink-text-2); max-width: 60ch; }
+.cl__meta { display: grid; grid-template-columns: var(--cl-label) minmax(0, 1fr); column-gap: 16px; row-gap: 4px; margin: 2px 0 0; align-items: baseline; }
+.cl__meta > div { display: contents; }
+.cl__meta dt, .cl__meta dt.lbl { font-family: var(--f-text); font-stretch: 100%; font-weight: 400; font-size: var(--fs-sm); letter-spacing: 0; text-transform: none; color: var(--ink-text-2); }
+.cl__meta dd { margin: 0; font-size: var(--fs-sm); color: var(--ink-text); }
+/* the note mark sits on the column edge like the text above it; its 44px hit area is invisible */
+.cl__meta .f-val { position: relative; min-height: 0; padding: 0; margin: 0; border-radius: 0; vertical-align: baseline; }
+.cl__meta .f-val::after { content: ""; position: absolute; left: -8px; right: -8px; top: -12px; bottom: -12px; }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
