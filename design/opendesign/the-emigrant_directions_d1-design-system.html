@@ -1786,6 +1786,17 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .ncov__list li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 0; border-top: 1px solid var(--line-hair); }
 .ncov__cname { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; flex: 1 1 140px; min-width: 0; }
 .ncov__cname b { color: var(--ink-navy); }
+
+/* The chevron sits centred between two steps: the space before it (the step's right padding and the list gap) equals
+   the space after it (its right margin and the list gap), so a highlighted current step never touches it. */
+.f-rail .f-step { padding-right: 10px; }
+.f-rail li + li::before { margin: 0 14px 0 0; }
+.f-rail--compact ol { gap: 0; }
+.f-rail--compact .f-step { padding-right: 4px; }
+.f-rail--compact li + li::before, .k-phone .f-rail li + li::before { margin: 0 4px 0 0; }
+.k-phone .f-rail .f-step[data-state="later"], .f-rail--compact .f-step[data-state="later"] { padding-right: 0; }
+@container app (max-width: 1279px) { .f-head--desk .f-rail .f-step { padding-right: 8px; } .f-head--desk .f-rail li + li::before { margin: 0 12px 0 0; } }
+@container rail (max-width: 359px) { .f-rail--compact .f-step { padding-right: 2px; } .f-rail--compact li + li::before { margin: 0; } }
 </style>
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
