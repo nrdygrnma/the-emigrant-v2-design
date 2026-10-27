@@ -1693,7 +1693,101 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* the note mark sits on the column edge like the text above it; its 44px hit area is invisible */
 .cl__meta .f-val { position: relative; min-height: 0; padding: 0; margin: 0; border-radius: 0; vertical-align: baseline; }
 .cl__meta .f-val::after { content: ""; position: absolute; left: -8px; right: -8px; top: -12px; bottom: -12px; }
+
+/* ── Route step (D3): household editor, route result, not covered ──
+   Built from the same parts as the rest: the member card, the condition list, chips, tags and alerts.
+   Every row wraps, so German text 35% longer still fits at 360px. */
+.hh-why { display: flex; align-items: flex-start; gap: 12px; padding: 16px 20px; border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); color: var(--ink-text); --od-icon-size: 20px; }
+.hh-why > .od-icon { flex: none; margin-top: 2px; color: var(--ink-evidence); }
+.hh-why b { display: block; color: var(--ink-navy); }
+.hh-why p { font-size: var(--fs-sm); color: var(--ink-text-2); }
+.hm-list { display: grid; gap: 16px; }
+.hm { gap: 16px; padding: 16px 20px; }
+.hm__head { flex-wrap: wrap; gap: 4px 10px; }
+.hm__remove { margin: 0 -8px 0 auto; }
+.hm .rgroup { gap: 4px; }
+.hm__field { display: grid; gap: 8px; min-width: 0; }
+.hm__field + .hm__field { padding-top: 16px; border-top: 1px solid var(--line-hair); }
+.hm__nat { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.hm__nat .smenu { flex: 1 1 auto; min-width: 0; }
+.hm__addnat { justify-self: start; }
+.hm__age { max-width: 12rem; }
+.hm__missing { display: flex; align-items: flex-start; gap: 8px; font-size: var(--fs-sm); --od-icon-size: 18px; }
+.hm__missing > .od-icon { flex: none; margin-top: 1px; }
+.hm-add { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.rc, .ncov { display: grid; gap: 12px; padding: 16px 20px; border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); }
+.rc__id, .ncov__id { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.rc__name, .ncov__name, .rt__name { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-h2); line-height: 1.05; color: var(--ink-navy); overflow-wrap: anywhere; }
+.rc__marks { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 6px; }
+.rc__date { font-size: var(--fs-sm); color: var(--ink-text-2); }
+.rc__count { font-weight: 600; color: var(--ink-navy); }
+.hh-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding-top: 12px; border-top: 1px solid var(--line-hair); font-size: var(--fs-sm); color: var(--ink-text-2); }
+.hh-line__who { display: flex; flex-wrap: wrap; gap: 2px 16px; flex: 1 1 220px; min-width: 0; }
+.hh-line b { color: var(--ink-navy); }
+.hh-side { display: grid; gap: 10px; }
+.hh-side__m { display: grid; }
+.hh-side__m b { color: var(--ink-navy); }
+.hh-side__m span { font-size: var(--fs-sm); color: var(--ink-text-2); }
+.f-side .f-card > .btn { justify-self: start; }
+
+/* Outcome of a route, said as conditions: a pill that may wrap, never a verdict */
+.rstate { display: inline-flex; align-items: flex-start; gap: 6px; padding: 2px 10px 2px 8px; border-radius: 12px; font-size: var(--fs-xs); font-weight: 600; line-height: 20px; --od-icon-size: 16px; }
+.rstate > .od-icon { flex: none; margin-top: 2px; }
+.rstate--apply { background: var(--tint-covered); color: var(--ink-covered); }
+.rstate--notmet { background: var(--tint-none); color: var(--ink-navy); box-shadow: inset 0 0 0 1px var(--line-edge); }
+.rstate--unknown { background: var(--paper-card); color: var(--ink-text-2); box-shadow: inset 0 0 0 1px var(--ink-notyet); }
+
+/* Routes side by side: two columns, four where the column is wide enough */
+.rts-c { container: rts / inline-size; }
+.rts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@container rts (min-width: 600px) { .rts--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@container rts (max-width: 300px) { .rts { grid-template-columns: minmax(0, 1fr); } }
+.rts li { display: grid; min-width: 0; }
+.rts__card { display: grid; gap: 6px; align-content: start; justify-items: start; width: 100%; min-height: 44px; padding: 12px; border: 1px solid var(--line-edge); border-radius: var(--r-btn); background: var(--paper-card); color: var(--ink-text); font: inherit; text-align: left; }
+.rts__card:hover { border-color: var(--ink-navy); }
+.rts__card.is-on { padding: 11px; border: 2px solid var(--ink-navy); box-shadow: var(--shadow-card); }
+.rts__name { font-weight: 700; color: var(--ink-navy); line-height: 1.3; overflow-wrap: anywhere; }
+.rts__regime { font-size: var(--fs-sm); color: var(--ink-text-2); line-height: 1.35; }
+.rts .mchip { white-space: normal; overflow-wrap: anywhere; }
+
+/* One route in full */
+.rt { display: grid; gap: 20px; padding: 20px; border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); min-width: 0; }
+.rt__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.rt__head .lbl { flex-basis: 100%; }
+.rt__name { flex: 1 1 14rem; }
+.rt__facts { display: grid; grid-template-columns: 8rem minmax(0, 1fr); column-gap: 16px; row-gap: 10px; margin: 0; padding: 14px 0; border-top: 1px solid var(--line-hair); border-bottom: 1px solid var(--line-hair); align-items: baseline; }
+.rt__facts > div { display: contents; }
+.rt__facts dt { font-size: var(--fs-sm); color: var(--ink-text-2); }
+.rt__facts dd { margin: 0; font-size: var(--fs-sm); color: var(--ink-text); min-width: 0; overflow-wrap: anywhere; }
+.rt__facts dd small { display: flex; margin-top: 4px; }
+.rt__facts .mchip--link { margin-top: 0; }
+.rt__part { display: grid; gap: 8px; min-width: 0; }
+.rt__h { font-size: var(--fs-lg); line-height: 1.3; font-weight: 700; color: var(--ink-navy); }
+.rt__part .cgroup { margin-top: 8px; }
+.rt__docs { display: grid; gap: 6px; }
+.rt__docs li { display: flex; align-items: flex-start; gap: 8px; font-size: var(--fs-sm); color: var(--ink-text); --od-icon-size: 18px; }
+.rt__docs li > .od-icon { flex: none; margin-top: 1px; color: var(--ink-text-2); }
+@container phone (max-width: 420px) { .rt { padding: 16px; } .rt__facts { grid-template-columns: minmax(0, 1fr); row-gap: 2px; } .rt__facts dd { margin-bottom: 8px; } }
+
+/* Not covered: a calm statement, never a failure */
+.ncov__title { font-size: var(--fs-lg); line-height: 1.3; font-weight: 700; color: var(--ink-navy); }
+.ncov__reason { font-weight: 600; color: var(--ink-navy); max-width: 60ch; }
+.ncov__more { color: var(--ink-text-2); max-width: 62ch; }
+.ncov__members { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line-hair); }
+.ncov__band { padding-top: 12px; border-top: 1px solid var(--line-hair); color: var(--ink-navy); }
+.ncov__band > .od-icon { color: var(--ink-covered); }
+.ncov__steps { display: grid; gap: 16px; counter-reset: ncs; }
+.ncov__steps > li { position: relative; display: grid; gap: 2px; padding-left: 40px; counter-increment: ncs; min-width: 0; }
+.ncov__steps > li::before { content: counter(ncs); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 28px; height: 28px; border: 2px solid var(--ink-navy); border-radius: 50%; font-weight: 700; font-size: var(--fs-sm); color: var(--ink-navy); }
+.ncov__steps > li > b { color: var(--ink-navy); }
+.ncov__steps > li > span { color: var(--ink-text-2); font-size: var(--fs-sm); }
+.ncov__list { display: grid; margin-top: 8px; }
+.ncov__list li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 0; border-top: 1px solid var(--line-hair); }
+.ncov__cname { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; flex: 1 1 140px; min-width: 0; }
+.ncov__cname b { color: var(--ink-navy); }
 </style>
+
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
  * sizes or component looks: every value references a design-system token. Whole pixels, 1px or 2px borders. */
@@ -1824,6 +1918,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
   <nav aria-label="Deliveries">
     <a href="./the-emigrant_directions_d1-design-system.html">D1 · Design system and components</a>
     <a href="./the-emigrant_directions_d2-screens.html" aria-current="page">D2 · Screens</a>
+    <a href="./the-emigrant_directions_d3-route-screens.html">D3 · Route screens</a>
   </nav>
 </div>
 <main id="main" class="wrap">
@@ -2705,7 +2800,104 @@ function initBehavior() {
   initSelectMenus();
   watchLabels();
 }
+
+/* ── Route step components (D3): the household member editor, the condition item, the route outcome,
+   the coverage tag, the route summary card and the route in full. D3 composes its screens from these. ── */
+let rsUid = 0;
+const rsId = p => `${p}-r${++rsUid}`;
+const DEMONYM = { Austria: 'Austrian', Brazil: 'Brazilian', Germany: 'German', India: 'Indian', Portugal: 'Portuguese', 'Costa Rica': 'Costa Rican', Spain: 'Spanish', 'United States': 'US' };
+
+const roleName = (m, i, list) => m.role === 'Child' ? `Child ${list.slice(0, i + 1).filter(x => x.role === 'Child').length}` : m.role;
+const memberWho = m => `${m.nat.length ? `${m.nat.map(n => DEMONYM[n] || n).join(' and ')} citizen` : 'Nationality not entered'}${m.relation ? `, ${m.relation.toLowerCase()}` : ''}${m.age !== undefined ? `, ${m.age}` : ''}`;
+const householdLine = (list, link = true) => `<p class="hh-line"><span class="lbl">For</span><span class="hh-line__who">${list.map((m, i) => `<span><b>${roleName(m, i, list)}</b> ${memberWho(m)}</span>`).join('')}</span>${link ? `<button type="button" class="f-link" data-toast="Opens Household (screen 7). Changing it re-checks the routes.">${icon('edit-pencil')}<span>Change</span></button>` : ''}</p>`;
+
+const HM_WHY = {
+  You: 'your nationality decides which routes exist for you, for example the right to live in your own country, or anywhere in the EU.',
+  Partner: 'your partner\'s nationality decides whether they need a permit, and which one.',
+  Child: 'a child\'s nationality decides whether they need a permit of their own.'
+};
+function natGroup(m, role) {
+  const id = rsId('nat'), nats = m.nat.length ? m.nat : [null];
+  const rows = nats.map((n, i) => `<div class="hm__nat">${selectMenu({ ariaLabel: `${role}: nationality ${i + 1}`, items: COUNTRY_ITEMS(), value: n, placeholder: 'Choose a country', searchPlaceholder: 'Type a country' })}${nats.length > 1 ? `<button type="button" class="f-iconbtn" data-toast="${esc(n)} removed from ${role}'s nationalities." aria-label="Remove ${esc(n)} from ${role}'s nationalities">${icon('xmark')}</button>` : ''}</div>`).join('');
+  return `<div class="field hm__field" role="group" aria-labelledby="${id}"><span class="field__label" id="${id}">${nats.length > 1 ? 'Nationalities' : 'Nationality'}</span>${rows}
+    <button type="button" class="f-link hm__addnat" data-toast="Adds another nationality for ${role}.">${icon('plus')}<span>Add another nationality</span></button>
+    <p class="qp__why">${icon('info-circle')}<span>Why we ask: ${HM_WHY[m.role]}${nats.length > 1 ? ' Each nationality can open a different route, so add every one held.' : ''}</span></p></div>`;
+}
+function relGroup(m) {
+  const n = rsId('rel');
+  return `<div class="hm__field"><fieldset class="rgroup"><legend>How are you and your partner related?</legend>${['Married', 'Registered partnership', 'Durable partnership'].map(r => `<label class="radio"><input type="radio" name="${n}"${m.relation === r ? ' checked' : ''}><span class="radio__box" aria-hidden="true"></span><span>${r}</span></label>`).join('')}
+    ${m.relation ? '' : `<p class="mcard__missing hm__missing">${icon('warning-circle')}<span>Not chosen yet. Choose one to see the routes.</span></p>`}
+    <p class="qp__why">${icon('info-circle')}<span>Why we ask: routes treat married, registered and durable partners differently. A durable partnership usually needs proof that you have lived together.</span></p></fieldset></div>`;
+}
+function ageField(m, role) {
+  const id = rsId('age');
+  return `<div class="field hm__field"><label class="field__label" for="${id}">Age</label><div class="num hm__age"><input class="input" id="${id}" inputmode="numeric" value="${m.age ?? ''}" aria-label="${role}: age in years"><span class="num__unit">years</span></div>
+    <p class="qp__why">${icon('info-circle')}<span>Why we ask: some routes treat children differently from age 18, some from age 25.</span></p></div>`;
+}
+function memberEditor(m, i, list) {
+  const role = roleName(m, i, list), incomplete = m.role === 'Partner' && !m.relation;
+  return `<section class="mcard hm${incomplete ? ' mcard--incomplete' : ''}" aria-label="${role}">
+    <div class="mcard__head hm__head"><h2 class="mcard__role">${role}</h2>${m.nat.length > 1 ? '<span class="tagx">Dual nationality</span>' : ''}<span class="od-fill"></span>${m.role === 'You' ? '' : `<button type="button" class="btn btn--ghost btn--sm hm__remove" data-toast="${role} removed from your household.">${icon('minus-circle')}<span>Remove</span><span class="sr-only"> ${role}</span></button>`}</div>
+    ${natGroup(m, role)}${m.role === 'Partner' ? relGroup(m) : ''}${m.role === 'Child' ? ageField(m, role) : ''}</section>`;
+}
+
+/* One condition: the D1 condition list item. k: met | notmet | unknown */
+const COND_STATE = { met: ['check-circle', 'Appears met'], notmet: ['xmark-circle', 'Appears not met'], unknown: ['help-circle', 'Not known yet'] };
+function condItem(k, t, why, req, doc, note) {
+  const st = COND_STATE[k];
+  return `<li class="cl cl--${k}"><div class="cl__head"><span class="cl__title">${t}</span><span class="cl__state">${icon(st[0])}<span>${st[1]}</span></span></div>${why ? `<p class="cl__why">${why}</p>` : ''}
+    <dl class="cl__meta"><div><dt>Requirement</dt><dd>${req}</dd></div><div><dt>Document</dt><dd>${doc}</dd></div><div><dt>Source</dt><dd>${valButton(note, '', `Source note for ${t}`, 'f-val--refonly')}</dd></div></dl></li>`;
+}
+/* A route's outcome, said as conditions, never as a verdict */
+const OUTCOME = { apply: ['check-circle', 'Conditions appear met'], notmet: ['xmark-circle', 'A condition appears not met'], unknown: ['help-circle', 'Some conditions not known yet'] };
+const outcomePill = k => `<span class="rstate rstate--${k}">${icon(OUTCOME[k][0])}<span>${OUTCOME[k][1]}</span></span>`;
+const COVER = { covered: ['shield-check', 'Covered'], partly: ['minus-circle', 'Partly covered'] };
+const coverTag = k => `<span class="rtag rtag--${k === 'covered' ? 'available' : 'partly'}">${icon(COVER[k][0])}<span>${COVER[k][1]}</span></span>`;
+const outcomeOf = r => r.groups.some(g => g.conds.some(c => c[0] === 'notmet')) ? 'notmet' : r.groups.some(g => g.conds.some(c => c[0] === 'unknown')) ? 'unknown' : 'apply';
+
+function routeSummary(r, sel, pairId) {
+  const k = outcomeOf(r);
+  return `<li><button type="button" class="rts__card${r.key === sel ? ' is-on' : ''}" aria-pressed="${r.key === sel}" data-route="${r.key}"${pairId ? ` data-route-pair="${pairId}"` : ' data-toast="Shows the conditions of this route below."'}>
+    <span class="rts__name">${r.name}</span><span class="rts__regime">${r.regime}</span>${chip(r.figure)}${outcomePill(k)}</button></li>`;
+}
+function routeDetail(r, smp, stale) {
+  const k = outcomeOf(r), d = NOTES[r.note];
+  const facts = `<dl class="rt__facts">
+      <div><dt>Regime</dt><dd>${r.regime}</dd></div>
+      <div><dt>Authority</dt><dd>${smp.authority}</dd></div>
+      <div><dt>Official source</dt><dd>${chip(`${smp.official}<span aria-hidden="true">↗</span>`, 'mchip--link')}</dd></div>
+      <div><dt>Last verified</dt><dd>${chip(stale ? '2025-03-18' : smp.verified)} by ${smp.verifier}${stale ? `<small>${staleNote('2025-03')}</small>` : ''}</dd></div>
+      <div><dt>Coverage</dt><dd>${coverTag(r.cover)}${r.cover === 'partly' ? '<small>The rules for working on this permit are not verified yet.</small>' : ''}</dd></div>
+      <div><dt>Evidence</dt><dd>${evButton(r.note, { compact: true })}${d.machineTranslation ? `<small class="f-iconline f-flag">${icon('translate')}<span>Verified through machine translation</span></small>` : ''}</dd></div>
+    </dl>`;
+  const groups = r.groups.map(g => `<div class="cgroup"><h4 class="cgroup__title"><span class="cgroup__role">${g.role}</span><span class="cgroup__who">${g.who}</span></h4><ul class="cgroup__list">${g.conds.map(c => condItem(...c, r.note)).join('')}</ul></div>`).join('');
+  const unknown = r.groups.flatMap(g => g.conds.filter(c => c[0] === 'unknown').map(c => [g.role, c]));
+  const docs = [...new Set(r.groups.flatMap(g => g.conds.map(c => c[4])))];
+  return `<section class="rt" aria-labelledby="rt-${r.key}-h">
+    <div class="rt__head"><span class="lbl">Route</span><h2 class="rt__name" id="rt-${r.key}-h">${r.name}</h2>${outcomePill(k)}</div>
+    ${facts}
+    <div class="rt__part"><h3 class="rt__h">Conditions that appear to apply</h3><p class="f-muted">Per member, with what we compared and its source. Tap a note mark to open the source.</p>${groups}</div>
+    <div class="rt__part"><h3 class="rt__h">Documents</h3><ul class="rt__docs">${docs.map(x => `<li>${icon('journal-page')}<span>${x}</span></li>`).join('')}</ul></div>
+    ${unknown.length || r.cover === 'partly' ? `<div class="rt__part"><h3 class="rt__h">Not known yet, and why</h3>${unknown.map(([role, c]) => `<div class="f-unknown"><span class="f-unknown__kicker">${role}</span><p class="f-iconline f-unknown__title">${icon('help-circle')}<span>${c[1]}</span></p><p class="f-unknown__why">${c[2]}</p></div>`).join('')}${r.cover === 'partly' ? unknownBlock('minimum', { decide: 'A named lawyer checking the rules for working on this permit. Until then we do not show them as conditions.' }) : ''}</div>` : ''}
+  </section>`;
+}
+
+/* Not covered: what we do not cover yet and why, calmly; per member when only part is covered; the band stays.
+   v: { title, tag: 'none' | 'partly', reason, more, hh, members: [[role, 'covered' | 'none', words]], band } */
+function notCoveredCard(v, c, phone) {
+    const marks = v.tag === 'partly' ? routeCheck('partly') : `<span class="rtag rtag--none">${icon('circle')}<span>Not covered yet</span></span>`;
+    const members = v.members ? `<div class="ncov__members"><span class="lbl">Per member</span><span class="mres-list">${v.members.map(([r, k, t]) => `<span class="mres mres--${k}">${icon(MEMBER_ROUTE[k][0])}<span><b>${r}</b> ${MEMBER_ROUTE[k][1]} · ${t}</span></span>`).join('')}</span></div>` : '';
+  return `<section class="ncov" aria-label="${esc(v.title)}">
+        <div class="ncov__id">${pstamp(c, 'sm')}<div><p class="ncov__name">${esc(c.name)}</p><span class="rc__marks">${chip(c.iso)}${marks}</span></div></div>
+        ${phone ? `<h2 class="ncov__title">${esc(v.title)}</h2>` : ''}
+        <p class="ncov__reason">${esc(v.reason)}</p><p class="ncov__more">${esc(v.more)}</p>
+        ${v.hh ? householdLine(v.hh) : ''}${members}
+        <p class="f-iconline ncov__band">${icon('check-circle')}<span>${esc(v.band)}</span></p>
+        ${v.tag === 'partly' ? `<div><button type="button" class="btn btn--secondary" data-toast="Opens the route result for ${esc(c.name)} (screen 8), the covered part only.">See the covered part</button></div>` : ''}
+      </section>`;
+}
 </script>
+
 <script>/* The Emigrant — D2 screen engine. Composes the brief's screens from the D1 components in
  * emigrant-ds.js. Nothing here redraws a component. Every screen renders as a phone artboard
  * (390 × 844) and a desktop artboard (1440 × 900) with the full shell, a prototype-only state
