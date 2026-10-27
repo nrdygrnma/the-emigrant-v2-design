@@ -147,12 +147,12 @@ dialog.k-dialog::backdrop { background: var(--k-scrim); }
   /* Lines */
   --line-hair: #c3ccdb;
   --line-edge: #6e7a92;
-  /* Not yet / unknown: one mark, system-wide. 2px round dots, never dashes: the E0 mark, unknown
-     values, "coming", the not-yet step circle, the boarding pass destination, yes/no criterion cards,
-     empty piles and drop zones. --b-notyet on an edge; where the mark takes currentColor, the style alone. */
-  --dots-w: 2px;
-  --dots-style: dotted;
-  --b-notyet: var(--dots-w) var(--dots-style) var(--line-edge);
+  /* Not yet / unknown: one mark, system-wide. A light solid line in the hairline ink, never dashes or dots:
+     the E0 mark, unknown values, "coming", the not-yet step circle, the boarding pass destination, yes/no
+     criterion cards, empty piles, drop zones. The word on the mark carries the meaning; the line stays quiet. */
+  --ink-notyet: var(--line-hair);
+  --b-notyet: 2px solid var(--ink-notyet);
+  --b-notyet-thin: 1px solid var(--ink-notyet);
   /* Background pattern (A2): five waves on a 360 × 160 tile, 1px lines.
      Used for the page, the app screens and the thin bands on the cards. */
   --pattern-line-1: #cdd6e6;
@@ -263,7 +263,7 @@ b, strong { color: var(--ink-navy); }
 .stamp__code { font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0; white-space: nowrap; }
 .stamp__text { display: grid; min-width: 0; }
 .stamp__name { font-family: var(--f-mono); font-stretch: 75%; text-transform: none; letter-spacing: 0; font-weight: 600; }
-.stamp--e0 { border-style: var(--dots-style); color: var(--ink-muted); }
+.stamp--e0 { border-color: var(--ink-notyet); color: var(--ink-muted); }
 .stamp--e2 { border-style: double; border-width: 3px; padding: 3px 9px; }
 .stamp--e3 { border-style: double; border-width: 3px; padding: 3px 10px 3px 6px; border-radius: 16px; }
 .stamp--big { padding: 8px 14px; transform: rotate(var(--rot, -2deg)); }
@@ -273,10 +273,10 @@ b, strong { color: var(--ink-navy); }
 .stamp-row__date { font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); color: var(--ink-text-2); }
 .seal { color: inherit; }
 
-/* Coverage marks: 11 boxes, filled when known, dotted when not */
+/* Coverage marks: 11 boxes, filled when known, a light outline when not */
 .cov { display: grid; gap: 4px; }
 .cov__boxes { display: inline-flex; gap: 2px; }
-.cov__boxes i { display: block; width: 8px; height: 12px; border: 1px var(--dots-style) var(--line-edge); border-radius: 2px; }
+.cov__boxes i { display: block; width: 8px; height: 12px; border: 1px solid var(--line-edge); border-radius: 2px; }
 .cov__boxes i.on { border: 1px solid var(--ink-navy); background: var(--ink-navy); }
 .cov__txt { font-size: var(--fs-sm); color: var(--ink-text-2); }
 
@@ -307,7 +307,9 @@ b, strong { color: var(--ink-navy); }
 .f-railrow { padding: 4px 8px; background: var(--paper-card); border-bottom: 1px solid var(--line-hair); }
 .f-rail ol { display: flex; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .f-rail li { display: flex; align-items: center; }
-.f-rail li + li::before { content: ""; display: block; width: 16px; height: 0; border-top: 2px dotted var(--line-edge); margin: 0 2px; }
+.f-rail li + li::before { content: ""; display: block; width: 24px; height: 1px; border-radius: 1px; background: var(--line-edge); margin: 0 6px; }
+/* the progress line: the connector after a finished step is solid green and 2px */
+.f-rail li:has(> .f-step[data-state="done"]) + li::before { height: 2px; background: var(--ink-covered); }
 .f-step { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px 0 6px; border: 0; border-radius: 999px; background: transparent; cursor: pointer; color: var(--ink-text-2); font-weight: 700; font-stretch: 100%; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--fs-xs); white-space: nowrap; --od-icon-size: 16px;
   transition: background-color var(--k-fast) var(--k-ease-out); }
 .f-step__n { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 2px solid currentColor; border-radius: 50%; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0; }
@@ -317,15 +319,15 @@ b, strong { color: var(--ink-navy); }
 .f-step[data-state="done"] { color: var(--ink-covered); }
 .f-step[data-state="done"] .f-step__n { background: var(--ink-covered); border-color: var(--ink-covered); color: var(--ink-on-covered); }
 .f-step[data-state="later"] { cursor: default; }
-/* "coming": the dotted not-yet mark (2px round dots) in the muted ink, 8px from its label (the flex gap of the step and the leg title) */
-.f-step__soon { display: inline-flex; align-items: center; padding: 3px 9px; border: var(--dots-w) var(--dots-style) var(--ink-muted); border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; line-height: 1; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
+/* "coming": the not-yet mark, a light solid outline, 8px from its label (the flex gap of the step and the leg title) */
+.f-step__soon { display: inline-flex; align-items: center; padding: 3px 9px; border: var(--b-notyet-thin); border-radius: 999px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 400; line-height: 1; text-transform: none; letter-spacing: 0; color: var(--ink-text-2); }
 .k-phone .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .k-phone .f-step__n { width: 24px; height: 24px; }
 .k-phone .f-step__soon { padding: 2px 6px; }
 .k-phone .f-railrow { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 359px) { .f-rail li + li::before { display: none; } .f-step { letter-spacing: 0; } }
 .k-phone .f-step[data-state="later"] { padding-right: 0; }
-.k-phone .f-rail li + li::before { width: 6px; margin: 0; }
+.k-phone .f-rail li + li::before { width: 8px; margin: 0 1px; }
 @media (hover: hover) { .f-step:not([data-state="later"]):not([data-state="now"]):hover, .f-mi:hover, .f-back:hover, .f-key__btn:hover { background: var(--paper-page); } }
 .f-menu { background: var(--paper-card); border: 1px solid var(--line-hair); border-radius: var(--r-card); padding: 8px; display: grid; gap: 4px; }
 .k-phone .f-menu { border-radius: var(--r-card) var(--r-card) 0 0; padding-bottom: 32px; }
@@ -522,7 +524,7 @@ b, strong { color: var(--ink-navy); }
 .rc__name { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-h2); line-height: 1; }
 .f-members { display: grid; gap: 8px; }
 .f-member { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 8px 12px; align-items: start; padding: 8px 8px 8px 12px; border: 2px solid currentColor; border-radius: var(--r-card); }
-.f-member--covered { color: var(--ink-covered); } .f-member--partly { color: var(--ink-partly); } .f-member--none { color: var(--ink-muted); border-style: var(--dots-style); }
+.f-member--covered { color: var(--ink-covered); } .f-member--partly { color: var(--ink-partly); } .f-member--none { color: var(--ink-muted); border-color: var(--ink-notyet); }
 .f-member__who { font-stretch: 125%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--fs-xs); line-height: 24px; padding-top: 10px; color: inherit; }
 .f-member__body { display: grid; gap: 0; padding-top: 10px; min-width: 0; }
 .f-member__verdict { font-weight: 700; color: inherit; }
@@ -589,7 +591,7 @@ b, strong { color: var(--ink-navy); }
 .strip a { display: inline-flex; align-items: center; min-height: 44px; color: var(--paper-page); font-size: var(--fs-sm); }
 .strip a[aria-current="page"] { font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--paper-page); }
 .strip a:focus-visible { outline-color: var(--paper-page); }
-.sample { display: inline-block; padding: 0 8px; border: 1px var(--dots-style) var(--ink-evidence); border-radius: 4px; color: var(--ink-evidence); background: var(--paper-card); font-stretch: 125%; font-weight: 700; text-transform: uppercase; font-size: var(--fs-xs); letter-spacing: 0.04em; transform: rotate(-2deg); }
+.sample { display: inline-block; padding: 0 8px; border: 1px solid var(--ink-evidence); border-radius: 4px; color: var(--ink-evidence); background: var(--paper-card); font-stretch: 125%; font-weight: 700; text-transform: uppercase; font-size: var(--fs-xs); letter-spacing: 0.04em; transform: rotate(-2deg); }
 .strip .sample { border-color: var(--paper-page); color: var(--paper-page); background: transparent; }
 .wrap { max-width: calc(1240px + 2 * var(--m)); margin: 0 auto; padding: 0 var(--m); }
 
@@ -789,7 +791,7 @@ b, strong { color: var(--ink-navy); }
 .field__why { font-size: var(--fs-sm); color: var(--ink-text-2); }
 .field__error { font-size: var(--fs-sm); color: var(--ink-danger); font-weight: 700; }
 .input, .select { width: 100%; min-height: 48px; padding: 10px 14px; border: 1px solid var(--line-edge); border-radius: var(--r-btn); background: var(--paper-card); color: var(--ink-navy); font: inherit; }
-.input:disabled, .select:disabled { background: var(--paper-page); color: var(--ink-muted); border-style: var(--dots-style); }
+.input:disabled, .select:disabled { background: var(--paper-page); color: var(--ink-muted); border-color: var(--ink-notyet); }
 .input[aria-invalid="true"] { border: 2px solid var(--ink-danger); }
 .select { appearance: none; padding-right: 44px; background-image: linear-gradient(45deg, transparent 50%, var(--ink-navy) 50%), linear-gradient(135deg, var(--ink-navy) 50%, transparent 50%); background-position: right 22px center, right 16px center; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
 .num { display: flex; align-items: stretch; }
@@ -829,7 +831,7 @@ b, strong { color: var(--ink-navy); }
 .radio input:checked + .radio__box::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--ink-navy); }
 .check input:focus-visible + .check__box, .radio input:focus-visible + .radio__box, .switch input:focus-visible + .switch__track { outline: 2px solid var(--k-focus); outline-offset: 2px; }
 .check input:disabled ~ *, .radio input:disabled ~ * { opacity: 1; color: var(--ink-muted); }
-.check input:disabled + .check__box { border-style: var(--dots-style); }
+.check input:disabled + .check__box { border-color: var(--ink-notyet); }
 .rgroup { display: grid; gap: 0; margin: 0; padding: 0; border: 0; min-width: 0; }
 .rgroup legend { padding: 0 0 4px; font-weight: 700; color: var(--ink-navy); }
 .switch { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; color: var(--ink-navy); }
@@ -847,7 +849,7 @@ b, strong { color: var(--ink-navy); }
 /* Tags, badges */
 .tagx { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border: 1px solid var(--line-edge); border-radius: 999px; font-size: var(--fs-xs); font-weight: 700; color: var(--ink-navy); background: var(--paper-card); letter-spacing: 0.02em; --od-icon-size: 14px; }
 .tagx--quiet { border-color: var(--line-hair); color: var(--ink-text-2); }
-.tagx--sample { border-style: var(--dots-style); color: var(--ink-evidence); border-color: var(--ink-evidence); }
+.tagx--sample { color: var(--ink-evidence); border-color: var(--ink-evidence); }
 .countbadge { display: inline-grid; place-items: center; min-width: 28px; height: 24px; padding: 0 8px; border-radius: 999px; background: var(--ink-navy); color: var(--paper-card); font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-xs); font-weight: 600; }
 
 /* Tabs */
@@ -899,7 +901,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .drop__file { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-stretch: 75%; font-size: var(--fs-sm); }
 
 /* Empty state */
-.empty { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; border: var(--dots-w) var(--dots-style) var(--line-hair); border-radius: var(--r-card); background: var(--paper-card); text-align: center; --od-icon-size: 32px; }
+.empty { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; border: var(--b-notyet); border-radius: var(--r-card); background: var(--paper-card); text-align: center; --od-icon-size: 32px; }
 .empty > .od-icon { color: var(--ink-text-2); }
 .empty__title { font-weight: 700; color: var(--ink-navy); }
 .empty p { color: var(--ink-text-2); font-size: var(--fs-sm); max-width: 40ch; }
@@ -929,7 +931,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* ── Route check label: a quiet tag, never a band, never approval ── */
 .rtag { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 8px; border: 1px solid var(--line-hair); border-radius: 999px; background: var(--paper-card); color: var(--ink-text-2); font-size: var(--fs-xs); font-weight: 600; line-height: 18px; --od-icon-size: 14px; white-space: nowrap; }
 .rtag--available { color: var(--ink-navy); border-color: var(--line-edge); }
-.rtag--partly { border-style: var(--dots-style); border-color: var(--line-edge); color: var(--ink-navy); }
+.rtag--partly { border-color: var(--line-edge); color: var(--ink-navy); }
 .rtag--none { color: var(--ink-text-2); }
 
 /* Member result (only on the route result, and on the shortlist after Route) */
@@ -947,7 +949,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .eband__bars i { width: 6px; border: 1px solid var(--ink-navy); border-radius: 1px; }
 .eband__bars i:nth-child(1) { height: 6px; } .eband__bars i:nth-child(2) { height: 10px; } .eband__bars i:nth-child(3) { height: 14px; }
 .eband--strong .eband__bars i, .eband--partial .eband__bars i:nth-child(-n+2), .eband--thin .eband__bars i:nth-child(1) { background: var(--ink-navy); }
-.eband--thin .eband__bars i:not(:first-child), .eband--partial .eband__bars i:nth-child(3) { border-style: var(--dots-style); }
+.eband--thin .eband__bars i:not(:first-child), .eband--partial .eband__bars i:nth-child(3) { border-color: var(--line-edge); }
 .cov--btn { display: grid; gap: 4px; justify-items: start; align-content: center; padding: 4px 8px; margin-left: -8px; border: 0; border-radius: var(--r-btn); background: transparent; cursor: pointer; text-align: left; }
 @media (hover: hover) { .cov--btn:hover { background: var(--paper-page); } }
 .f-val__u { font-size: var(--fs-sm); color: var(--ink-text-2); }
@@ -972,7 +974,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .crow__route { grid-area: route; }
 .crow__add { grid-area: add; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 56px; padding: 4px; border: 1px solid var(--line-edge); border-radius: var(--r-btn); background: var(--paper-card); color: var(--ink-navy); cursor: pointer; font-size: var(--fs-xs); font-weight: 700; line-height: 1.2; --od-icon-size: 20px; }
 .crow__add[aria-pressed="true"] { background: var(--ink-navy); border-color: var(--ink-navy); color: var(--paper-card); }
-.crow--full .crow__add { border-style: var(--dots-style); color: var(--ink-text-2); }
+.crow--full .crow__add { border-color: var(--ink-notyet); color: var(--ink-text-2); }
 .crow--ruled { background: var(--paper-page); }
 .crow--ruled .crow__name { color: var(--ink-text); }
 @media (hover: hover) { .crow__main:hover .crow__name { text-decoration: underline; } }
@@ -991,8 +993,8 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .crit__name { font-weight: 700; color: var(--ink-navy); line-height: 1.3; }
 .crit__line { font-size: var(--fs-sm); color: var(--ink-text-2); }
 .crit__kind { justify-self: start; }
-.crit--yesno { border: var(--b-notyet); padding: 9px 7px 9px 9px; }
-.crit--yesno .crit__kind { border-style: var(--dots-style); }
+.crit--yesno { border-color: var(--ink-notyet); }
+.crit--yesno .crit__kind { border-color: var(--ink-notyet); }
 .crit__move { min-width: 44px; min-height: 44px; display: grid; place-items: center; border: 0; border-radius: var(--r-btn); background: transparent; color: var(--ink-navy); cursor: pointer; --od-icon-size: 20px; }
 .crit.is-dragging { transform: rotate(-1deg) translateY(-2px); box-shadow: var(--shadow-lift); border-color: var(--ink-navy); }
 .crit.is-focused { outline: 2px solid var(--k-focus); outline-offset: 2px; }
@@ -1000,18 +1002,18 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .pile { display: grid; gap: 8px; align-content: start; min-height: 120px; padding: 12px; border: 1px solid var(--line-hair); border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); }
 .pile__head { display: flex; align-items: center; gap: 8px; }
 .pile__title { font-weight: 700; color: var(--ink-navy); }
-.pile__empty { padding: 15px 7px; border: var(--dots-w) var(--dots-style) var(--line-hair); border-radius: var(--r-btn); color: var(--ink-text-2); font-size: var(--fs-sm); text-align: center; }
-.pile.is-target { border: var(--dots-w) var(--dots-style) var(--ink-navy); padding: 11px; background: var(--tint-focus); }
+.pile__empty { padding: 15px 7px; border: var(--b-notyet); border-radius: var(--r-btn); color: var(--ink-text-2); font-size: var(--fs-sm); text-align: center; }
+.pile.is-target { border: 2px solid var(--ink-navy); padding: 11px; background: var(--tint-focus); }
 .pile--non .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px solid var(--ink-navy); background: var(--ink-navy); vertical-align: 0; }
 .pile--important .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px solid var(--ink-navy); vertical-align: 0; }
-.pile--nice .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px var(--dots-style) var(--ink-navy); vertical-align: 0; }
+.pile--nice .pile__title::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border: 2px solid var(--line-edge); vertical-align: 0; }
 .pile--unused { background: var(--paper-page); box-shadow: none; }
 .na-line { display: grid; gap: 4px; padding: 12px 16px; border: var(--b-notyet); border-radius: var(--r-card); background: var(--paper-card); }
 .na-line__list { display: flex; flex-wrap: wrap; gap: 6px; }
 
 /* ── Household member card ── */
 .mcard { display: grid; gap: 10px; padding: 16px; border: 1px solid var(--line-hair); border-left: 4px solid var(--ink-navy); border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); }
-.mcard--incomplete { border-left-style: var(--dots-style); border-left-color: var(--ink-partly); }
+.mcard--incomplete { border-left-color: var(--ink-partly); }
 .mcard__head { display: flex; align-items: center; gap: 8px; }
 .mcard__role { font-family: var(--f-cond); font-stretch: 62%; font-weight: 800; text-transform: uppercase; font-size: var(--fs-h2); line-height: 1; color: var(--ink-navy); }
 .mcard dl { display: grid; gap: 6px; margin: 0; }
@@ -1030,7 +1032,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 16px; border-radius: var(--r-card); background: var(--paper-card); box-shadow: var(--shadow-card); color: var(--ink-navy); --od-icon-size: 20px; }
 .banner__txt { display: flex; align-items: flex-start; gap: 8px; flex: 1 1 240px; min-width: 0; }
 .banner__txt > .od-icon { margin-top: 2px; flex: none; }
-.banner--prov { border: var(--dots-w) var(--dots-style) var(--ink-evidence); }
+.banner--prov { border: 2px solid var(--tint-focus); box-shadow: var(--shadow-card), inset 4px 0 0 var(--ink-evidence); }
 .banner--upd { border-left: 4px solid var(--ink-evidence); }
 .banner__changes { flex-basis: 100%; display: grid; gap: 4px; padding-left: 28px; font-size: var(--fs-sm); color: var(--ink-text); }
 .appfoot { display: grid; gap: 4px; padding: 12px 16px; background: var(--paper-card); border-top: 1px solid var(--line-hair); font-size: var(--fs-sm); color: var(--ink-text-2); }
@@ -1132,7 +1134,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .f-rail--compact .f-step { padding: 0 6px 0 4px; gap: 5px; }
 .f-rail--compact .f-step__n { width: 24px; height: 24px; }
 .f-rail--compact .f-step__soon { padding: 2px 6px; }
-.f-rail--compact li + li::before { width: 6px; margin: 0; }
+.f-rail--compact li + li::before { width: 8px; margin: 0 1px; }
 .f-railrow:has(.f-rail--compact) { padding: 4px; container: rail / inline-size; }
 @container rail (max-width: 339px) { .f-rail--compact ol { flex-wrap: wrap; row-gap: 0; } }
 .f-rail--compact ol { flex-wrap: wrap; }
@@ -1476,6 +1478,8 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-desk .st-card--b2 .st-leg { grid-template-columns: 24px minmax(0, 1fr); grid-template-areas: "n head" ". text"; gap: 6px 8px; padding: 0 20px 0 0; align-items: start; }
 .k-desk .st-card--b2 .st-leg + .st-leg { border-left: 1px solid var(--line-hair); padding-left: 20px; }
 .k-desk .st-card--b2 .st-leg__n { grid-area: n; width: 24px; height: 24px; font-size: var(--fs-xs); }
+.st-leg--soon .st-leg__n { border-color: var(--ink-notyet); color: var(--ink-text-2); }
+.f-step[data-state="later"] .f-step__n { border-color: var(--ink-notyet); }
 .k-desk .st-card--b2 .st-leg__body { display: contents; }
 .k-desk .st-card--b2 .st-leg__title { grid-area: head; display: flex; align-items: center; gap: 8px; font-size: var(--fs-lg); line-height: 24px; }
 .k-desk .st-card--b2 .st-leg__text { grid-area: text; font-size: var(--fs-xs); line-height: 1.5; }
@@ -1495,7 +1499,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .st-pass__rows > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); column-gap: 12px; align-items: baseline; }
 .st-pass__rows dt { text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-text-2); font-size: var(--fs-xs); }
 .st-pass__rows dd { margin: 0; color: var(--ink-navy); font-weight: 600; white-space: nowrap; }
-/* The destination: no box. "???" in navy on a dotted underline, the not-yet mark */
+/* The destination: no box. "???" in navy on a light solid underline, the not-yet mark */
 .st-pass__blank { display: inline-grid; place-items: center; min-width: 72px; padding: 0 6px 2px; border: 0; border-bottom: var(--b-notyet); color: var(--ink-navy); font-weight: 600; letter-spacing: 0; text-align: center; }
 .st-pass__fill { color: var(--ink-navy); font-weight: 600; }
 .st-pass__stub { display: grid; align-content: space-between; justify-items: center; text-align: center; padding: 10px 12px 12px 14px; overflow: hidden; }
@@ -1554,38 +1558,13 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .cp--compact .cp__fields > div.cp__credit { grid-column: 1 / -1; }
 /* The D1 gallery shows the Start artboards the way D2 does: the desktop one scaled to fit its column */
 .g-boards .k-boards { margin-top: 4px; }
-/* ── The not-yet mark, drawn: real dots ─────────────────────────────────────────────────────────
-   A CSS dotted border smears into short dashes and cannot set the gap. So every not-yet mark keeps a transparent
-   border for its layout and gets a drawing of real circles over it, 3px dots 4px apart (2px dots 3px apart on the
-   small tags), placed evenly around its own rounded outline. The engine draws it to each element's exact size
-   (dotsWatch) and sets --dots-mask; the ink is --dots-ink. */
-.dots-box, .dots-line { position: relative; border-color: transparent !important; }
-.dots-box::before, .dots-line::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--dots-ink, currentColor); pointer-events: none; z-index: 0;
-  -webkit-mask: var(--dots-mask, none) center / 100% 100% no-repeat; mask: var(--dots-mask, none) center / 100% 100% no-repeat; }
-.dots-box > *, .dots-line > * { position: relative; z-index: 1; }
-.dots-box.dots-box--small { --dot: 2px; --pitch: 5px; }
-/* inks per mark */
-.f-unknown, .na-line, .nc, .drop, .crit--yesno, .pile__empty, .st-pass__blank, .f-step__n, .st-leg__n { --dots-ink: var(--line-edge); }
-.empty { --dots-ink: var(--line-hair); }
-.pile.is-target { --dots-ink: var(--ink-navy); }
-.banner--prov, .tagx--sample, .sample { --dots-ink: var(--ink-evidence); }
-.strip .sample { --dots-ink: var(--paper-page); }
-.f-step__soon, .stamp--e0 { --dots-ink: var(--ink-muted); }
-.crow--full .crow__add, .rtag--partly, .crit--yesno .crit__kind { --dots-ink: var(--line-edge); }
-/* the rings: a transparent border keeps the size, the drawing is the ring */
-.f-step[data-state="later"] .f-step__n { border: 2px solid transparent; }
-.st-leg--soon .st-leg__n { border: 2px solid transparent; color: var(--ink-text-2); }
-.f-step__soon { border: 1px solid transparent; padding: 4px 10px; }
-.k-phone .f-step__soon, .f-rail--compact .f-step__soon { padding: 3px 7px; }
-@container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 3px 6px; } }
-/* the destination: the dots run along the bottom edge only */
-.st-pass__blank { border-bottom: 2px solid transparent; }
-
 /* ── Start, round 6 ─────────────────────────────────────────────────────────────────────────────
-   The perforation of the boarding pass is the tickets' tear line: a 2px dashed line in the control-edge ink
-   between the notches, no punched holes. */
-.st-pass__perf { width: 0; left: calc(100% - var(--stub) - 1px); top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); background: none; border-left: 2px dashed var(--line-edge); }
-.k-desk .st-pass__perf { top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); }
+   The perforation of the boarding pass: a line of punched holes between the notches, 6px wide, every 10px, with a
+   faint inner shadow on each hole's upper edge. Whole holes only. */
+.st-pass__perf { width: 10px; left: calc(100% - var(--stub) - 5px); top: calc(var(--notch) + 8px); bottom: calc(var(--notch) + 8px); border: 0;
+  background-image: radial-gradient(circle 3px at 5px 5.4px, var(--paper-card) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5px 4.6px, rgba(20, 33, 61, 0.28) 3.1px, #0000 3.8px);
+  background-size: 10px 10px; background-repeat: round; background-position: 0 0; background-clip: border-box; }
+.k-desk .st-pass__perf { top: calc(var(--notch) + 9px); bottom: calc(var(--notch) + 9px); }
 /* Desktop: the papers card lies over the lower part of the photo and ends on the paper ground, the way the base
    file's opening does. The photo stops behind the card; below it the security paper shows, then the footer. */
 .k-desk .st-stage { background: none; }
@@ -1601,7 +1580,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone { container: phone / inline-size; }
 
 /* The prototype-only state switcher, clearly marked */
-.d2-states { display: grid; gap: 8px; margin-top: 8px; padding-top: 12px; border-top: 1px var(--dots-style) var(--ink-evidence); }
+.d2-states { display: grid; gap: 8px; margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--line-hair); }
 .d2-states__tag { display: inline-flex; align-items: center; gap: 6px; justify-self: start; color: var(--ink-evidence); font-stretch: 112.5%; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--fs-xs); --od-icon-size: 16px; }
 .d2-states__row { display: flex; flex-wrap: wrap; gap: 8px; }
 .d2-state { min-height: 44px; padding: 0 14px; border: 1px solid var(--ink-evidence); border-radius: 999px; background: var(--paper-card); color: var(--ink-evidence); font-weight: 600; font-size: var(--fs-sm); cursor: pointer; }
@@ -2292,8 +2271,8 @@ function deskHeader(p = {}) {
   const railPart = p.rail === false ? '<span class="od-fill"></span>' : `<div class="od-fill f-head__rail">${rail(p.rail || 'shortlist')}</div>`;
   return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${topLinks()}${moreBtn(p.ctx || 'desktop')}${nextBar('head', p.next)}</header>`;
 }
-/* The footers, the minimum on every screen, phone included: the privacy promise and the two links, Disclaimer and
-   Terms of use. The disclaimer sentence itself is the fine line on each screen (fineLine), once. */
+/* The footers, the same on every screen, phone included: the privacy promise and the two links, Disclaimer and
+   Terms of use. That is the whole disclaimer in the app; the sentence lives on the Terms of use page. */
 const TERMS_TOAST = 'Opens the full terms of use (screen 14).';
 const footLinks = () => `<a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><span aria-hidden="true">·</span><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a>`;
 function phoneFoot(p = {}) {
@@ -2302,8 +2281,7 @@ function phoneFoot(p = {}) {
 function deskFoot(p = {}) {
   return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal"><a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a><span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<span class="mono">${DATA_VERSION}</span></div></footer>`;
 }
-/* The disclaimer sentence with the Terms of use link, once per screen, in the body */
-const fineLine = () => `<p class="f-fine">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p>`;
+
 /* Desktop artboards shown scaled to fit their column */
 function fitDesks() {
   document.querySelectorAll('[data-fit]').forEach(fit => {
@@ -2510,71 +2488,6 @@ function watchLabels() {
   new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) labelCase(n); }))).observe(document.body, { childList: true, subtree: true });
 }
 
-/* ── The not-yet mark, drawn: real dots ──────────────────────────────
-   Every element in DOTS_SEL gets a mask of real circles at its own size: 3px dots, 4px apart (the --dot and --pitch
-   custom properties change that), placed evenly along its rounded outline. .dots-line marks get the dots along the
-   bottom edge only. Drawn on insertion and again on every resize. */
-const DOTS_SEL = '.stamp--e0, .f-unknown, .na-line, .nc, .drop:not(.is-over):not(.is-chosen):not(.is-error), .empty, .crit--yesno, .pile__empty, .pile.is-target, .banner--prov, .tagx--sample, .sample, .crow--full .crow__add, .rtag--partly, .crit--yesno .crit__kind, .f-step[data-state="later"] .f-step__n, .st-leg--soon .st-leg__n, .f-step__soon';
-const DOTS_SMALL = '.tagx--sample, .sample, .rtag--partly, .crit--yesno .crit__kind';
-const DOTS_LINE = '.st-pass__blank';
-function dotsSvg(w, h, pts, dot) {
-  const c = pts.map(([x, y]) => `<circle cx='${x.toFixed(2)}' cy='${y.toFixed(2)}' r='${dot}'/>`).join('');
-  return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' fill='white'>${c}</svg>`)}")`;
-}
-function dotsRing(w, h, r, dot, pitch) {
-  const rc = Math.max(0, Math.min(r, h / 2, w / 2) - dot), sx = Math.max(0, w - 2 * (dot + rc)), sy = Math.max(0, h - 2 * (dot + rc));
-  const per = 2 * sx + 2 * sy + 2 * Math.PI * rc, n = Math.max(4, Math.round(per / pitch)), step = per / n;
-  const q = Math.PI * rc / 2;
-  const at = d => {
-    if (d < sx) return [dot + rc + d, dot];
-    d -= sx; if (d < q) { const a = -Math.PI / 2 + d / rc; return [w - dot - rc + rc * Math.cos(a), dot + rc + rc * Math.sin(a)]; }
-    d -= q; if (d < sy) return [w - dot, dot + rc + d];
-    d -= sy; if (d < q) { const a = d / rc; return [w - dot - rc + rc * Math.cos(a), h - dot - rc + rc * Math.sin(a)]; }
-    d -= q; if (d < sx) return [w - dot - rc - d, h - dot];
-    d -= sx; if (d < q) { const a = Math.PI / 2 + d / rc; return [dot + rc + rc * Math.cos(a), h - dot - rc + rc * Math.sin(a)]; }
-    d -= q; if (d < sy) return [dot, h - dot - rc - d];
-    d -= sy; const a = Math.PI + d / rc; return [dot + rc + rc * Math.cos(a), dot + rc + rc * Math.sin(a)];
-  };
-  return dotsSvg(w, h, Array.from({ length: n }, (_, i) => at(i * step)), dot);
-}
-function dotsLine(w, h, dot, pitch) {
-  const n = Math.max(2, Math.round(w / pitch)), step = w / n;
-  return dotsSvg(w, h, Array.from({ length: n }, (_, i) => [step / 2 + i * step, h - dot]), dot);
-}
-function dotsDraw(el) {
-  const w = el.offsetWidth, h = el.offsetHeight; if (!w || !h) return;
-  const cs = getComputedStyle(el), dot = parseFloat(cs.getPropertyValue('--dot')) / 2 || 1.5, pitch = parseFloat(cs.getPropertyValue('--pitch')) || 7;
-  const r = parseFloat(cs.borderTopLeftRadius) || 0;
-  el.style.setProperty('--dots-mask', el.classList.contains('dots-line') ? dotsLine(w, h, dot, pitch) : dotsRing(w, h, r, dot, pitch));
-}
-let dotsRO = null;
-function dotsApply(root = document) {
-  const list = [...(root.matches && root.matches(`${DOTS_SEL}, ${DOTS_LINE}`) ? [root] : []), ...root.querySelectorAll(`${DOTS_SEL}, ${DOTS_LINE}`)];
-  list.forEach(el => {
-    if (el.dataset.dots) return;
-    el.dataset.dots = '1';
-    el.classList.add(el.matches(DOTS_LINE) ? 'dots-line' : 'dots-box');
-    if (el.matches(DOTS_SMALL)) el.classList.add('dots-box--small');
-    dotsDraw(el); dotsRO.observe(el);
-  });
-}
-function dotsWatch() {
-  dotsRO = new ResizeObserver(entries => entries.forEach(en => dotsDraw(en.target)));
-  dotsApply();
-  /* new nodes get their dots; a class change (a pile becoming a drop target, a row becoming "full") is re-read, but a
-     change we made ourselves (adding dots-box) is a no-op, since the element already matches and is marked */
-  new MutationObserver(ms => ms.forEach(m => {
-    m.addedNodes.forEach(n => { if (n.nodeType === 1) dotsApply(n); });
-    if (m.type === 'attributes' && m.target.nodeType === 1) {
-      const t = m.target, hit = t.matches(`${DOTS_SEL}, ${DOTS_LINE}`);
-      if (hit && !t.dataset.dots) dotsApply(t);
-      else if (!hit && t.dataset.dots) { delete t.dataset.dots; t.classList.remove('dots-box', 'dots-line', 'dots-box--small'); t.style.removeProperty('--dots-mask'); dotsRO.unobserve(t); }
-      t.querySelectorAll('[data-dots]').forEach(c => { if (!c.matches(`${DOTS_SEL}, ${DOTS_LINE}`)) { delete c.dataset.dots; c.classList.remove('dots-box', 'dots-line', 'dots-box--small'); c.style.removeProperty('--dots-mask'); dotsRO.unobserve(c); } });
-      if (hit || t.querySelector(`${DOTS_SEL}, ${DOTS_LINE}`)) dotsApply(t);
-    }
-  })).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-}
-
 /* ── Behavior ──────────────────────────────────────────────────────── */
 let toastTimer = 0;
 function toast(msg) {
@@ -2666,7 +2579,6 @@ function initBehavior() {
   document.getElementById('kToastClose').innerHTML = icon('xmark');
   initSelectMenus();
   watchLabels();
-  dotsWatch();
 }
 </script>
 <script>/* The Emigrant — D2 screen engine. Composes the brief's screens from the D1 components in
@@ -2751,10 +2663,10 @@ const statusCard = (matches = 12, possible = 41, ruled = 140, note = 'All 193 co
    all columns), overlay (html placed over the screen), offline, updated, loading */
 /* The shell. Phone: header with the Menu, the compact rail, the screen, the one action, the footer with the disclaimer
    line. Desktop: the header on every screen (wordmark, rail, inline links, More, the one action), the screen with its
-   help column, the footer with the Disclaimer and Terms of use links. The disclaimer sentence is the fine line at the
-   end of every screen, once. */
+   help column, the footer with the Disclaimer and Terms of use links. The disclaimer is the same everywhere: those two
+   footer links, nothing in the body. */
 function shell(ctx, p) {
-  const body = p.loading ? skeleton() : `${p.updated ? updBanner(ctx === 'phone') : ''}${p.body}${fineLine()}`;
+  const body = p.loading ? skeleton() : `${p.updated ? updBanner(ctx === 'phone') : ''}${p.body}`;
   const next = p.loading ? { label: 'Loading…', hint: 'One moment.', disabled: true } : p.next;
   const railState = p.rail || 'shortlist';
   if (ctx === 'phone') {
@@ -2841,7 +2753,7 @@ function sortSummary(S, compact) {
 }
 SCREENS.criteria = {
   no: '3', title: 'Criteria sort',
-  note: 'Four piles. Yes/no cards have a dotted edge, scored cards a solid one. Move a card by its move button and a pile menu, or focus it and press 1 to 4; every move is announced and the counts update. Time zone, Driving side and Climate zone ask their one question on the card once picked.',
+  note: 'Four piles. Yes/no cards have a light edge, scored cards a darker one. Move a card by its move button and a pile menu, or focus it and press 1 to 4; every move is announced and the counts update. Time zone, Driving side and Climate zone ask their one question on the card once picked.',
   states: [['provisional', 'Provisional'], ['sorted', 'Sorted'], ['nomatch', 'A Non-negotiable leaves no Match'], ['unknownall', 'A criterion unknown for every country']],
   init(S) {
     if (S.state === 'provisional') S.sort = { non: [], important: [], nice: [], unused: CRITERIA.map(c => c.id) };
@@ -3031,7 +2943,7 @@ function exportSheet(st) {
       : `<div class="acc"><div class="acc__item"><button type="button" class="acc__btn" data-disclose aria-expanded="true" aria-controls="${pw}-what">What the file holds<span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="acc__body" id="${pw}-what">Your criteria and piles, your shortlist, your household if you entered it, your route results, and the data version. Nothing else.</div></div></div>
       <div class="field"><label class="field__label" for="${pw}">Password (optional)</label><span class="field__why">Protects the file if someone else finds it.</span><div class="pw"><input class="input" id="${pw}" type="password" value="${st === 'pw' ? 'olive-harbor-17' : ''}"><button type="button" class="f-iconbtn" data-toggle-pw="${pw}" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>
       <div class="strength" aria-live="polite"><span class="strength__bars" aria-hidden="true">${[1, 2, 3, 4].map(i => `<i class="${st === 'pw' && i <= 3 ? 'on' : ''}"></i>`).join('')}</span><span class="field__why">${st === 'pw' ? '<b>Good.</b> ' : ''}A lost password cannot be recovered. We cannot reset it.</span></div></div>
-      ${disclaimerLine({ box: true })}<div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="export:save">${icon('download')}<span>Save</span></button></div>`;
+      <div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="export:save">${icon('download')}<span>Save</span></button></div>`;
   return sheet('Save your travel folder', body, nid('xt'));
 }
 function importSheet(st) {
@@ -3066,7 +2978,7 @@ SCREENS.plan = {
   }
 };
 SCREENS.export = {
-  no: '11', title: 'Save your travel folder', note: 'A sheet on the travel folder (a bottom sheet on phone, a side panel on desktop): what the file holds, the optional password with its strength hint and the warning that a lost password cannot be recovered, the disclaimer, Save.',
+  no: '11', title: 'Save your travel folder', note: 'A sheet on the travel folder (a bottom sheet on phone, a side panel on desktop): what the file holds, the optional password with its strength hint and the warning that a lost password cannot be recovered, Save. The disclaimer is in the footer, as on every screen.',
   states: [['nopw', 'Without password'], ['pw', 'With password'], ['saved', 'Saved'], ['failed', 'Failed']],
   render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'routedone' }); return { ...base, overlay: exportSheet(S.state) }; }
 };
@@ -3119,7 +3031,7 @@ SCREENS.evidence = {
   no: '16', title: 'How the evidence works', note: 'In plain words: the levels, the risk classes, the minimum level per purpose, the bands, the evidence band, why unknown never becomes a recommendation, the machine-translation exception. Reached from every evidence mark.', states: [['default', 'Reading']],
   render(ctx) {
     return { ...reading('Help', 'How the evidence works', 'in plain words. Every evidence mark links here.', [
-      ['The four evidence levels', `<ul class="f-keylist">${[0, 1, 2, 3].map(l => `<li><span class="f-keymark">${mark(l, 'low', { compact: true, name: 'A. Hofer' })}</span><p>${LEVEL_MEANING[l]}</p></li>`).join('')}</ul>${P('The ring tells the level even without color: dashed for E0, single for E1, double for E2, and double with our mark after the name for E3.')}`],
+      ['The four evidence levels', `<ul class="f-keylist">${[0, 1, 2, 3].map(l => `<li><span class="f-keymark">${mark(l, 'low', { compact: true, name: 'A. Hofer' })}</span><p>${LEVEL_MEANING[l]}</p></li>`).join('')}</ul>${P('The ring tells the level even without color: a light line for E0, single for E1, double for E2, and double with our mark after the name for E3.')}`],
       ['The three risk classes', `<ul class="f-keylist">${[['low', 'The source is stable and official. The value rarely changes.'], ['medium', 'The source is reliable but changes often, or is an estimate. At E1, medium risk is flagged.'], ['high', 'The source is thin or contested. We show the value, but treat it with care.']].map(([r, t]) => `<li><span class="f-keymark"><span class="stamp-row__risk">${meter(RISK[r][0])}<span>${RISK[r][1]}</span></span></span><p>${t}</p></li>`).join('')}</ul>`],
       ['The minimum level per purpose', '<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Purpose</th><th scope="col">Minimum level</th><th scope="col">Below it</th></tr></thead><tbody><tr><td>A value in the ranking</td><td>E1 Sourced</td><td>Shown but not counted</td></tr><tr><td>A yes / no criterion</td><td>E1 Sourced</td><td>Counts as not known</td></tr><tr><td>A route condition</td><td>E3 Verified by a named person</td><td>Not shown as a condition</td></tr></tbody></table></div>'],
       ['The three bands', `${P('<b>Matches</b> fit every Non-negotiable you set. <b>Possible, needs checking</b> fit, with questions still open. <b>Ruled out</b> miss at least one Non-negotiable, and stay listed with the reason.')}${P('There is no winner and no rank number. The order speaks for itself, and a score only counts the criteria that are known.')}`],
