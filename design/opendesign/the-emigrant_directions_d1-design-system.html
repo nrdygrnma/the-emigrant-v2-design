@@ -1814,6 +1814,20 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .cmp-swipe__list > div { display: grid; gap: 2px; padding: 8px 0; border-top: 1px solid var(--line-hair); }
 .cmp-swipe__list dt { font-size: var(--fs-sm); color: var(--ink-text-2); }
 .cmp-swipe__list dd { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; }
+
+/* The current step: a slim pill that hugs the number circle (3px around it), drawn behind the label. The button
+   keeps its 44px touch height; only the drawn pill is smaller. Hover uses the same slim shape. */
+.f-step { position: relative; isolation: isolate; padding-left: 3px; --step-pill: 34px; }
+.f-step::after { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 50%; height: var(--step-pill); transform: translateY(-50%); border-radius: 999px; background: transparent; }
+.f-step[data-state="now"] { background: transparent; }
+.f-step[data-state="now"]::after { background: var(--step-now-bg); }
+.k-phone .f-step, .f-rail--compact .f-step { padding-left: 3px; --step-pill: 30px; }
+@container app (max-width: 1279px) { .f-head--desk .f-step { padding-left: 3px; } }
+@container rail (max-width: 359px) { .f-rail--compact .f-step { padding-left: 2px; --step-pill: 28px; } }
+@media (hover: hover) {
+  .f-step:not([data-state="later"]):not([data-state="now"]):hover { background: transparent; }
+  .f-step:not([data-state="later"]):not([data-state="now"]):hover::after { background: var(--paper-page); }
+}
 </style>
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">

@@ -1814,6 +1814,20 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .cmp-swipe__list > div { display: grid; gap: 2px; padding: 8px 0; border-top: 1px solid var(--line-hair); }
 .cmp-swipe__list dt { font-size: var(--fs-sm); color: var(--ink-text-2); }
 .cmp-swipe__list dd { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; }
+
+/* The current step: a slim pill that hugs the number circle (3px around it), drawn behind the label. The button
+   keeps its 44px touch height; only the drawn pill is smaller. Hover uses the same slim shape. */
+.f-step { position: relative; isolation: isolate; padding-left: 3px; --step-pill: 34px; }
+.f-step::after { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 50%; height: var(--step-pill); transform: translateY(-50%); border-radius: 999px; background: transparent; }
+.f-step[data-state="now"] { background: transparent; }
+.f-step[data-state="now"]::after { background: var(--step-now-bg); }
+.k-phone .f-step, .f-rail--compact .f-step { padding-left: 3px; --step-pill: 30px; }
+@container app (max-width: 1279px) { .f-head--desk .f-step { padding-left: 3px; } }
+@container rail (max-width: 359px) { .f-rail--compact .f-step { padding-left: 2px; --step-pill: 28px; } }
+@media (hover: hover) {
+  .f-step:not([data-state="later"]):not([data-state="now"]):hover { background: transparent; }
+  .f-step:not([data-state="later"]):not([data-state="now"]):hover::after { background: var(--paper-page); }
+}
 </style>
 
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
