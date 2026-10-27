@@ -1043,9 +1043,10 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .map__svg { display: block; width: 100%; height: auto; aspect-ratio: 100 / 62; background: var(--map-sea); border: 1px solid var(--line-hair); border-radius: 4px; }
 .map__grat { fill: none; stroke: var(--map-grat); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 2 3; }
 .map__land { fill: var(--map-land); stroke: var(--map-line); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
-.map__hit { stroke: var(--ink-navy); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+/* The selected country: a clean solid silhouette in navy with a fine paper edge, so it reads crisply against its neighbours */
+.map__hit { fill: var(--ink-navy); stroke: var(--paper-card); stroke-width: 0.75; vector-effect: non-scaling-stroke; stroke-linejoin: round; paint-order: stroke; }
 .map__hatch { stroke: var(--ink-navy); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.map__ring { fill: none; stroke: var(--ink-navy); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.map__ring { fill: none; stroke: var(--ink-navy); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
 .map__ring--soft { stroke-width: 1; stroke-dasharray: 3 3; }
 .map__dot { fill: var(--ink-navy); }
 .map__inset { position: absolute; right: 16px; bottom: 16px; width: 96px; height: 48px; background: var(--paper-card); border: 1px solid var(--line-edge); border-radius: 2px; }
@@ -2174,8 +2175,8 @@ function mapCard(iso, opts = {}) {
         <defs><pattern id="mapHatch${id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" class="map__hatch"/></pattern></defs>
         <path d="${grat}" class="map__grat"/>
         <path d="${WORLD.land}${others}" class="map__land"/>
-        ${small ? '' : `<path d="${w.d}" fill="url(#mapHatch${id})" class="map__hit"/>`}
-        ${small ? `<circle cx="${cx}" cy="${cy}" r="${ring}" class="map__ring"/><circle cx="${cx}" cy="${cy}" r="${Math.max(2, Math.round(ring / 4))}" class="map__dot"/>` : `<circle cx="${cx}" cy="${cy}" r="${ring * 1.6}" class="map__ring map__ring--soft"/>`}
+        ${small ? '' : `<path d="${w.d}" class="map__hit"/>`}
+        ${small ? `<circle cx="${cx}" cy="${cy}" r="${ring}" class="map__ring"/><circle cx="${cx}" cy="${cy}" r="${Math.max(2, Math.round(ring / 4))}" class="map__dot"/>` : ''}
       </svg>${inset}
     </div>
     <figcaption class="map__cap"><span class="map__name">${esc(c.name)}</span><span class="map__region">${esc(region)}${small ? ' · marked with a ring' : ''}</span><span class="map__src">Map outlines: Natural Earth</span></figcaption>
