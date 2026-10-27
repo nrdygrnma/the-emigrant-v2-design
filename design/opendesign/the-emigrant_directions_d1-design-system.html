@@ -1797,6 +1797,23 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .f-rail .f-step[data-state="later"], .f-rail--compact .f-step[data-state="later"] { padding-right: 0; }
 @container app (max-width: 1279px) { .f-head--desk .f-rail .f-step { padding-right: 8px; } .f-head--desk .f-rail li + li::before { margin: 0 12px 0 0; } }
 @container rail (max-width: 359px) { .f-rail--compact .f-step { padding-right: 2px; } .f-rail--compact li + li::before { margin: 0; } }
+
+/* Added states: Start's failed file, a skipped question, the not-covered link, Compare's swipe layout */
+.st-fail { margin-top: 12px; }
+.qp__skipped { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border: var(--b-notyet-thin); border-radius: var(--r-btn); font-size: var(--fs-sm); color: var(--ink-text-2); --od-icon-size: 18px; }
+.qp__skipped > .od-icon { flex: none; margin-top: 1px; }
+.qp__skipped b { color: var(--ink-navy); }
+.d2-nclink { justify-self: start; font-size: var(--fs-sm); --od-icon-size: 18px; }
+.cmp-swipe__hint { display: flex; align-items: center; gap: 6px; font-size: var(--fs-sm); color: var(--ink-text-2); --od-icon-size: 16px; }
+.cmp-swipe { --od-gap: 12px; --od-rail-pad: 0px; width: 0; min-width: 100%; padding: 2px 2px 6px; }  /* width 0 + min-width 100%: the row never widens the screen */
+.cmp-swipe__col { width: 85%; display: grid; gap: 4px; align-content: start; padding: 12px 16px; border: 1px solid var(--line-edge); border-radius: var(--r-card); background: var(--paper-card); }
+.cmp-swipe__name { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 8px; font-size: var(--fs-lg); line-height: 1.3; font-weight: 700; color: var(--ink-navy); }
+.cmp-swipe__pos { font-size: var(--fs-xs); font-weight: 600; color: var(--ink-text-2); white-space: nowrap; }
+.cmp-swipe__pile { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-label); }
+.cmp-swipe__list { display: grid; margin: 0; }
+.cmp-swipe__list > div { display: grid; gap: 2px; padding: 8px 0; border-top: 1px solid var(--line-hair); }
+.cmp-swipe__list dt { font-size: var(--fs-sm); color: var(--ink-text-2); }
+.cmp-swipe__list dd { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; }
 </style>
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
@@ -2190,13 +2207,13 @@ const NOTES = {
   langAUT: { n: 2, claim: 'Language · Official languages, Austria', value: 'German. Matches a language you speak.', level: 3, risk: 'low', source: 'Federal Constitutional Law, Art. 8', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-07', label: 'Firsthand', verifier: 'A. Hofer', role: 'Editor, firsthand check (sample)', verifiedOn: '2026-07-30', why: 'Your household speaks German, which is the official language nationwide.' },
   internetCRI: { n: 3, claim: 'Internet · Speed tests, Costa Rica', value: '54 Mbit/s median download', level: 1, risk: 'medium', source: 'Measurement Lab (M-Lab), speed test open data, national aggregate', url: 'measurementlab.net', license: 'CC0 1.0, public domain', asOf: '2026-08', dataFrom: '2021', label: 'Source only', stale: true },
   climateCRI: { n: 4, claim: 'Climate · Climate zone, Costa Rica', value: 'Not known yet', level: 0, risk: 'low', source: 'No usable source found yet', url: '', license: 'None', asOf: 'None', label: 'Source only', reason: 'translation' },
-  routeCRI: { n: 5, claim: 'Rentista route, Costa Rica', value: 'Conditions appear to apply to You and Partner', level: 3, risk: 'medium', source: 'Dirección General de Migración y Extranjería', url: 'migracion.go.cr', license: 'Public government information', asOf: '2026-08', label: 'Editorial', verifier: 'M. Solano', role: 'Immigration lawyer, San José (sample)', verifiedOn: '2026-09-12', why: 'The rentista route requires a stable monthly income from abroad; your household listed one.', machineTranslation: ['ingresos estables', 'rentista'] },
+  routeCRI: { n: 5, claim: 'Rentista route, Costa Rica', value: 'Conditions appear to apply to You and Partner', level: 3, risk: 'high', source: 'Dirección General de Migración y Extranjería', url: 'migracion.go.cr', license: 'Public government information', asOf: '2026-08', label: 'Editorial', verifier: 'M. Solano', role: 'Immigration lawyer, San José (sample)', verifiedOn: '2026-09-12', why: 'The rentista route requires a stable monthly income from abroad; your household listed one.', machineTranslation: ['ingresos estables', 'rentista'] },
   healthDEU: { n: 9, claim: 'Healthcare · Life expectancy, Germany', value: '80.9 years at birth', level: 1, risk: 'low', source: 'World Bank, World Development Indicators', url: 'data.worldbank.org', license: 'CC BY 4.0', asOf: '2026-05', label: 'Source only' },
   healthCRI: { n: 10, claim: 'Healthcare · Life expectancy, Costa Rica', value: '80.3 years at birth', level: 1, risk: 'low', source: 'World Bank, World Development Indicators', url: 'data.worldbank.org', license: 'CC BY 4.0', asOf: '2026-05', label: 'Source only' },
   langDEU: { n: 11, claim: 'Language · Official languages, Germany', value: 'German. Matches a language you speak.', level: 3, risk: 'low', source: 'Federal government, official language provisions', url: 'gesetze-im-internet.de', license: 'Public government information', asOf: '2026-07', label: 'Firsthand', verifier: 'J. Weber', role: 'Editor, firsthand check (sample)', verifiedOn: '2026-08-04', why: 'Your household speaks German, the official language nationwide.' },
   costAUT: { n: 6, claim: 'Cost · Price level, Austria', value: '104 (World = 100)', level: 1, risk: 'low', source: 'World Bank, International Comparison Program 2021, actual individual consumption', url: 'data.worldbank.org', license: 'CC BY 4.0', asOf: '2026-06', label: 'Source only', flagged: true },
-  euRuleAUT: { n: 7, claim: 'Residence for an EU citizen returning home, Austria', value: 'Conditions appear met for You', level: 1, risk: 'low', source: 'Settlement and Residence Act (NAG)', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial' },
-  partnerAUT: { n: 8, claim: 'Residence for a durable partner of an Austrian, Austria', value: 'Some conditions appear not met yet', level: 1, risk: 'medium', source: 'Settlement and Residence Act (NAG), § 47', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial' }
+  euRuleAUT: { n: 7, claim: 'Residence for an EU citizen returning home, Austria', value: 'Conditions appear met for You', level: 3, risk: 'high', source: 'Settlement and Residence Act (NAG)', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial', verifier: 'A. Hofer', role: 'Immigration lawyer, Vienna (sample)', verifiedOn: '2026-09-12', why: 'An Austrian citizen may live in Austria; registration is the only step.' },
+  partnerAUT: { n: 8, claim: 'Residence for a durable partner of an Austrian, Austria', value: 'Some conditions appear not met yet', level: 3, risk: 'high', source: 'Settlement and Residence Act (NAG), § 47', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial', verifier: 'A. Hofer', role: 'Immigration lawyer, Vienna (sample)', verifiedOn: '2026-09-12', why: 'The permit is for relatives of an Austrian citizen, including a durable partner.' }
 };
 
 /* ── The mark: the monogram (48px and below) and the seal (64px and up) ────────────
@@ -2618,13 +2635,13 @@ function startB2(variant, ctx) {
       <ul class="start-card__terms">${['We take no responsibility for the accuracy, completeness or currency of the information.', 'Our liability is limited as far as the law allows.', 'This is not legal advice.', 'Confirm with the authority or an adviser.', 'Your data stays on your device.'].map(t => `<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul>
       <a class="f-link" href="#" data-toast="Opens the full terms (screen 14).">${icon('journal-page')}<span>Read the full terms</span></a><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-act="accept">Accept</button></div></div>`;
   } else if (variant === 'firstload') {
-    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Downloading the data for the first time</span>${chip('40%')}</div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
+    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Loading country data · about 2 MB, once</span>${chip('40%')}</div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
   } else {
     const returning = variant === 'returning';
     const lead = `<div class="st-col st-col--lead"><h1 class="f-title st-headline" tabindex="-1">${esc(START.headline)}</h1><p class="st-rational">${esc(START.rational)}</p></div>`;
     const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
       ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
-      : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
+      : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}${variant === 'importfail' ? `<div class="alert alert--error st-fail" role="alert">${icon('warning-triangle')}<div><b>holiday-photos.zip can't be opened.</b><p>It is not a travel folder file, it is damaged, or it comes from a newer version of the app. Nothing was changed. <a class="f-link" href="#" data-toast="${esc(MENU_ITEMS.open[1])}">Choose another file</a></p></div></div>` : ''}</div>`;
     inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
   }
   const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
@@ -2779,13 +2796,14 @@ function openReport(claim) {
   if (!dlg.open) dlg.showModal();
   dlg.querySelector('h2').focus();
 }
+let reportUid = 0;   /* each dialog its own radio group, so two copies on one page never share a selection */
 function reportDialog(claim, state) {
   const reasons = ['The value is wrong', 'The source is out of date', 'The source link is broken', 'This is the wrong source for this claim'];
   const head = `<div class="dlg__head"><h2 class="dlg__title" tabindex="-1">Report an error</h2><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div>`;
   if (state === 'sent') return `${head}<div class="dlg__body"><div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Thank you, your report was sent.</b><p>It carries only the fact and the reason you chose. Nothing about you or your plan.</p></div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-close>Close</button></div>`;
   if (state === 'failed') return `${head}<div class="dlg__body"><div class="alert alert--warning" role="status">${icon('wifi-off')}<div><b>You are offline. Your report will be sent when you are back online.</b><p>You can close this. Nothing else needs to be done.</p></div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-close>Close</button></div>`;
   return `${head}<div class="dlg__body"><p class="dlg__claim"><span class="lbl">The fact</span><b>${esc(claim)}</b></p>
-    <fieldset class="rgroup"><legend>What is wrong?</legend>${reasons.map((r, i) => `<label class="radio"><input type="radio" name="reason-${hash(claim)}" value="${i}"${i === 0 ? ' checked' : ''}><span class="radio__box" aria-hidden="true"></span><span>${r}</span></label>`).join('')}</fieldset>
+    <fieldset class="rgroup"><legend>What is wrong?</legend>${reasons.map((r, i) => `<label class="radio"><input type="radio" name="reason-${hash(claim)}-${++reportUid}" value="${i}"${i === 0 ? ' checked' : ''}><span class="radio__box" aria-hidden="true"></span><span>${r}</span></label>`).join('')}</fieldset>
     <p class="f-muted">We only receive the fact and this reason. No free text, nothing about you.</p></div>
     <div class="dlg__foot"><button type="button" class="btn btn--secondary" data-close>Cancel</button><button type="button" class="btn btn--primary" data-report-send>Send report</button></div>`;
 }
@@ -2927,6 +2945,23 @@ function notCoveredCard(v, c, phone) {
         <p class="f-iconline ncov__band">${icon('check-circle')}<span>${esc(v.band)}</span></p>
         ${v.tag === 'partly' ? `<div><button type="button" class="btn btn--secondary" data-toast="Opens the route result for ${esc(c.name)} (screen 8), the covered part only.">See the covered part</button></div>` : ''}
       </section>`;
+}
+
+/* Compare, phone layout B: one country per card, swiped sideways. Every value keeps its criterion name beside it.
+   noteFn(iso, id) names the source note for a value; without it the cards show the values only. */
+function compareSwipe(isos, noteFn) {
+  const rows = [['non', PILES.non], ['important', PILES.important], ['nice', PILES.nice]];
+  const cols = isos.map((iso, i) => {
+    const c = countryBy(iso);
+    return `<section class="cmp-swipe__col" aria-label="${esc(c.name)}, ${i + 1} of ${isos.length}"><h3 class="cmp-swipe__name"><span>${esc(c.name)}</span><span class="cmp-swipe__pos">${i + 1} of ${isos.length}</span></h3>
+      ${rows.map(([p, ids]) => `<h4 class="cmp-swipe__pile">${pileMark(p)}<span>${PILE_NAMES[p]}</span></h4><dl class="cmp-swipe__list">${ids.map(id => {
+        const v = (VALUES[iso] || {})[id];
+        const val = !v || !v[0] ? `<span class="f-iconline f-val--unknown">${icon('help-circle')}<span>Not known yet</span></span>`
+          : `<span class="cmp__v">${esc(v[0])} <small>${esc(v[1])}</small></span>${noteFn ? evButton(noteFn(iso, id), { compact: true, level: v[2], risk: v[3] }) : ''}`;
+        return `<div><dt>${critName(critBy(id))}</dt><dd>${val}</dd></div>`;
+      }).join('')}</dl>`).join('')}</section>`;
+  }).join('');
+  return `<p class="cmp-swipe__hint">${icon('nav-arrow-right')}<span>Swipe for the next country. Each value keeps its criterion name.</span></p><div class="cmp-swipe od-rail" role="region" aria-label="Your shortlist, one country at a time" tabindex="0">${cols}</div>`;
 }
 </script>
 
@@ -3121,7 +3156,8 @@ function compareTable(cols, stack = false) {
   </tbody></table></div>`;
 }
 S.compare = () => `<div class="g-item"><div class="g-item__label"><b>Comparison table</b><span>criteria as rows, grouped by pile; unknowns visible; one tap to each source</span></div>
-  ${frames(`<div class="cmp-switch"><span class="lbl">Second column</span><div class="segc" role="group" aria-label="Second country" data-cmp-switch><button type="button" aria-pressed="true" data-iso="CRI">Costa Rica</button><button type="button" aria-pressed="false" data-iso="DEU">Germany</button></div></div><div data-cmp-phone>${compareTable(['AUT', 'CRI'], true)}</div><p class="g-note">Phone: two countries side by side, each criterion name across both columns above its values, and a switch for the third country.</p>`, compareTable(['AUT', 'CRI', 'DEU']), { frame: true })}</div>`;
+  ${frames(`<div class="cmp-switch"><span class="lbl">Second column</span><div class="segc" role="group" aria-label="Second country" data-cmp-switch><button type="button" aria-pressed="true" data-iso="CRI">Costa Rica</button><button type="button" aria-pressed="false" data-iso="DEU">Germany</button></div></div><div data-cmp-phone>${compareTable(['AUT', 'CRI'], true)}</div><p class="g-note">Phone: two countries side by side, each criterion name across both columns above its values, and a switch for the third country.</p>`, compareTable(['AUT', 'CRI', 'DEU']), { frame: true })}</div>
+  <div class="g-item"><div class="g-item__label"><b>Comparison, phone layout B</b><span>swipe: one country per card, every value with its criterion name; the alternative to the column switch</span></div><div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390</span><div class="g-phone"><div class="g-pad">${compareSwipe(['AUT', 'CRI', 'DEU'])}</div></div></div></div></div>`;
 
 S.longlist = () => `<div class="g-item"><div class="g-item__label"><b>Long list</b><span>all ${COUNTRIES.length} countries as compact rows, with search, region and route-check filters</span></div>
   <div class="g-row" style="align-items:end">

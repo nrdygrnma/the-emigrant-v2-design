@@ -1797,6 +1797,23 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .f-rail .f-step[data-state="later"], .f-rail--compact .f-step[data-state="later"] { padding-right: 0; }
 @container app (max-width: 1279px) { .f-head--desk .f-rail .f-step { padding-right: 8px; } .f-head--desk .f-rail li + li::before { margin: 0 12px 0 0; } }
 @container rail (max-width: 359px) { .f-rail--compact .f-step { padding-right: 2px; } .f-rail--compact li + li::before { margin: 0; } }
+
+/* Added states: Start's failed file, a skipped question, the not-covered link, Compare's swipe layout */
+.st-fail { margin-top: 12px; }
+.qp__skipped { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border: var(--b-notyet-thin); border-radius: var(--r-btn); font-size: var(--fs-sm); color: var(--ink-text-2); --od-icon-size: 18px; }
+.qp__skipped > .od-icon { flex: none; margin-top: 1px; }
+.qp__skipped b { color: var(--ink-navy); }
+.d2-nclink { justify-self: start; font-size: var(--fs-sm); --od-icon-size: 18px; }
+.cmp-swipe__hint { display: flex; align-items: center; gap: 6px; font-size: var(--fs-sm); color: var(--ink-text-2); --od-icon-size: 16px; }
+.cmp-swipe { --od-gap: 12px; --od-rail-pad: 0px; width: 0; min-width: 100%; padding: 2px 2px 6px; }  /* width 0 + min-width 100%: the row never widens the screen */
+.cmp-swipe__col { width: 85%; display: grid; gap: 4px; align-content: start; padding: 12px 16px; border: 1px solid var(--line-edge); border-radius: var(--r-card); background: var(--paper-card); }
+.cmp-swipe__name { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 8px; font-size: var(--fs-lg); line-height: 1.3; font-weight: 700; color: var(--ink-navy); }
+.cmp-swipe__pos { font-size: var(--fs-xs); font-weight: 600; color: var(--ink-text-2); white-space: nowrap; }
+.cmp-swipe__pile { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-label); }
+.cmp-swipe__list { display: grid; margin: 0; }
+.cmp-swipe__list > div { display: grid; gap: 2px; padding: 8px 0; border-top: 1px solid var(--line-hair); }
+.cmp-swipe__list dt { font-size: var(--fs-sm); color: var(--ink-text-2); }
+.cmp-swipe__list dd { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; }
 </style>
 
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
@@ -2169,13 +2186,13 @@ const NOTES = {
   langAUT: { n: 2, claim: 'Language · Official languages, Austria', value: 'German. Matches a language you speak.', level: 3, risk: 'low', source: 'Federal Constitutional Law, Art. 8', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-07', label: 'Firsthand', verifier: 'A. Hofer', role: 'Editor, firsthand check (sample)', verifiedOn: '2026-07-30', why: 'Your household speaks German, which is the official language nationwide.' },
   internetCRI: { n: 3, claim: 'Internet · Speed tests, Costa Rica', value: '54 Mbit/s median download', level: 1, risk: 'medium', source: 'Measurement Lab (M-Lab), speed test open data, national aggregate', url: 'measurementlab.net', license: 'CC0 1.0, public domain', asOf: '2026-08', dataFrom: '2021', label: 'Source only', stale: true },
   climateCRI: { n: 4, claim: 'Climate · Climate zone, Costa Rica', value: 'Not known yet', level: 0, risk: 'low', source: 'No usable source found yet', url: '', license: 'None', asOf: 'None', label: 'Source only', reason: 'translation' },
-  routeCRI: { n: 5, claim: 'Rentista route, Costa Rica', value: 'Conditions appear to apply to You and Partner', level: 3, risk: 'medium', source: 'Dirección General de Migración y Extranjería', url: 'migracion.go.cr', license: 'Public government information', asOf: '2026-08', label: 'Editorial', verifier: 'M. Solano', role: 'Immigration lawyer, San José (sample)', verifiedOn: '2026-09-12', why: 'The rentista route requires a stable monthly income from abroad; your household listed one.', machineTranslation: ['ingresos estables', 'rentista'] },
+  routeCRI: { n: 5, claim: 'Rentista route, Costa Rica', value: 'Conditions appear to apply to You and Partner', level: 3, risk: 'high', source: 'Dirección General de Migración y Extranjería', url: 'migracion.go.cr', license: 'Public government information', asOf: '2026-08', label: 'Editorial', verifier: 'M. Solano', role: 'Immigration lawyer, San José (sample)', verifiedOn: '2026-09-12', why: 'The rentista route requires a stable monthly income from abroad; your household listed one.', machineTranslation: ['ingresos estables', 'rentista'] },
   healthDEU: { n: 9, claim: 'Healthcare · Life expectancy, Germany', value: '80.9 years at birth', level: 1, risk: 'low', source: 'World Bank, World Development Indicators', url: 'data.worldbank.org', license: 'CC BY 4.0', asOf: '2026-05', label: 'Source only' },
   healthCRI: { n: 10, claim: 'Healthcare · Life expectancy, Costa Rica', value: '80.3 years at birth', level: 1, risk: 'low', source: 'World Bank, World Development Indicators', url: 'data.worldbank.org', license: 'CC BY 4.0', asOf: '2026-05', label: 'Source only' },
   langDEU: { n: 11, claim: 'Language · Official languages, Germany', value: 'German. Matches a language you speak.', level: 3, risk: 'low', source: 'Federal government, official language provisions', url: 'gesetze-im-internet.de', license: 'Public government information', asOf: '2026-07', label: 'Firsthand', verifier: 'J. Weber', role: 'Editor, firsthand check (sample)', verifiedOn: '2026-08-04', why: 'Your household speaks German, the official language nationwide.' },
   costAUT: { n: 6, claim: 'Cost · Price level, Austria', value: '104 (World = 100)', level: 1, risk: 'low', source: 'World Bank, International Comparison Program 2021, actual individual consumption', url: 'data.worldbank.org', license: 'CC BY 4.0', asOf: '2026-06', label: 'Source only', flagged: true },
-  euRuleAUT: { n: 7, claim: 'Residence for an EU citizen returning home, Austria', value: 'Conditions appear met for You', level: 1, risk: 'low', source: 'Settlement and Residence Act (NAG)', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial' },
-  partnerAUT: { n: 8, claim: 'Residence for a durable partner of an Austrian, Austria', value: 'Some conditions appear not met yet', level: 1, risk: 'medium', source: 'Settlement and Residence Act (NAG), § 47', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial' }
+  euRuleAUT: { n: 7, claim: 'Residence for an EU citizen returning home, Austria', value: 'Conditions appear met for You', level: 3, risk: 'high', source: 'Settlement and Residence Act (NAG)', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial', verifier: 'A. Hofer', role: 'Immigration lawyer, Vienna (sample)', verifiedOn: '2026-09-12', why: 'An Austrian citizen may live in Austria; registration is the only step.' },
+  partnerAUT: { n: 8, claim: 'Residence for a durable partner of an Austrian, Austria', value: 'Some conditions appear not met yet', level: 3, risk: 'high', source: 'Settlement and Residence Act (NAG), § 47', url: 'ris.bka.gv.at', license: 'Public government information', asOf: '2026-09', label: 'Editorial', verifier: 'A. Hofer', role: 'Immigration lawyer, Vienna (sample)', verifiedOn: '2026-09-12', why: 'The permit is for relatives of an Austrian citizen, including a durable partner.' }
 };
 
 /* ── The mark: the monogram (48px and below) and the seal (64px and up) ────────────
@@ -2597,13 +2614,13 @@ function startB2(variant, ctx) {
       <ul class="start-card__terms">${['We take no responsibility for the accuracy, completeness or currency of the information.', 'Our liability is limited as far as the law allows.', 'This is not legal advice.', 'Confirm with the authority or an adviser.', 'Your data stays on your device.'].map(t => `<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul>
       <a class="f-link" href="#" data-toast="Opens the full terms (screen 14).">${icon('journal-page')}<span>Read the full terms</span></a><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-act="accept">Accept</button></div></div>`;
   } else if (variant === 'firstload') {
-    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Downloading the data for the first time</span>${chip('40%')}</div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
+    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Loading country data · about 2 MB, once</span>${chip('40%')}</div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
   } else {
     const returning = variant === 'returning';
     const lead = `<div class="st-col st-col--lead"><h1 class="f-title st-headline" tabindex="-1">${esc(START.headline)}</h1><p class="st-rational">${esc(START.rational)}</p></div>`;
     const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
       ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
-      : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
+      : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}${variant === 'importfail' ? `<div class="alert alert--error st-fail" role="alert">${icon('warning-triangle')}<div><b>holiday-photos.zip can't be opened.</b><p>It is not a travel folder file, it is damaged, or it comes from a newer version of the app. Nothing was changed. <a class="f-link" href="#" data-toast="${esc(MENU_ITEMS.open[1])}">Choose another file</a></p></div></div>` : ''}</div>`;
     inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
   }
   const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
@@ -2758,13 +2775,14 @@ function openReport(claim) {
   if (!dlg.open) dlg.showModal();
   dlg.querySelector('h2').focus();
 }
+let reportUid = 0;   /* each dialog its own radio group, so two copies on one page never share a selection */
 function reportDialog(claim, state) {
   const reasons = ['The value is wrong', 'The source is out of date', 'The source link is broken', 'This is the wrong source for this claim'];
   const head = `<div class="dlg__head"><h2 class="dlg__title" tabindex="-1">Report an error</h2><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div>`;
   if (state === 'sent') return `${head}<div class="dlg__body"><div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Thank you, your report was sent.</b><p>It carries only the fact and the reason you chose. Nothing about you or your plan.</p></div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-close>Close</button></div>`;
   if (state === 'failed') return `${head}<div class="dlg__body"><div class="alert alert--warning" role="status">${icon('wifi-off')}<div><b>You are offline. Your report will be sent when you are back online.</b><p>You can close this. Nothing else needs to be done.</p></div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-close>Close</button></div>`;
   return `${head}<div class="dlg__body"><p class="dlg__claim"><span class="lbl">The fact</span><b>${esc(claim)}</b></p>
-    <fieldset class="rgroup"><legend>What is wrong?</legend>${reasons.map((r, i) => `<label class="radio"><input type="radio" name="reason-${hash(claim)}" value="${i}"${i === 0 ? ' checked' : ''}><span class="radio__box" aria-hidden="true"></span><span>${r}</span></label>`).join('')}</fieldset>
+    <fieldset class="rgroup"><legend>What is wrong?</legend>${reasons.map((r, i) => `<label class="radio"><input type="radio" name="reason-${hash(claim)}-${++reportUid}" value="${i}"${i === 0 ? ' checked' : ''}><span class="radio__box" aria-hidden="true"></span><span>${r}</span></label>`).join('')}</fieldset>
     <p class="f-muted">We only receive the fact and this reason. No free text, nothing about you.</p></div>
     <div class="dlg__foot"><button type="button" class="btn btn--secondary" data-close>Cancel</button><button type="button" class="btn btn--primary" data-report-send>Send report</button></div>`;
 }
@@ -2907,6 +2925,23 @@ function notCoveredCard(v, c, phone) {
         ${v.tag === 'partly' ? `<div><button type="button" class="btn btn--secondary" data-toast="Opens the route result for ${esc(c.name)} (screen 8), the covered part only.">See the covered part</button></div>` : ''}
       </section>`;
 }
+
+/* Compare, phone layout B: one country per card, swiped sideways. Every value keeps its criterion name beside it.
+   noteFn(iso, id) names the source note for a value; without it the cards show the values only. */
+function compareSwipe(isos, noteFn) {
+  const rows = [['non', PILES.non], ['important', PILES.important], ['nice', PILES.nice]];
+  const cols = isos.map((iso, i) => {
+    const c = countryBy(iso);
+    return `<section class="cmp-swipe__col" aria-label="${esc(c.name)}, ${i + 1} of ${isos.length}"><h3 class="cmp-swipe__name"><span>${esc(c.name)}</span><span class="cmp-swipe__pos">${i + 1} of ${isos.length}</span></h3>
+      ${rows.map(([p, ids]) => `<h4 class="cmp-swipe__pile">${pileMark(p)}<span>${PILE_NAMES[p]}</span></h4><dl class="cmp-swipe__list">${ids.map(id => {
+        const v = (VALUES[iso] || {})[id];
+        const val = !v || !v[0] ? `<span class="f-iconline f-val--unknown">${icon('help-circle')}<span>Not known yet</span></span>`
+          : `<span class="cmp__v">${esc(v[0])} <small>${esc(v[1])}</small></span>${noteFn ? evButton(noteFn(iso, id), { compact: true, level: v[2], risk: v[3] }) : ''}`;
+        return `<div><dt>${critName(critBy(id))}</dt><dd>${val}</dd></div>`;
+      }).join('')}</dl>`).join('')}</section>`;
+  }).join('');
+  return `<p class="cmp-swipe__hint">${icon('nav-arrow-right')}<span>Swipe for the next country. Each value keeps its criterion name.</span></p><div class="cmp-swipe od-rail" role="region" aria-label="Your shortlist, one country at a time" tabindex="0">${cols}</div>`;
+}
 </script>
 
 <script>/* The Emigrant — D2 screen engine. Composes the brief's screens from the D1 components in
@@ -2936,6 +2971,7 @@ FACT_NOTE.language.CRI = 'langCRI';
 /* Values for the facts the household did not select, and for the Netherlands (route check not available) */
 Object.assign(VALUES.AUT, { jobs: ['5.2', '%', 1, 'low', '2026-06'], eu: ['Yes', '', 1, 'low', '2026-01'], hazard: ['2.1', 'risk index', 1, 'low', '2026-02'], driving: ['Right', '', 1, 'low', '2026-01'], taxes: ['43.1', '% of GDP', 1, 'low', '2025-12'], community: ['20.5', '% of residents', 1, 'medium', '2026-03'] });
 Object.assign(VALUES.CRI, { flights: ['2', 'airports', 1, 'low', '2026-04'], jobs: ['8.9', '%', 1, 'medium', '2026-06'], eu: ['No', '', 1, 'low', '2026-01'], driving: ['Right', '', 1, 'low', '2026-01'] });
+VALUES.PRT = { health: ['81.1', 'years', 1, 'low', '2026-05'], safety: ['81', 'percentile', 1, 'low', '2026-03'], language: ['No match', 'Portuguese', 3, 'low', '2026-07'], internet: ['112', 'Mbit/s', 1, 'medium', '2026-08'], cost: ['71', 'World = 100', 1, 'low', '2026-06'], law: ['80', 'percentile', 1, 'low', '2026-03'], climate: ['Csa', 'hot-summer Mediterranean', 1, 'low', '2026-01'], flights: ['5', 'airports', 1, 'low', '2026-04'], timezone: ['1', 'hours', 1, 'low', '2026-01'], corruption: ['61', '/ 100', 1, 'low', '2026-02'], education: ['97', '% enrolled', 1, 'low', '2025-12'] };
 VALUES.NLD = { cost: ['112', 'World = 100', 1, 'low', '2026-06'], law: ['96', 'percentile', 1, 'low', '2026-03'], internet: ['128', 'Mbit/s', 1, 'low', '2026-08'], climate: ['Cfb', 'oceanic', 1, 'low', '2026-01'], language: ['No match', 'Dutch', 1, 'low', '2026-07'], health: ['81.7', 'years', 1, 'low', '2026-05'], safety: ['82', 'percentile', 1, 'low', '2026-03'], flights: ['5', 'airports', 1, 'low', '2026-04'], timezone: ['0', 'hours', 1, 'low', '2026-01'], corruption: ['79', '/ 100', 1, 'low', '2026-02'] };
 const OTHER_GROUPS = [['Work', ['jobs']], ['The place', ['eu', 'hazard', 'driving']], ['People', ['community']]];
 const LANGUAGES = ['Arabic', 'Bengali', 'Bosnian', 'Bulgarian', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Estonian', 'Finnish', 'French', 'German', 'Greek', 'Hindi', 'Hungarian', 'Icelandic', 'Irish', 'Italian', 'Japanese', 'Korean', 'Latvian', 'Lithuanian', 'Maltese', 'Mandarin Chinese', 'Norwegian', 'Polish', 'Portuguese', 'Romanian', 'Russian', 'Serbian', 'Slovak', 'Slovenian', 'Spanish', 'Swahili', 'Swedish', 'Thai', 'Turkish', 'Ukrainian', 'Vietnamese'];
@@ -3023,10 +3059,10 @@ const defState = () => ({ list: new Set(), country: 'AUT', search: '', region: '
 SCREENS.start = {
   no: '1 · 1a', title: 'Start, with Terms of use',
   note: 'The first impression, in the chosen B2 direction: the full photo as the stage, the papers card over its lower part with the headline about the life, the rational line, the boarding pass as the one object, and the three journey legs. Terms of use (1a) take the card over until accepted; then the only button is "Accept". The cover is provisional and comes from one setting, START.cover, in the D1 engine; D1\'s "Cover with the papers card" is this same component. The footers carry the privacy promise and the Disclaimer and Terms of use links.',
-  states: [['first', 'First visit'], ['terms', 'Terms not accepted'], ['changed', 'Terms changed'], ['returning', 'Returning with a plan'], ['firstload', 'Data loading for the first time']],
+  states: [['first', 'First visit'], ['terms', 'Terms not accepted'], ['changed', 'Terms changed'], ['returning', 'Returning with a plan'], ['firstload', 'Data loading for the first time'], ['importfail', 'Opening a file failed']],
   system: [['offline', 'Offline']],
   render(ctx, S) {
-    const v = S.state === 'offline' ? 'first' : S.state;
+    const v = S.state === 'offline' ? 'first' : S.state;   /* importfail: the first-visit card with the error under the actions */
     return { body: startB2(v, ctx), startShell: true, full: true, next: null, offline: S.state === 'offline' };
   }
 };
@@ -3035,19 +3071,26 @@ SCREENS.start = {
 function question(n, total, q, why, control, foot) {
   return `<div class="qp"><span class="qp__step">Question ${n} of ${total}</span><div class="prog"><div class="prog__track" role="progressbar" aria-valuenow="${n}" aria-valuemin="0" aria-valuemax="${total}" aria-label="Question ${n} of ${total}"><span class="prog__bar" style="width:${Math.round((n / total) * 100)}%"></span></div></div><p class="qp__q">${q}</p><p class="qp__why">${icon('info-circle')}<span>Why we ask: ${why}</span></p>${control}<div class="qp__foot">${foot}</div></div>`;
 }
+/* Layout B: one question per screen. The one action is the next question; the last one shows the first ranking */
+function profileOneByOne(ctx) {
+  const body = `${pageTitle(ctx, 'A few quick questions', 'Quick profile · one per screen', 'answer or skip this question, then the next. Three in all.')}
+    ${question(2, 3, 'Which languages does your household speak?', '"Language · Official languages" checks whether a country\'s official language is one of these.', `${selectMenu({ ariaLabel: 'Languages your household speaks', items: LANGUAGES, value: ['German', 'English'], multiple: true, icon: 'language', placeholder: 'Add a language', searchPlaceholder: 'Type a language' })}<div class="chips" data-chips>${['German', 'English'].map(l => `<button type="button" class="chip-x" data-lang="${l}"><span>${l}</span>${icon('xmark')}<span class="sr-only"> remove</span></button>`).join('')}</div>`, '<button type="button" class="btn btn--ghost btn--sm" data-toast="Back to question 1.">' + icon('nav-arrow-left') + '<span>Back</span></button><button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. Language · Official languages then counts as not known for you.">Skip</button>')}`;
+  return { body, next: { label: 'Next question', hint: 'Question 2 of 3 · the last one shows your first ranking', toast: 'Question 3 of 3. Its action is "Show my first ranking".' }, side: `${findCard([['Why we ask', 'Under the question.'], ['Back', 'Below the answer.'], ['Your answers', 'They stay on this device.']])}${privacyCard()}` };
+}
 SCREENS.profile = {
   no: '2', title: 'Quick profile',
-  note: 'Three questions, each with "why we ask", each skippable. Languages stay here because Language · Official languages needs them; the climate question moved to its criterion card.',
-  states: [['empty', 'Empty'], ['partly', 'Partly answered'], ['complete', 'Complete']],
+  note: 'Three questions, each with "why we ask", each skippable. Languages stay here because Language · Official languages needs them; the climate question moved to its criterion card. Two layouts: A, all questions on one screen (the first four states); B, one question per screen, with Back and the next question as the one action. The slots take a different set of three or four questions without a redesign.',
+  states: [['empty', 'Empty'], ['partly', 'Partly answered'], ['complete', 'Complete'], ['skipped', 'A question skipped'], ['onebyone', 'Layout B: one question per screen']],
   render(ctx, S) {
-    const a = S.state === 'complete' ? 3 : S.state === 'partly' ? 1 : 0;
+    if (S.state === 'onebyone') return profileOneByOne(ctx);
+    const a = S.state === 'complete' ? 3 : S.state === 'partly' || S.state === 'skipped' ? 1 : 0, skipped = S.state === 'skipped';
     const chips = a >= 2 ? ['German', 'Portuguese', 'English'] : [];
     const body = `${pageTitle(ctx, 'A few quick questions', 'Quick profile', 'three short questions, then your first ranking. Skip any of them; we use a sensible default.')}
-      <div class="f-status"><p class="f-status__counts" role="status"><span><b>${a}</b> of 3 answered</span></p><p class="f-status__note">${a === 3 ? 'Ready for your first ranking.' : 'All three can be skipped; we use a sensible default.'}</p></div>
+      <div class="f-status"><p class="f-status__counts" role="status"><span><b>${a}</b> of 3 answered</span>${skipped ? '<span><b>1</b> skipped</span>' : ''}</p><p class="f-status__note">${a === 3 ? 'Ready for your first ranking.' : 'All three can be skipped; we use a sensible default.'}</p></div>
       ${question(1, 3, 'Where do you live now?', 'to compare prices from where you are.', selectMenu({ ariaLabel: 'Where do you live now?', items: COUNTRY_ITEMS(), value: a >= 1 ? 'Austria' : '', placeholder: 'Choose a country', searchPlaceholder: 'Type a country' }), '<button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. We use no home country for prices.">Skip</button>')}
-      ${question(2, 3, 'Which languages does your household speak?', '"Language · Official languages" checks whether a country\'s official language is one of these.', `${selectMenu({ ariaLabel: 'Languages your household speaks', items: LANGUAGES, value: chips, multiple: true, icon: 'language', placeholder: 'Add a language', searchPlaceholder: 'Type a language' })}<div class="chips" data-chips>${chips.map(l => `<button type="button" class="chip-x" data-lang="${l}"><span>${l}</span>${icon('xmark')}<span class="sr-only"> remove</span></button>`).join('')}</div>`, `<span class="field__why" data-lang-count aria-live="polite">${chips.length} languages chosen</span><button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. Language · Official languages then counts as not known for you.">Skip</button>`)}
+      ${skipped ? question(2, 3, 'Which languages does your household speak?', '"Language · Official languages" checks whether a country\'s official language is one of these.', `<p class="qp__skipped">${icon('minus-circle')}<span><b>Skipped.</b> Language · Official languages counts as not known for you, for every country.</span></p>`, '<button type="button" class="btn btn--secondary btn--sm" data-toast="Shows the languages question again.">Answer it after all</button>') : question(2, 3, 'Which languages does your household speak?', '"Language · Official languages" checks whether a country\'s official language is one of these.', `${selectMenu({ ariaLabel: 'Languages your household speaks', items: LANGUAGES, value: chips, multiple: true, icon: 'language', placeholder: 'Add a language', searchPlaceholder: 'Type a language' })}<div class="chips" data-chips>${chips.map(l => `<button type="button" class="chip-x" data-lang="${l}"><span>${l}</span>${icon('xmark')}<span class="sr-only"> remove</span></button>`).join('')}</div>`, `<span class="field__why" data-lang-count aria-live="polite">${chips.length} languages chosen</span><button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. Language · Official languages then counts as not known for you.">Skip</button>`)}
       ${question(3, 3, 'How much does cost of living matter?', 'sets how strongly Cost · Price level counts. You can change it in the sort.', `<div class="segc" role="group" aria-label="Cost importance">${['Not much', 'Somewhat', 'A lot'].map(t => `<button type="button" aria-pressed="${a === 3 && t === 'Somewhat'}">${t}</button>`).join('')}</div>`, '<span class="field__why">7 inputs or fewer before your first ranking.</span>')}`;
-    const next = { label: 'Show my first ranking', hint: a === 3 ? 'Step 1 of 3 · all three answered' : `Step 1 of 3 · ${a} of 3 answered, the rest use defaults`, toast: 'Opens the criteria sort with your first ranking (screen 3).' };
+    const next = { label: 'Show my first ranking', hint: a === 3 ? 'Step 1 of 3 · all three answered' : `Step 1 of 3 · ${a} of 3 answered${skipped ? ', 1 skipped' : ''}, the rest use defaults`, toast: 'Opens the criteria sort with your first ranking (screen 3).' };
     return { body, next, side: `${findCard([['Why we ask', 'Under every question.'], ['Skipping', 'Each question has a default.'], ['Your answers', 'They stay on this device.']])}${privacyCard()}` };
   }
 };
@@ -3058,9 +3101,9 @@ const CRIT_ASK = {
   driving: () => { const u = nid('askd'); return `<span class="field__label" id="${u}">Which side of the road do you prefer?</span><div class="segc" role="group" aria-labelledby="${u}">${['Left', 'Right', 'No preference'].map(t => `<button type="button" aria-pressed="${t === 'Right'}">${t}</button>`).join('')}</div>`; },
   climate: () => { const u = nid('clz'); return `<fieldset class="chk-chips"><legend class="field__label">Which climate zones do you like?</legend><div class="chk-chips__row">${CLIMATE_ZONES.map(z => `<label class="chk-chip"><input type="checkbox" name="${u}"${['Temperate', 'Cold'].includes(z) ? ' checked' : ''}><span class="chk-chip__box" aria-hidden="true">${icon('check')}</span><span>${z}</span></label>`).join('')}</div></fieldset>`; }
 };
-function critCard(id, pile) {
+function critCard(id, pile, drag) {
   const c = critBy(id);
-  return `<li class="crit crit--${c.kind}" tabindex="0" data-crit="${id}" aria-label="${critName(c)}, ${c.kind === 'yesno' ? 'yes or no' : 'scored'}, in ${PILE_NAMES[pile]}. Press 1 to 4 to move it.">
+  return `<li class="crit crit--${c.kind}${drag === id ? ' is-dragging' : ''}" tabindex="0" data-crit="${id}" aria-label="${critName(c)}, ${c.kind === 'yesno' ? 'yes or no' : 'scored'}, in ${PILE_NAMES[pile]}. Press 1 to 4 to move it.">
     <span class="crit__grip" aria-hidden="true">${icon('drag-hand-gesture')}</span>
     <div class="crit__body"><span class="crit__name">${critName(c)}</span><span class="crit__line">${[c.meaning, c.limit].filter(Boolean).join(' ')}</span><span class="tagx ${c.kind === 'yesno' ? 'tagx--quiet' : ''} crit__kind">${c.kind === 'yesno' ? 'Yes / no' : `Scored · ${c.unit}`}</span>${pile !== 'unused' && CRIT_ASK[id] ? `<div class="crit__ask">${CRIT_ASK[id]()}</div>` : ''}</div>
     <button type="button" class="crit__move" data-move="${id}" aria-label="Move ${critName(c)} to another pile">${icon('sort')}</button></li>`;
@@ -3072,7 +3115,9 @@ function sortCounts(S) {
   return [Math.max(0, 12 - (non - 2) * 4), 41 + (non - 2) * 2, Math.max(0, 140 + (non - 2) * 2)];
 }
 function pilesHtml(S) {
-  return `<div class="piles-c"><div class="piles" data-piles>${Object.keys(PILE_NAMES).map(p => pileSection(p, S.sort[p], id => critCard(id, p))).join('')}</div></div>`;
+  /* Dragging: Climate zone lifted out of Nice to have and held over Important, which shows it is the drop target */
+  const drag = S.state === 'dragging' ? 'climate' : null;
+  return `<div class="piles-c"><div class="piles" data-piles>${Object.keys(PILE_NAMES).map(p => pileSection(p, S.sort[p], id => critCard(id, p, drag), { target: drag && p === 'important' })).join('')}</div></div>${drag ? '<p class="sr-only" role="status">Climate zone, picked up. Over Important. Drop to move it there.</p>' : ''}`;
 }
 function sortSummary(S, compact) {
   const [m, p, r] = sortCounts(S), top = COUNTRIES.filter(c => c.band === 'match').slice(0, 3).map(c => c.name);
@@ -3082,10 +3127,10 @@ function sortSummary(S, compact) {
 SCREENS.criteria = {
   no: '3', title: 'Criteria sort',
   note: 'Four piles in one blue ladder: each head shows its level by fill, bars and name, so colour is never the only cue. Yes/no cards have a light edge, scored cards a darker one. Move a card by its move button and a pile menu, or focus it and press 1 to 4; every move is announced and the counts update. Time zone, Driving side and Climate zone ask their one question on the card once picked.',
-  states: [['provisional', 'Provisional'], ['sorted', 'Sorted'], ['nomatch', 'A Non-negotiable leaves no Match'], ['unknownall', 'A criterion unknown for every country']],
+  states: [['provisional', 'Provisional'], ['sorted', 'Sorted'], ['nomatch', 'A Non-negotiable leaves no Match'], ['unknownall', 'A criterion unknown for every country'], ['dragging', 'Dragging a card']],
   init(S) {
     if (S.state === 'provisional') S.sort = { non: [], important: [], nice: [], unused: CRITERIA.map(c => c.id) };
-    if (S.state === 'sorted') S.sort = JSON.parse(JSON.stringify(PILES));
+    if (S.state === 'sorted' || S.state === 'dragging') S.sort = JSON.parse(JSON.stringify(PILES));
     if (S.state === 'nomatch') { S.sort = JSON.parse(JSON.stringify(PILES)); S.sort.non = ['safety', 'health', 'eu']; S.sort.unused = S.sort.unused.filter(x => x !== 'eu'); }
     if (S.state === 'unknownall') { S.sort = JSON.parse(JSON.stringify(PILES)); S.sort.important.push('community'); S.sort.unused = S.sort.unused.filter(x => x !== 'community'); }
   },
@@ -3122,7 +3167,7 @@ function resultBands(S) {
   return `<div class="f-bands">${BANDS.map(b => {
     let rows = resultRows(S, b.id);
     if (nm && b.id === 'match') rows = [];
-    const id = nid('rb'), open = b.id !== 'ruled' && (rows.length > 0 || nm) && !(S.state === 'capped' && b.id === 'match');
+    const id = nid('rb'), open = S.state === 'ruledopen' ? b.id === 'ruled' : b.id !== 'ruled' && (rows.length > 0 || nm) && !(S.state === 'capped' && b.id === 'match');
     const empty = b.id === 'match' && !rows.length && nm ? `<div class="f-unknown"><p class="f-iconline f-unknown__title">${icon('help-circle')}<span>No country meets all your Non-negotiables</span></p><p class="f-unknown__why">EU member rules out 166 countries on its own. Move it to Important in the sort to see matches again.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the criteria sort (screen 3).">Loosen a Non-negotiable</button></div>` : '';
     return `<section class="f-band f-band--${b.id}"><button type="button" class="f-band__btn" data-disclose aria-expanded="${open}" aria-controls="${id}"><span class="f-band__title">${b.title}</span><span class="f-band__count">${rows.length}</span><span class="k-chev">${icon('nav-arrow-down')}</span><span class="f-band__means">${b.means}</span></button>
       <div class="f-band__body" id="${id}"${open ? '' : ' hidden'}>${empty}${rows.length ? `<ul class="clist">${rows.map(c => capRow(S, c)).join('')}</ul>` : ''}</div></section>`;
@@ -3132,7 +3177,7 @@ function filters(S, ctx) {
   const q = nid('q'), more = nid('more'), folded = ctx === 'phone', active = (S.search.trim() ? 1 : 0) + (S.region !== 'All regions' ? 1 : 0) + (S.coveredOnly ? 1 : 0);
   return `<div class="d2-filters f-section${folded ? ' d2-filters--folded' : ''}">${folded ? `<button type="button" class="d2-whatfold__btn" data-disclose aria-expanded="${active > 0}" aria-controls="${more}">${icon('filter')}<span>Search and filters${active ? ` · ${active} on` : ''}</span><span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="d2-filters__more" id="${more}"${active ? '' : ' hidden'}>` : ''}<div class="field"><label class="field__label" for="${q}">Search by name</label><input class="input" id="${q}" data-search value="${esc(S.search)}" placeholder="e.g. Saint"></div>
     <div class="field">${selectMenu({ label: 'Region', items: REGIONS(), value: S.region, searchPlaceholder: 'Type a region' }).replace('data-smenu', 'data-smenu data-region')}</div>
-    <label class="switch"><input type="checkbox" role="switch" data-covered${S.coveredOnly ? ' checked' : ''}><span class="switch__track" aria-hidden="true"></span><span>Route check available only</span><span class="switch__state" aria-hidden="true">${S.coveredOnly ? 'On' : 'Off'}</span></label>${folded ? '</div>' : ''}</div>`;
+    <label class="switch"><input type="checkbox" role="switch" data-covered${S.coveredOnly ? ' checked' : ''}><span class="switch__track" aria-hidden="true"></span><span>Route check available only</span><span class="switch__state" aria-hidden="true">${S.coveredOnly ? 'On' : 'Off'}</span></label><a class="f-link d2-nclink" href="#" data-toast="Opens Not covered (screen 9, delivery D3).">${icon('info-circle')}<span>What "not covered yet" means</span></a>${folded ? '</div>' : ''}</div>`;
 }
 function resultsNext(S) {
   const n = S.list.size;
@@ -3141,7 +3186,7 @@ function resultsNext(S) {
 SCREENS.results = {
   no: '4', title: 'Results',
   note: 'All 193 countries in three bands, Ruled out collapsed. Compact country rows: postage stamp, name, score, evidence band, and the quiet route-check tag only where a check is available or partly available. Add up to three; the fourth explains the limit. No rank numbers.',
-  states: [['provisional', 'Provisional'], ['sorted', 'Priorities set'], ['nomatch', 'No Matches'], ['emptyfilter', 'A filter leaves nothing'], ['stale', 'Some facts out of date'], ['full', 'Shortlist full'], ['capped', 'Band capped']],
+  states: [['provisional', 'Provisional'], ['sorted', 'Priorities set'], ['nomatch', 'No Matches'], ['emptyfilter', 'A filter leaves nothing'], ['stale', 'Some facts out of date'], ['full', 'Shortlist full'], ['capped', 'Band capped'], ['ruledopen', 'Ruled out expanded']],
   init(S) { S.search = S.state === 'emptyfilter' ? 'Zzz' : ''; S.region = 'All regions'; S.coveredOnly = false; S.list = new Set(S.state === 'full' ? ['AUT', 'CRI', 'DEU'] : ['sorted', 'capped'].includes(S.state) ? ['AUT'] : []); },
   render(ctx, S) {
     const nm = S.state === 'nomatch';
@@ -3193,13 +3238,13 @@ function countryHero(c, ctx, next) {
 SCREENS.country = {
   no: '5', title: 'Country',
   note: 'A ticket-style country page: the photo print without fastening, the country-page card over its lower edge, the answer from the criteria, the locator map, then every criterion with its value, evidence mark, last-checked date and "Report an error". Unknown values say why. Facts the household did not select come last, grouped.',
-  states: [['notin', 'Not in shortlist'], ['in', 'In shortlist'], ['full', 'Shortlist full'], ['partly', 'Partly unknown'], ['stale', 'Out of date'], ['mt', 'Machine translation (Costa Rica)'], ['noroute', 'Route check not available']],
-  init(S) { S.country = ['partly', 'stale', 'mt'].includes(S.state) ? 'CRI' : S.state === 'noroute' ? 'NLD' : 'AUT'; S.list = new Set(S.state === 'in' ? ['AUT'] : S.state === 'full' ? ['CRI', 'DEU', 'PRT'] : []); },
+  states: [['notin', 'Not in shortlist'], ['in', 'In shortlist'], ['full', 'Shortlist full'], ['known', 'Fully known (Portugal)'], ['partly', 'Partly unknown'], ['stale', 'Out of date'], ['mt', 'Machine translation (Costa Rica)'], ['noroute', 'Route check not available'], ['panel', 'Source panel open'], ['report', 'Report an error open']],
+  init(S) { S.country = ['partly', 'stale', 'mt'].includes(S.state) ? 'CRI' : S.state === 'noroute' ? 'NLD' : S.state === 'known' ? 'PRT' : 'AUT'; S.list = new Set(S.state === 'in' ? ['AUT'] : S.state === 'full' ? ['CRI', 'DEU', 'PRT'] : []); },
   render(ctx, S) {
-    const c = countryBy(S.country), sel = SELECTED, unknown = sel.filter(id => !((VALUES[c.iso] || {})[id] || [])[0]);
+    const c0 = countryBy(S.country), c = S.state === 'known' ? { ...c0, known: c0.total } : c0, sel = SELECTED, unknown = sel.filter(id => !((VALUES[c.iso] || {})[id] || [])[0]);
     const phone = ctx === 'phone';
     const nextTxt = S.list.has(c.iso) ? `${esc(c.name)} is on your shortlist. Compare it with the others, or check the route${c.routeCheck === 'none' ? ' once it is available' : ''}.` : `if ${esc(c.name)} looks right, add it to your shortlist. Then we check whether all of you can live there.`;
-    const noRoute = c.routeCheck === 'none' ? `<div class="alert alert--info" role="note">${icon('circle')}<div><b>Route check not available yet for ${esc(c.name)}.</b>We have no verified residence rules for it in this release. You can still shortlist and compare it.</div></div>` : '';
+    const noRoute = c.routeCheck === 'none' ? `<div class="alert alert--info" role="note">${icon('circle')}<div><b>Route check not available yet for ${esc(c.name)}.</b>We have no verified residence rules for it in this release. You can still shortlist and compare it. <a class="f-link" href="#" data-toast="Opens Not covered (screen 9, delivery D3).">What not covered means</a></div></div>` : '';
     const body = `${back('your results', 'toast:Opens Results (screen 4).')}${countryHero(c, ctx, nextTxt)}
       ${phone ? '' : what(nextTxt)}${noRoute}
       <div class="f-section"><h2 class="f-h2">Your criteria, with their sources</h2><p class="f-muted">${sel.length - unknown.length} of ${sel.length} known. Tap a value or an evidence mark to open its source note.</p><ul class="d2-facts">${sel.filter(id => !unknown.includes(id)).map(id => factRow(c.iso, id)).join('')}</ul></div>
@@ -3211,9 +3256,12 @@ SCREENS.country = {
       : !on ? { label: `Add ${esc(c.name)} to your shortlist`, hint: 'Then we check whether all of you can live there.', act: 'addcountry' }
         : c.routeCheck === 'none' ? { label: 'Compare your shortlist', hint: `${esc(c.name)} is on your shortlist · route check not available yet`, toast: 'Opens Shortlist and compare (screen 6).' }
           : { label: `Check the route for ${esc(c.name)}`, hint: `${esc(c.name)} is on your shortlist`, toast: 'Opens Route (screen 7, delivery D3). The household is asked there, never earlier.' };
-    return { body, next, side: `${mapCard(c.iso)}${keyCard()}` };
+    const overlay = S.state === 'panel' ? sourceSheet('langAUT') : S.state === 'report' ? dialog(reportDialog('Healthcare · Life expectancy, Austria', 'idle')) : '';
+    return { body, next, overlay, side: `${mapCard(c.iso)}${keyCard()}` };
   }
 };
+/* A source note over a screen: a bottom sheet on phone, a side panel on desktop */
+const sourceSheet = id => { const t = nid('sp'); return `<div class="k-scrim" data-close></div><div class="k-panel k-panel--overlay d2-sheetpanel" role="dialog" aria-modal="true" aria-labelledby="${t}">${sourcePanel(NOTES[id], t, true)}</div>`; };
 
 /* 6 · Shortlist and compare */
 function compareTable(cols, stack) {
@@ -3233,20 +3281,21 @@ function compareTable(cols, stack) {
 SCREENS.compare = {
   no: '6', title: 'Shortlist and compare',
   note: 'Up to three tickets, then the comparison table: criteria as rows grouped by pile, unknowns visible in their cell, an evidence mark per cell. On phone: two columns and a switch for the third. Remove a country on its ticket.',
-  states: [['one', 'One country'], ['two', 'Two countries'], ['three', 'Three countries'], ['allunknown', 'A column all unknown'], ['empty', 'Empty']],
-  init(S) { S.list = new Set({ one: ['AUT'], two: ['AUT', 'CRI'], three: ['AUT', 'CRI', 'DEU'], allunknown: ['AUT', 'VCT'], empty: [] }[S.state] || ['AUT']); S.second = null; },
+  states: [['one', 'One country'], ['two', 'Two countries'], ['three', 'Three countries'], ['allunknown', 'A column all unknown'], ['empty', 'Empty'], ['swipe', 'Phone layout B: swipe']],
+  init(S) { S.list = new Set({ one: ['AUT'], two: ['AUT', 'CRI'], three: ['AUT', 'CRI', 'DEU'], swipe: ['AUT', 'CRI', 'DEU'], allunknown: ['AUT', 'VCT'], empty: [] }[S.state] || ['AUT']); S.second = null; },
   render(ctx, S) {
     const isos = [...S.list];
     if (!isos.length) return { body: `${pageTitle(ctx, 'Your shortlist', 'Shortlist', 'add up to three countries from your results to compare them side by side.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Your shortlist is empty</p><p>Add up to three countries from your results to compare them.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See results</button></div>`, next: { label: 'Check whether all of you can live there', hint: 'Add at least one country to your shortlist first.', disabled: true }, side: findCard([['Add countries', 'From Results, the Add button on a row.'], ['Remove', 'On each ticket.']]) };
     const second = S.second && isos.includes(S.second) ? S.second : isos[1];
     const phoneCols = isos.length === 1 ? isos : [isos[0], second];
-    const sw = isos.length === 3 && ctx === 'phone' ? `<div class="cmp-switch"><span class="lbl">Second column</span><div class="segc" role="group" aria-label="Second country" data-cmp-switch>${isos.slice(1).map(i => `<button type="button" aria-pressed="${i === second}" data-iso="${i}">${countryBy(i).name}</button>`).join('')}</div></div>` : '';
+    const swipe = S.state === 'swipe' && ctx === 'phone';
+    const sw = isos.length === 3 && ctx === 'phone' && !swipe ? `<div class="cmp-switch"><span class="lbl">Second column</span><div class="segc" role="group" aria-label="Second country" data-cmp-switch>${isos.slice(1).map(i => `<button type="button" aria-pressed="${i === second}" data-iso="${i}">${countryBy(i).name}</button>`).join('')}</div></div>` : '';
     const allUnknown = isos.find(i => !VALUES[i] || !Object.values(VALUES[i]).some(v => v[0]));
     const body = `${pageTitle(ctx, 'Your shortlist', 'Shortlist and compare', `compare ${plural(isos.length, 'country', 'countries')} criterion by criterion. Then we check whether all of you can legally live there.`)}
       ${allUnknown ? `<div class="alert alert--info" role="note">${icon('help-circle')}<div><b>Nothing is known yet for ${esc(countryBy(allUnknown).name)}.</b>We have no usable source for any of your criteria there. It stays on your shortlist; the column shows what is missing.</div></div>` : ''}
       <div class="d2-tickets">${isos.map(i => ticket(i, { remove: true })).join('')}</div>
       ${ctx === 'phone' ? keyFold() : ''}
-      <div class="f-section"><h2 class="f-h2">Side by side</h2>${sw}<div data-cmp-table>${ctx === 'phone' ? compareTable(phoneCols, true) : compareTable(isos)}</div></div>`;
+      <div class="f-section"><h2 class="f-h2">Side by side</h2>${sw}<div data-cmp-table>${swipe ? compareSwipe(isos, noteFor) : ctx === 'phone' ? compareTable(phoneCols, true) : compareTable(isos)}</div></div>`;
     return { body, next: { label: 'Check whether all of you can live there', hint: `Step 1 of 3 · ${plural(isos.length, 'country', 'countries')} on your shortlist`, toast: 'Opens Route (screen 7, delivery D3). The household is asked there.' }, side: `${keyCard()}${findCard([['Remove a country', 'On its ticket.'], ['A cell', 'Tap the evidence mark for its source.']])}` };
   }
 };
@@ -3280,6 +3329,7 @@ function importSheet(st) {
   const acts = '<div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:replace">Replace my travel folder with the file</button><button type="button" class="btn btn--secondary" data-close>Keep mine</button></div>';
   let body;
   if (st === 'imported') body = `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Opened.</b><p>Your travel folder now matches the file: 3 countries, 1 route checked. Your results were recalculated on ${DATA_VERSION.toLowerCase()}.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Go to your travel folder</button></div>`;
+  else if (st === 'damaged' || st === 'newer') body = `<div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}${chip('our-move-2027.emigrant')}</span><span class="field__error">${st === 'damaged' ? 'The file is damaged. Nothing was changed.' : 'Made with a newer version of the app. Nothing was changed.'}</span></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be opened.</b><p>${st === 'damaged' ? 'It may have been cut off while it was saved or copied. If you have another copy, open that one. Your travel folder on this device is unchanged.' : 'Reload this page to get the newest version of the app, then open the file again. Your travel folder on this device is unchanged.'}</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:import">Choose another file</button></div>`;
   else if (st === 'cant') body = `<div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}${chip('holiday-photos.zip')}</span><span class="field__error">Not a travel folder file. Nothing was changed.</span></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be opened.</b><p>It is not a travel folder file, it is damaged, or it comes from a newer version of the app. Your travel folder on this device is unchanged.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:import">Choose another file</button></div>`;
   else if (st === 'pwask' || st === 'wrongpw') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}${chip('our-move-2027.emigrant')}</span><span class="field__why">Saved 2026-10-20 · protected with a password</span></div>
       <div class="field"><label class="field__label" for="${pw}">Password for this file</label><div class="pw"><input class="input" id="${pw}" type="password" value="${st === 'wrongpw' ? 'olive-harbor-71' : ''}"${st === 'wrongpw' ? ` aria-invalid="true" aria-describedby="${pw}e"` : ''}><button type="button" class="f-iconbtn" data-toggle-pw="${pw}" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>${st === 'wrongpw' ? `<span class="field__error" id="${pw}e">That password does not open this file. Check it and try again; we cannot reset it.</span>` : ''}</div>
@@ -3312,7 +3362,7 @@ SCREENS.export = {
 };
 SCREENS.import = {
   no: '12', title: 'Open a travel folder', note: 'A sheet on the travel folder, also reachable from Start: choose or drop a file, the password if the file has one, and before anything is replaced, which copy is newer, each with its date and a one-line summary.',
-  states: [['idle', 'Choose a file'], ['chosen', 'File chosen'], ['pwask', 'Password asked'], ['wrongpw', 'Wrong password'], ['cant', "Can't be opened"], ['older', 'File older than this device'], ['imported', 'Opened']],
+  states: [['idle', 'Choose a file'], ['chosen', 'File chosen'], ['pwask', 'Password asked'], ['wrongpw', 'Wrong password'], ['cant', 'Not a travel folder file'], ['damaged', 'File damaged'], ['newer', 'From a newer app version'], ['older', 'File older than this device'], ['imported', 'Opened']],
   render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'shortlistdone' }); return { ...base, overlay: importSheet(S.state) }; }
 };
 SCREENS.delete = {
@@ -3331,16 +3381,19 @@ function reading(kicker, title, intro, sections, ctx) {
 }
 const P = t => `<p>${t}</p>`;
 SCREENS.terms = {
-  no: '14', title: 'Terms of use, full text', note: 'Long-form reading: headings, jump links, the version date.', states: [['default', 'Reading']],
-  render(ctx) {
-    return { ...reading('Terms of use', 'Terms of use', 'these terms apply to release 1, the private release.', [
-      ['1 · What The Emigrant is', P('The Emigrant helps a household decide where it could move abroad, and whether all of its members appear to meet the conditions to live there. It is an information tool. It is not legal advice, and it does not decide anything.')],
-      ['2 · No responsibility for accuracy', P('We take no responsibility for the accuracy, completeness or currency of the information. Every fact carries its source, its evidence level and the date it was last checked, so you can judge it yourself. Confirm anything you rely on with the authority or an adviser.')],
-      ['3 · Liability', P('Our liability is limited as far as the law allows. We are not liable for decisions you take on the basis of the information shown, nor for loss that follows from them.')],
-      ['4 · Route results are not decisions', P('A route result lists the conditions that appear to apply to your household. It is never an eligibility verdict. Only the authority decides, after its own procedure.')],
-      ['5 · Your data', P('Your plan stays on this device. No profile or plan data is sent to our server. An error report carries only the fact and one fixed reason. See Privacy for what our server sees.')],
-      ['6 · Changes to these terms', P('When these terms change, you are asked to read and accept them again before you continue. The version date is at the top of this page.')]
-    ], ctx) };
+  no: '14', title: 'Terms of use, full text', note: 'Long-form reading: headings, jump links, the version date. Placeholder legal text under the real section headings. When the terms changed since you accepted them, a notice at the top says what changed and asks you to accept again.', states: [['default', 'Reading'], ['changed', 'Terms changed since you accepted']],
+  render(ctx, S) {
+    const r = reading('Terms of use', 'Terms of use', 'these terms apply to release 1, the private release.', [
+      ['1 · Scope', P('The Emigrant helps a household decide where it could move abroad, and whether all of its members appear to meet the conditions to live there. These terms apply to the app in release 1, the private release.')],
+      ['2 · No advice', P('The Emigrant is an information tool. It is not legal, tax or immigration advice, and it does not decide anything.')],
+      ['3 · No responsibility for accuracy, completeness or currency', P('We take no responsibility for the accuracy, completeness or currency of the information. Every fact carries its source, its evidence level and the date it was last checked, so you can judge it yourself. Confirm anything you rely on with the authority or an adviser.')],
+      ['4 · Limitation of liability', P('Our liability is limited to the extent permitted by law. We are not liable for decisions you take on the basis of the information shown, nor for loss that follows from them.')],
+      ['5 · Route results are not decisions', P('A route result lists the conditions that appear to apply to your household. It is never an eligibility verdict. Only the authority decides, after its own procedure.')],
+      ['6 · Your data', P('Your plan stays on this device. No profile or plan data is sent to our server. An error report carries only the fact and one fixed reason. See Privacy for what our server sees.')],
+      ['7 · Changes', P('When these terms change, you are asked to read and accept them again before you continue. The version date is at the top of this page.')]
+    ], ctx);
+    if (S.state === 'changed') r.body = r.body.replace('<p class="f-fine d2-version">', `<div class="alert alert--info" role="status">${icon('refresh')}<div><b>These terms changed since you accepted them.</b><p>Changed on 2026-10-24: server logs are now kept for seven days (section 6). You accepted the version of 2026-06-02.</p><div class="start-card__acts"><button type="button" class="btn btn--secondary btn--sm" data-toast="Accepted. The terms are not shown again unless they change.">Accept the new terms</button></div></div></div><p class="f-fine d2-version">`);
+    return r;
   }
 };
 SCREENS.privacy = {
@@ -3360,7 +3413,7 @@ SCREENS.evidence = {
   render(ctx) {
     return { ...reading('Help', 'How the evidence works', 'in plain words. Every evidence mark links here.', [
       ['The four evidence levels', `<ul class="f-keylist">${[0, 1, 2, 3].map(l => `<li><span class="f-keymark">${mark(l, 'low', { compact: true, name: 'A. Hofer' })}</span><p>${LEVEL_MEANING[l]}</p></li>`).join('')}</ul>${P('The ring tells the level even without color: a light line for E0, single for E1, double for E2, and double with our mark after the name for E3.')}`],
-      ['The three risk classes', `<ul class="f-keylist">${[['low', 'The source is stable and official. The value rarely changes.'], ['medium', 'The source is reliable but changes often, or is an estimate. At E1, medium risk is flagged.'], ['high', 'The source is thin or contested. We show the value, but treat it with care.']].map(([r, t]) => `<li><span class="f-keymark"><span class="stamp-row__risk">${meter(RISK[r][0])}<span>${RISK[r][1]}</span></span></span><p>${t}</p></li>`).join('')}</ul>`],
+      ['The three risk classes', `<ul class="f-keylist">${[['low', 'A stable, official fact that rarely changes, such as a country\'s area or climate zone.'], ['medium', 'A reliable fact that changes often or is an estimate, such as cost of living or internet speed. At E1, medium risk is flagged.'], ['high', 'A fact with legal consequences, such as a visa or residence route. It is shown only once a named, qualified person has checked it (E3).']].map(([r, t]) => `<li><span class="f-keymark"><span class="stamp-row__risk">${meter(RISK[r][0])}<span>${RISK[r][1]}</span></span></span><p>${t}</p></li>`).join('')}</ul>`],
       ['The minimum level per purpose', '<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Purpose</th><th scope="col">Minimum level</th><th scope="col">Below it</th></tr></thead><tbody><tr><td>A value in the ranking</td><td>E1 Sourced</td><td>Shown but not counted</td></tr><tr><td>A yes / no criterion</td><td>E1 Sourced</td><td>Counts as not known</td></tr><tr><td>A route condition</td><td>E3 Verified by a named person</td><td>Not shown as a condition</td></tr></tbody></table></div>'],
       ['The three bands', `${P('<b>Matches</b> fit every Non-negotiable you set. <b>Possible, needs checking</b> fit, with questions still open. <b>Ruled out</b> miss at least one Non-negotiable, and stay listed with the reason.')}${P('There is no winner and no rank number. The order speaks for itself, and a score only counts the criteria that are known.')}`],
       ['The evidence band', `<div class="g-col">${eband(10, 11)}${eband(7, 11)}${eband(4, 11)}</div>${P('How many of the criteria you selected are known for a country: Strong from 80 percent, Partial from 50, Thin below.')}`],
@@ -3674,10 +3727,16 @@ const ROUTE_STATE_ISO = { one: 'AUT', several: 'CRI', none: 'CRI', unknown: 'AUT
 
 SCREENS.route = {
   no: '8', title: 'Route result',
-  note: 'Per country. Austria: an Austrian with an unmarried Brazilian partner in a durable partnership; the return branch says what You need, then the national permit for the partner and the EU documentation for a returning Austrian. Costa Rica: a married couple with two children; four routes side by side with their key figure. Each route: name and regime, "Conditions that appear to apply" per member with requirement, document and source, the documents, the authority, the official source, the last-verified date, the coverage label, and what is not known yet. The route note is the D1 component; the disclaimer stays in the footer links.',
-  states: [['one', 'One route appears to apply'], ['several', 'Several'], ['none', 'None appears to apply'], ['unknown', 'Partly unknown'], ['partly', 'Partly covered'], ['stale', 'Stale last-verified date']],
+  note: 'Per country. Austria: an Austrian with an unmarried Brazilian partner in a durable partnership; the return branch says what You need, then the national permit for the partner and the EU documentation for a returning Austrian. Costa Rica: a married couple with two children; four routes side by side with their key figure. Each route: name and regime, "Conditions that appear to apply" per member with requirement, document and source, the documents, the authority, the official source, the last-verified date, the coverage label, and what is not known yet. The route note is the D1 component; the disclaimer stays in the footer links. "Not covered" shows screen 9 inside the route result, as the brief places it; screen 9 below shows its three variants.',
+  states: [['one', 'One route appears to apply'], ['several', 'Several'], ['none', 'None appears to apply'], ['unknown', 'Partly unknown'], ['partly', 'Partly covered'], ['stale', 'Stale last-verified date'], ['notcovered', 'Not covered (screen 9 inside)']],
   init(S) { S.route = null; },
   render(ctx, S) {
+    if (S.state === 'notcovered') {
+      const v = NOT_COVERED.dest, c = countryBy(v.iso);
+      const body = `${back('your shortlist', 'toast:Opens Shortlist and compare (screen 6).')}${pageTitle(ctx, 'Routes for the Netherlands', 'Route', 'go back to your shortlist. Your shortlist and results stay as they are.')}${notCoveredCard(v, c, ctx === 'phone')}
+        <section class="f-section"><h2 class="f-h2">What you can do</h2><ol class="ncov__steps"><li><b>Ask the official immigration authority.</b><span>For the Netherlands, that is ${esc(v.authority)}</span></li><li><b>Check the covered countries on your shortlist.</b><span>The route check works for these today.</span>${coveredRows()}</li></ol></section>`;
+      return { body, next: { label: 'Back to your shortlist', hint: 'The Netherlands stays on your shortlist', toast: 'Opens Shortlist and compare (screen 6).' }, rail: 'route', side: `${findCard([['Covered countries', 'Austria, Costa Rica, Germany; Portugal partly.'], ['Why no guess', 'We only show conditions a named person checked.']])}${privacyCard()}` };
+    }
     const iso = ROUTE_STATE_ISO[S.state], smp = ROUTE_SAMPLES[iso], c = countryBy(iso), stale = S.state === 'stale';
     const routes = iso === 'AUT' ? autRoutes(S.state) : criRoutes(S.state);
     const applies = routes.filter(r => outcomeOf(r) === 'apply');
@@ -3698,7 +3757,7 @@ SCREENS.route = {
     ].join('');
     const pin = `<div class="f-pinned" role="note">${icon('info-circle')}<p><b>This is not a visa or residence decision.</b> Only the authority decides.</p></div>`;
     const sum = `<div class="f-section"><h2 class="f-h2">${routes.length} routes checked</h2><div class="rts-c"><ul class="rts${routes.length > 2 ? ' rts--4' : ''}">${routes.map(r => routeSummary(r, sel, pairId)).join('')}</ul></div></div>`;
-    const body = `${back('your travel folder', 'toast:Opens your travel folder (screen 10).')}${pageTitle(ctx, `Routes for ${smp.name}`, 'Route', `save this result to your travel folder. Plan, the step-by-step part, comes in a later release.`)}
+    const body = `${back('your shortlist', 'toast:Opens Shortlist and compare (screen 6).')}${pageTitle(ctx, `Routes for ${smp.name}`, 'Route', `save this result to your travel folder. Plan, the step-by-step part, comes in a later release.`)}
       ${head}${notes}${pin}${own}${sum}${routeDetail(routes.find(r => r.key === sel), smp, stale)}`;
     const next = { label: 'Save to your travel folder', hint: `${smp.name} · ${applies.length ? plural(applies.length, 'route appears', 'routes appear') + ' to apply' : 'no route appears to apply yet'}`, toast: `Saved to your travel folder: the route result for ${smp.name}.` };
     const side = `<section class="f-card"><h2 class="f-card__title">For this household</h2><div class="hh-side">${smp.hh.map((m, i) => `<div class="hh-side__m"><b>${roleName(m, i, smp.hh)}</b><span>${memberWho(m)}</span></div>`).join('')}</div><button type="button" class="btn btn--ghost btn--sm" data-toast="Opens Household (screen 7).">${icon('edit-pencil')}<span>Change your household</span></button></section>${keyCard()}`;
