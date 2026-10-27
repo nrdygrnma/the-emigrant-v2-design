@@ -1568,15 +1568,15 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 
 /* ── Perforations, one look everywhere: a line of punched holes on the notch line ────────────────────
    Tickets tear off their stub along the same holes as the boarding pass: 6px holes every 10px, the paper ground
-   showing through, a faint inner shadow on each hole's upper edge. The notches sit on the stub, 8px in from its
-   edge, and the holes sit on exactly that line, so notches and holes share one centre line. No line, no dashes. */
-.tk__main { -webkit-mask: none; mask: none; }
+   showing through, a faint inner shadow on each hole's upper edge. The notches are centred 8px into the stub and cut
+   through both pieces, and the holes sit on exactly that line, so notches and holes share one centre line. No line, no dashes. */
+.tk__main { -webkit-mask: radial-gradient(circle var(--notch) at 0 calc(100% + 8px), #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 100% calc(100% + 8px), #0000 calc(var(--notch) - 1px), #000 var(--notch)); -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at 0 calc(100% + 8px), #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 100% calc(100% + 8px), #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
 .tk__stub { position: relative; border-top: 0; padding-top: 22px; -webkit-mask: radial-gradient(circle var(--notch) at 0 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 100% 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)); -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at 0 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 100% 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
 .tk__stub::before { content: ""; position: absolute; top: 2px; left: 16px; right: 16px; height: 12px; pointer-events: none;
   background-image: radial-gradient(circle 3px at 5px 6px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5px 5.4px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
   background-size: 10px 12px; background-repeat: round no-repeat; }
 @container tk (min-width: 640px) {
-  .tk__main { -webkit-mask: none; mask: none; }
+  .tk__main { -webkit-mask: radial-gradient(circle var(--notch) at calc(100% + 8px) 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at calc(100% + 8px) 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at calc(100% + 8px) 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at calc(100% + 8px) 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
   .tk__stub { border-left: 0; padding: 16px 16px 16px 26px; -webkit-mask: radial-gradient(circle var(--notch) at 8px 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 8px 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at 8px 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 8px 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
   .tk__stub::before { top: 16px; bottom: 16px; left: 2px; right: auto; width: 12px; height: auto;
     background-image: radial-gradient(circle 3px at 6px 5px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 6px 4.4px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
@@ -1588,6 +1588,14 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 /* the two footer links and their separator share one centred line */
 .appfoot .st-quiet__links { display: flex; align-items: center; gap: 12px; }
 .appfoot .st-quiet__links > span { line-height: 1; }
+
+/* The Menu button: the icon alone in a 44 × 44 target, a quiet outline, the name as a tooltip on hover and focus */
+.f-menubtn--icon { position: relative; width: 44px; height: 44px; min-height: 44px; padding: 0; gap: 0; justify-content: center; border: 1px solid var(--line-hair); border-radius: 999px; --od-icon-size: 22px; }
+.f-menubtn--icon[aria-expanded="true"] { background: var(--paper-page); border-color: var(--line-edge); }
+.f-menubtn--icon::after { content: attr(data-tip-text); position: absolute; top: calc(100% + 6px); right: 0; z-index: 9; padding: 4px 8px; border-radius: var(--r-sm); background: var(--k-inverse); color: var(--k-on-inverse); font-size: var(--fs-xs); font-weight: 600; line-height: 1.4; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity var(--k-fast) var(--k-ease-out); }
+.f-menubtn--icon:hover::after, .f-menubtn--icon:focus-visible::after { opacity: 1; }
+.f-menubtn--icon[aria-expanded="true"]::after { opacity: 0; }
+@media (hover: hover) { .f-menubtn--icon:hover { background: var(--paper-page); } }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
@@ -2277,7 +2285,8 @@ function appMenu(ctx, opts = {}) {
   return `<div class="k-menu f-menu" id="menu-${ctx}" role="menu" aria-label="${opts.more ? 'More' : 'Menu'}"${opts.open ? '' : ' hidden'}>${group('Your travel folder', folder)}${group('Help', ['evidence'])}${group('About', ['terms', 'privacy'])}${opts.start ? '' : `<div class="f-mgroup" role="group" aria-label="Your data"><button type="button" class="f-mi f-mi--danger" role="menuitem" data-toast="${esc(MENU_ITEMS.delete[1])}">${MENU_ITEMS.delete[0]}</button></div>`}</div>`;
 }
 const menuList = ctx => appMenu(ctx, { open: true });
-const menuBtn = ctx => `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}">${icon('menu')}<span>Menu</span></button>`;
+/* The Menu: the hamburger icon alone, 44 × 44, named "Menu" for screen readers, with a small tooltip on hover and focus */
+const menuBtn = ctx => `<button type="button" class="f-iconbtn f-menubtn f-menubtn--icon" aria-label="Menu" data-tip-text="Menu" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}">${icon('menu')}</button>`;
 /* The desktop header on every screen, four parts only: the wordmark, the plan rail (none on Start), the one action,
    and the Menu. The hint above the action shows only when it says why the action is not possible yet. */
 function deskHeader(p = {}) {
