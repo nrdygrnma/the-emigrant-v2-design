@@ -1596,6 +1596,15 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .f-menubtn--icon:hover::after, .f-menubtn--icon:focus-visible::after { opacity: 1; }
 .f-menubtn--icon[aria-expanded="true"]::after { opacity: 0; }
 @media (hover: hover) { .f-menubtn--icon:hover { background: var(--paper-page); } }
+
+/* Result bands: one card, not a card on a card. Inside a band the country list is no card of its own; the rows sit
+   on the band's paper, flush with its edges, separated by hairlines, the first one by a hairline under the header. */
+.f-band .clist { background: transparent; box-shadow: none; border-radius: 0; overflow: visible; border-top: 1px solid var(--line-hair); }
+.f-band .crow { padding-left: 0; padding-right: 0; }
+.f-band .crow:first-child { border-top: 0; }
+.f-band .crow--ruled { background: transparent; }
+.f-band .crow--ruled .crow__name { color: var(--ink-text-2); }
+.f-band__body { padding-bottom: 8px; }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
