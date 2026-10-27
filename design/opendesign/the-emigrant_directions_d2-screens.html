@@ -1787,17 +1787,6 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .ncov__cname { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; flex: 1 1 140px; min-width: 0; }
 .ncov__cname b { color: var(--ink-navy); }
 
-/* The chevron sits centred between two steps: the space before it (the step's right padding and the list gap) equals
-   the space after it (its right margin and the list gap), so a highlighted current step never touches it. */
-.f-rail .f-step { padding-right: 10px; }
-.f-rail li + li::before { margin: 0 14px 0 0; }
-.f-rail--compact ol { gap: 0; }
-.f-rail--compact .f-step { padding-right: 4px; }
-.f-rail--compact li + li::before, .k-phone .f-rail li + li::before { margin: 0 4px 0 0; }
-.k-phone .f-rail .f-step[data-state="later"], .f-rail--compact .f-step[data-state="later"] { padding-right: 0; }
-@container app (max-width: 1279px) { .f-head--desk .f-rail .f-step { padding-right: 8px; } .f-head--desk .f-rail li + li::before { margin: 0 12px 0 0; } }
-@container rail (max-width: 359px) { .f-rail--compact .f-step { padding-right: 2px; } .f-rail--compact li + li::before { margin: 0; } }
-
 /* Added states: Start's failed file, a skipped question, the not-covered link, Compare's swipe layout */
 .st-fail { margin-top: 12px; }
 .qp__skipped { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border: var(--b-notyet-thin); border-radius: var(--r-btn); font-size: var(--fs-sm); color: var(--ink-text-2); --od-icon-size: 18px; }
@@ -1815,18 +1804,26 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .cmp-swipe__list dt { font-size: var(--fs-sm); color: var(--ink-text-2); }
 .cmp-swipe__list dd { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; }
 
-/* The current step: a slim pill that hugs the number circle (3px around it), drawn behind the label. The button
-   keeps its 44px touch height; only the drawn pill is smaller. Hover uses the same slim shape. */
-.f-step { position: relative; isolation: isolate; padding-left: 3px; --step-pill: 34px; }
-.f-step::after { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 50%; height: var(--step-pill); transform: translateY(-50%); border-radius: 999px; background: transparent; }
-.f-step[data-state="now"] { background: transparent; }
-.f-step[data-state="now"]::after { background: var(--step-now-bg); }
-.k-phone .f-step, .f-rail--compact .f-step { padding-left: 3px; --step-pill: 30px; }
-@container app (max-width: 1279px) { .f-head--desk .f-step { padding-left: 3px; } }
-@container rail (max-width: 359px) { .f-rail--compact .f-step { padding-left: 2px; --step-pill: 28px; } }
+/* The plan rail, measured once: every step has a left padding --pl (around its number circle) and a right padding --pr
+   (after its label). The current step's slim pill fills exactly that box; the other steps show only the circle and the label.
+   Each chevron keeps the same distance --d to what you see on either side: to the label or circle of a plain step, to
+   the pill's edge of the current one. So it sits in the exact middle whichever step is current. Touch height stays 44px. */
+.f-rail { --pl: 2px; --pr: 10px; --d: 14px; --circle: 28px; }
+.f-rail--compact, .k-phone .f-rail { --pr: 4px; --d: 4px; --circle: 24px; }
+@container app (max-width: 1279px) { .f-head--desk .f-rail { --pr: 8px; --d: 12px; } }
+@container rail (max-width: 359px) { .f-rail--compact { --pr: 2px; --d: 2px; } .f-rail--compact .f-step { gap: 3px; } .f-rail--compact .f-step__soon { padding: 2px 4px; } }  /* under 360: 1px less between circle and label, and a tighter "coming" tag, pay for the centred chevrons */
+.f-rail ol, .f-rail--compact ol { gap: 0; }
+.f-rail .f-step, .f-rail--compact .f-step, .k-phone .f-rail .f-step, .f-head--desk .f-rail .f-step { position: relative; isolation: isolate; padding: 0 var(--pr) 0 var(--pl); }
+.f-rail .f-step[data-state="later"], .f-rail--compact .f-step[data-state="later"], .k-phone .f-rail .f-step[data-state="later"] { padding-right: 0; }
+.f-rail .f-step::after { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 50%; height: calc(var(--circle) + 2 * var(--pl)); transform: translateY(-50%); border-radius: 999px; background: transparent; }
+.f-rail .f-step[data-state="now"] { background: transparent; }
+.f-rail .f-step[data-state="now"]::after { background: var(--step-now-bg); }
+.f-rail li + li::before, .f-rail--compact li + li::before, .k-phone .f-rail li + li::before, .f-head--desk .f-rail li + li::before { margin: 0 calc(var(--d) - var(--pl)) 0 calc(var(--d) - var(--pr)); }
+.f-rail li:has(> .f-step[data-state="now"]) + li::before, .f-head--desk .f-rail li:has(> .f-step[data-state="now"]) + li::before { margin-left: var(--d); }
+.f-rail li + li:has(> .f-step[data-state="now"])::before, .f-head--desk .f-rail li + li:has(> .f-step[data-state="now"])::before { margin-right: var(--d); }
 @media (hover: hover) {
-  .f-step:not([data-state="later"]):not([data-state="now"]):hover { background: transparent; }
-  .f-step:not([data-state="later"]):not([data-state="now"]):hover::after { background: var(--paper-page); }
+  .f-rail .f-step:not([data-state="later"]):not([data-state="now"]):hover { background: transparent; }
+  .f-rail .f-step:not([data-state="later"]):not([data-state="now"]):hover::after { background: var(--paper-page); }
 }
 </style>
 
