@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Emigrant — Start study, self-contained · 2026-10-26 final</title>
+<title>The Emigrant — D2 · Screens</title>
 <style data-od-inline-asset="./emigrant-ds.css?v=20261026z">/* The Emigrant — design system stylesheet (D1).
  * Developed from transit-papers-base: Direction P, Blue + citrus, background pattern A2,
  * photo prints without fastening. Light is the base mode for screens; dark is defined and
@@ -1025,7 +1025,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .clist-cond { display: grid; }
 .f-cond__meta { display: grid; gap: 2px; font-size: var(--fs-sm); color: var(--ink-text-2); }
 
-/* ── Disclaimer line, banners, footer ── */
+/* ── Disclaimer box (unused in screens), banners, footer ── */
 .disc { display: flex; align-items: flex-start; gap: 8px; font-size: var(--fs-sm); line-height: 1.5; color: var(--ink-text-2); --od-icon-size: 18px; }
 .disc > .od-icon { margin-top: 2px; flex: none; }
 .disc--box { padding: 12px 16px; border: 1px solid var(--line-hair); border-radius: var(--r-btn); background: var(--paper-page); }
@@ -1358,17 +1358,13 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .strength { gap: 6px; }
 /* ══ D1 round 5: the not-yet mark, the app header on every screen, the footers, and Start (B2) ══════ */
 
-/* The desktop header on every screen: wordmark, plan rail, the inline links, "More", and the one action.
-   "Menu" exists on phone only. The hint sits under the button so the row holds on one line at 1440. */
+/* The desktop header on every screen: the wordmark, the plan rail, the one action and the Menu. Nothing else. */
 .f-head--desk { min-height: 88px; height: auto; align-items: center; }
-.f-toplinks { display: flex; align-items: center; gap: 4px; margin-right: 4px; }
-.f-toplinks a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; color: var(--ink-navy); font-weight: 600; font-size: var(--fs-sm); text-decoration: none; border-radius: var(--r-btn); white-space: nowrap; }
-.f-toplinks a:hover, .f-toplinks a:focus-visible { text-decoration: underline; }
-.f-next--head { display: flex; flex-direction: column; align-items: flex-end; gap: 0; }
-.f-next--head .f-next__hint { max-width: 260px; text-align: right; font-size: var(--fs-xs); line-height: 1.3; }
-.f-next--head .f-next__btn { white-space: nowrap; }
-/* From 1024 to 1279px the inline links fold into "More" (they are there in any case), so the row holds on one line */
-@container app (max-width: 1279px) { .f-toplinks { display: none; } }
+/* Desktop header: the action carries no hint line; only a reason (why it is disabled) shows, small, beside it */
+.f-head--desk .f-next--head { flex-direction: row; align-items: center; gap: 12px; }
+.f-head--desk .f-next--head .f-next__hint:not(.f-next__reason) { display: none; }
+.f-head--desk .f-next--head .f-next__reason { max-width: 220px; font-size: var(--fs-xs); line-height: 1.3; text-align: right; }
+.f-head--desk { gap: 24px; }
 
 /* The compact rail on a narrow phone (360): no letter-spacing, tighter legs and tag, so the three steps hold one line */
 @container rail (max-width: 359px) { .f-rail--compact ol { gap: 3px; } .f-rail--compact .f-step { letter-spacing: 0; gap: 4px; } .f-rail--compact .f-step__soon { padding: 2px 5px; } }
@@ -1569,6 +1565,26 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
    file's opening does. The photo stops behind the card; below it the security paper shows, then the footer. */
 .k-desk .st-stage { background: none; }
 .k-desk .st-cover--stage { inset: 0 0 auto 0; height: auto; bottom: 168px; }
+
+/* ── Perforations, one look everywhere: a line of punched holes ───────────────────────────────────
+   Tickets tear off their stub along the same holes as the boarding pass: 6px holes every 10px, the paper ground
+   showing through, a faint inner shadow on each hole's upper edge, kept clear of the notches. No dashed tear lines. */
+.tk__stub { position: relative; border-top: 0; }
+.tk__stub::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 12px; pointer-events: none;
+  background-image: radial-gradient(circle 3px at 5px 6.4px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5px 5.6px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
+  background-size: 10px 12px; background-repeat: round no-repeat; }
+@container tk (min-width: 640px) {
+  .tk__stub { border-left: 0; }
+  .tk__stub::before { top: 16px; bottom: 16px; left: 0; right: auto; width: 12px; height: auto;
+    background-image: radial-gradient(circle 3px at 6.4px 5px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5.6px 5px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
+    background-size: 12px 10px; background-repeat: no-repeat round; }
+}
+
+/* the spacer in the desktop header grows, so the Menu sits at the right edge (Start has no rail to push it) */
+.f-head--desk > .od-fill { flex: 1 1 auto; }
+/* the two footer links and their separator share one centred line */
+.appfoot .st-quiet__links { display: flex; align-items: center; gap: 12px; }
+.appfoot .st-quiet__links > span { line-height: 1; }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
@@ -1694,40 +1710,23 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-phone .f-screen { gap: 12px; padding-top: 12px; }
 .k-phone .f-band__btn { min-height: 56px; padding: 10px 0 8px; }
 </style>
-<style>
-/* The Emigrant — Start study: prototype controls only. The Start itself is the D1 component (emigrant-ds.css,
- * emigrant-ds.js), the same one D2 renders as screen 1. Only layout on top; every value is a token. */
-.st-fontstatus { font-size: var(--fs-xs); color: var(--ink-text-2); margin-top: 4px; }
-.st-fontstatus[data-ok="false"] { color: var(--ink-danger); font-weight: 700; }
-/* 4× close-up card next to the boards */
-.st-zoomcard { display: grid; gap: 8px; align-content: start; flex: 1 1 320px; max-width: 520px; }
-.st-zoom { position: relative; width: 100%; height: 220px; overflow: hidden; border: 1px solid var(--line-edge); border-radius: var(--r-card); background: var(--paper-card); }
-.st-zoom__in { position: absolute; left: 0; top: 0; width: 420px; transform-origin: 0 0; transform: scale(4) translate(-262px, 4px); }
-.st-zoom__in .st-pass { --stub: 112px; }
-.st-covernote { font-size: var(--fs-sm); color: var(--ink-text-2); align-self: center; }
-</style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
 </head>
 <body>
 <a class="k-skip" href="#main">Skip to content</a>
 <div class="strip">
-  <span class="strip__title">The Emigrant — Start study</span>
+  <span class="strip__title">The Emigrant — D2 · Screens</span>
   <span class="sample">Sample data</span>
   <nav aria-label="Deliveries">
-    <a href="./the-emigrant_directions_start-study-self.html" aria-current="page">Start study</a>
-    <a href="./the-emigrant_directions_d2-shortlist.html">D2 · Shortlist screens</a>
-    <a href="./the-emigrant_directions_d2-plan.html">D2 · Travel folder and data</a>
-    <a href="./the-emigrant_directions_d2-reading.html">D2 · Reading and system states</a>
-    <a href="./the-emigrant_directions_d1-design-system.html">D1 · Design system</a>
-    <a href="./the-emigrant_directions_d1-components.html">D1 · Components</a>
-    <a href="./the-emigrant_directions_transit-papers-base.html">Base · Transit Papers</a>
+    <a href="./the-emigrant_directions_d1-design-system.html">D1 · Design system and components</a>
+    <a href="./the-emigrant_directions_d2-screens.html" aria-current="page">D2 · Screens</a>
   </nav>
 </div>
 <main id="main" class="wrap">
   <section aria-labelledby="pTitle" style="margin-top:32px">
-    <div class="dep"><div class="dep__row"><span class="dep__no">1</span><h1 class="cond" id="pTitle" style="font-size:var(--fs-h1)">Start: B2 · Journey, on the full photo</h1></div>
-      <p>The chosen Start for The Emigrant, on the Transit Papers direction: a phone artboard (390 × 844) and a desktop artboard (1440 × 900, scaled to fit). This page renders the D1 component "Cover with the papers card" from the D1 engine, the same code D2 uses for screen 1, so the study, D1 and D2 cannot drift. The prototype controls carry the headline switcher, the cover switcher and the replay link. Sample data throughout.</p>
-      <nav class="g-toc" id="toc" aria-label="Variants on this page"></nav></div>
+    <div class="dep"><div class="dep__row"><span class="dep__no">D2</span><h1 class="cond" id="pTitle" style="font-size:var(--fs-h1)">Screens</h1></div>
+      <p>The D2 screens of the brief on the Transit Papers direction, built from the D1 components: Start with Terms of use (1, 1a), the Shortlist screens (2 to 6), your travel folder with Save, Open and Delete (10 to 13), the reading pages and the system states (14 to 17). Every screen is shown as a phone artboard (390 × 844) and a desktop artboard (1440 × 900, scaled to fit) with the full shell: the wordmark, the plan rail, one next action and the Menu, and the footer with the privacy promise and the Disclaimer and Terms of use links. The switcher under each title is prototype-only and reaches every state the brief lists, plus loading, offline and data updated; Start also carries the cover and headline switchers. Screens are designed in light; dark stays tokens. Nothing is frozen until you approve it.</p>
+      <nav class="g-toc" id="toc" aria-label="Screens on this page"></nav></div>
   </section>
   <div id="screens"></div>
   <div style="height:88px"></div>
@@ -2263,7 +2262,7 @@ function nextBar(where, n) {
     : `<button type="button" class="btn btn--primary f-next__btn" ${n.act ? `data-act="${esc(n.act)}"` : `data-toast="${esc(n.toast || n.label)}"`}>${n.label}</button>`;
   return `<div class="f-next f-next--${where}" data-next><span class="f-next__hint${n.disabled ? ' f-next__reason' : ''}">${n.hint || ''}</span>${btn}</div>`;
 }
-/* The menu: "Folder" leads to the travel folder (screen 10). On desktop it sits under "More"; on phone it is the Menu. */
+/* The menu, the same on phone and desktop: "Folder" leads to the travel folder (screen 10), then help, about and your data. */
 const MENU_ITEMS = {
   folder: ['Folder', 'Opens your travel folder (screen 10).'], save: ['Save your travel folder', 'Opens Save your travel folder (screen 11).'], open: ['Open a travel folder', 'Opens Open a travel folder (screen 12).'],
   evidence: ['How the evidence works', 'Opens How the evidence works (screen 16).'], terms: ['Terms of use', 'Opens the full terms (screen 14).'], privacy: ['Privacy', 'Opens Privacy (screen 15).'], delete: ['Delete your travel folder', 'Opens Delete your travel folder (screen 13).']
@@ -2276,12 +2275,11 @@ function appMenu(ctx, opts = {}) {
 }
 const menuList = ctx => appMenu(ctx, { open: true });
 const menuBtn = ctx => `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}">${icon('menu')}<span>Menu</span></button>`;
-const moreBtn = ctx => `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}"><span>More</span>${icon('nav-arrow-down')}</button>`;
-const topLinks = () => `<nav class="f-toplinks" aria-label="Main links"><a href="#" data-toast="${esc(MENU_ITEMS.evidence[1])}">How the evidence works</a><a href="#" data-toast="${esc(MENU_ITEMS.privacy[1])}">Privacy</a><a href="#" data-toast="${esc(MENU_ITEMS.open[1])}">Import a plan</a></nav>`;
-/* The desktop header on every screen: wordmark, plan rail (none on Start), the inline links, "More", the one action */
+/* The desktop header on every screen, four parts only: the wordmark, the plan rail (none on Start), the one action,
+   and the Menu. The hint above the action shows only when it says why the action is not possible yet. */
 function deskHeader(p = {}) {
   const railPart = p.rail === false ? '<span class="od-fill"></span>' : `<div class="od-fill f-head__rail">${rail(p.rail || 'shortlist')}</div>`;
-  return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${topLinks()}${moreBtn(p.ctx || 'desktop')}${nextBar('head', p.next)}</header>`;
+  return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${nextBar('head', p.next)}${menuBtn(p.ctx || 'desktop')}</header>`;
 }
 /* The footers, the same on every screen, phone included: the privacy promise and the two links, Disclaimer and
    Terms of use. That is the whole disclaimer in the app; the sentence lives on the Terms of use page. */
@@ -2391,12 +2389,12 @@ function startB2(variant, ctx) {
   return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
     <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
 }
-/* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
+/* The Start shell: no plan rail (the visitor has not started), the wordmark and the Menu, the cover credit
    in the footers, with the Disclaimer and Terms of use links. parts: { body, offline, menuId } */
 function startShell(ctx, parts) {
   const id = parts.menuId || ctx;
   const credit = `Cover: ${esc(START.cover.credit)}`;
-  const menu = appMenu(id, { start: true, more: ctx !== 'phone' });
+  const menu = appMenu(id, { start: true });
   if (ctx === 'phone') {
     return `<div class="od-screen">
       <div class="f-top"><header class="f-head">${WORDMARK}<span class="od-fill"></span>${menuBtn(id)}</header>${parts.offline ? offlineLine() : ''}</div>
@@ -2404,7 +2402,7 @@ function startShell(ctx, parts) {
     </div>${menu}`;
   }
   return `<div class="od-screen">
-    <header class="f-head f-head--desk">${WORDMARK}<span class="od-fill"></span>${topLinks()}${moreBtn(id)}</header>${parts.offline ? offlineLine() : ''}
+    <header class="f-head f-head--desk">${WORDMARK}<span class="od-fill"></span>${menuBtn(id)}</header>${parts.offline ? offlineLine() : ''}
     <div class="od-scroll" data-scroll><div class="f-desk d2-full st-desk st-desk--start"><main class="f-desk__main f-screen st-screen st-screen--start">${parts.body}</main></div></div>
     ${deskFoot({ credit })}
   </div>${menu}`;
@@ -2593,73 +2591,664 @@ function initBehavior() {
   watchLabels();
 }
 </script>
-<script>
-/* The Emigrant — Start study: the chosen B2 Start, rendered from the D1 engine (startB2, startShell) exactly as D2
- * screen 1 and the D1 gallery render it. The prototype controls change START (the headline, the cover) and re-render.
- * Sample data throughout. American English, code included. */
+<script>/* The Emigrant — D2 screen engine. Composes the brief's screens from the D1 components in
+ * emigrant-ds.js. Nothing here redraws a component. Every screen renders as a phone artboard
+ * (390 × 844) and a desktop artboard (1440 × 900) with the full shell, a prototype-only state
+ * switcher, and the three system states every screen shares (loading, offline, data updated).
+ * All content is sample data. American English throughout, code included. */
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-const HEADLINES_B2 = ['Where will your family wake up next year?', 'Somewhere, your next home is waiting.'];
-let b2Headline = 1;
-/* The covers for the switcher: our own sources and the credit format only (Drone / Unsplash). The
- * everyday-life slot is filled by Cole Sears' hillside homes. */
-const COVERS = {
+
+/* ── Extra sample notes and values the screens open (sample data) ──────── */
+let noteN = 20;
+function addNote(id, d) { if (!NOTES[id]) NOTES[id] = { n: noteN++, risk: 'low', label: 'Source only', ...d }; return id; }
+const WB = { source: 'World Bank, World Development Indicators', url: 'data.worldbank.org', license: 'CC BY 4.0', level: 1 };
+const FACT_NOTE = { health: { AUT: 'healthAUT', DEU: 'healthDEU', CRI: 'healthCRI' }, language: { AUT: 'langAUT', DEU: 'langDEU' }, cost: { AUT: 'costAUT' }, internet: { CRI: 'internetCRI' }, climate: { CRI: 'climateCRI' } };
+const UNKNOWN_FOR = { education: 'source', climate: 'translation', flights: 'contradict', timezone: 'source', corruption: 'minimum', health: 'source' };
+function noteFor(iso, id) {
+  const known = (FACT_NOTE[id] || {})[iso]; if (known) return known;
+  const key = `${id}${iso}`, c = countryBy(iso), crit = critBy(id), v = (VALUES[iso] || {})[id];
+  if (!v || !v[0]) return addNote(key, { claim: `${critName(crit)}, ${c.name}`, value: 'Not known yet', level: 0, source: 'No usable source found yet', url: '', license: 'None', asOf: 'None', reason: UNKNOWN_FOR[id] || 'source' });
+  return addNote(key, { claim: `${critName(crit)}, ${c.name}`, value: `${v[0]} ${v[1]}`.trim(), level: v[2], risk: v[3], asOf: v[4], dataFrom: v[5], stale: !!v[5] || v[4] < '2024', ...(id === 'language' ? { source: 'National constitution, language provisions', url: 'official gazette', license: 'Public government information', level: v[2] } : WB) });
+}
+/* Costa Rica's language fact is verified through machine translation */
+addNote('langCRI', { claim: 'Language · Official languages, Costa Rica', value: 'Spanish. No match with a language you speak.', level: 3, risk: 'low', source: 'Constitución Política, Art. 76', url: 'pgrweb.go.cr', license: 'Public government information', asOf: '2026-07', label: 'Editorial', verifier: 'M. Solano', role: 'Immigration lawyer, San José (sample)', verifiedOn: '2026-09-12', why: 'Spanish is the official language nationwide; your household listed German, Portuguese and English.', machineTranslation: ['idioma oficial', 'el español'] });
+FACT_NOTE.language.CRI = 'langCRI';
+/* Values for the facts the household did not select, and for the Netherlands (route check not available) */
+Object.assign(VALUES.AUT, { jobs: ['5.2', '%', 1, 'low', '2026-06'], eu: ['Yes', '', 1, 'low', '2026-01'], hazard: ['2.1', 'risk index', 1, 'low', '2026-02'], driving: ['Right', '', 1, 'low', '2026-01'], taxes: ['43.1', '% of GDP', 1, 'low', '2025-12'], community: ['20.5', '% of residents', 1, 'medium', '2026-03'] });
+Object.assign(VALUES.CRI, { flights: ['2', 'airports', 1, 'low', '2026-04'], jobs: ['8.9', '%', 1, 'medium', '2026-06'], eu: ['No', '', 1, 'low', '2026-01'], driving: ['Right', '', 1, 'low', '2026-01'] });
+VALUES.NLD = { cost: ['112', 'World = 100', 1, 'low', '2026-06'], law: ['96', 'percentile', 1, 'low', '2026-03'], internet: ['128', 'Mbit/s', 1, 'low', '2026-08'], climate: ['Cfb', 'oceanic', 1, 'low', '2026-01'], language: ['No match', 'Dutch', 1, 'low', '2026-07'], health: ['81.7', 'years', 1, 'low', '2026-05'], safety: ['82', 'percentile', 1, 'low', '2026-03'], flights: ['5', 'airports', 1, 'low', '2026-04'], timezone: ['0', 'hours', 1, 'low', '2026-01'], corruption: ['79', '/ 100', 1, 'low', '2026-02'] };
+const OTHER_GROUPS = [['Work', ['jobs']], ['The place', ['eu', 'hazard', 'driving']], ['People', ['community']]];
+const LANGUAGES = ['Arabic', 'Bengali', 'Bosnian', 'Bulgarian', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Estonian', 'Finnish', 'French', 'German', 'Greek', 'Hindi', 'Hungarian', 'Icelandic', 'Irish', 'Italian', 'Japanese', 'Korean', 'Latvian', 'Lithuanian', 'Maltese', 'Mandarin Chinese', 'Norwegian', 'Polish', 'Portuguese', 'Romanian', 'Russian', 'Serbian', 'Slovak', 'Slovenian', 'Spanish', 'Swahili', 'Swedish', 'Thai', 'Turkish', 'Ukrainian', 'Vietnamese'];
+const COUNTRY_ITEMS = () => COUNTRIES.slice().sort((a, b) => a.name.localeCompare(b.name)).map(c => ({ label: c.name, code: c.iso }));
+const REGIONS = () => ['All regions', ...[...new Set(COUNTRIES.map(c => c.region))].sort()];
+const TIME_ZONES = [['UTC−08:00', 'Pacific Time (Los Angeles, Vancouver)'], ['UTC−06:00', 'Central Time (Chicago, Mexico City)'], ['UTC−06:00', 'Central America (San José, Guatemala City)'], ['UTC−05:00', 'Eastern Time (New York, Toronto)'], ['UTC−03:00', 'Brasília Time (São Paulo)'], ['UTC±00:00', 'Greenwich and Western European Time (London, Lisbon)'], ['UTC+01:00', 'Central European Time (Vienna, Berlin)'], ['UTC+02:00', 'Eastern European Time (Athens, Helsinki)'], ['UTC+03:00', 'Istanbul, Nairobi, Riyadh'], ['UTC+04:00', 'Gulf Time (Dubai)'], ['UTC+05:30', 'India Standard Time (Mumbai, Delhi)'], ['UTC+07:00', 'Indochina Time (Bangkok, Hanoi)'], ['UTC+08:00', 'China and Singapore Time'], ['UTC+09:00', 'Japan and Korea Time'], ['UTC+10:00', 'Australian Eastern Time (Sydney)'], ['UTC+12:00', 'New Zealand Time (Auckland)']].map(([code, label]) => ({ label, code }));
+const CLIMATE_ZONES = ['Tropical', 'Dry', 'Temperate', 'Cold', 'Polar'];
+let uid = 0;
+const nid = p => `${p}-${++uid}`;
+
+/* ── Pieces shared by several screens ────────────────────────────────── */
+const what = txt => `<p class="f-what"><b>What happens next:</b> ${txt}</p>`;
+const titleBlock = (title, kicker, next) => `<div class="f-titleblock">${kicker ? `<span class="f-pagekind">${kicker}</span>` : ''}<h1 class="f-title" tabindex="-1">${title}</h1>${next ? what(next) : ''}</div>`;
+/* Compact page header on phone, every screen: condensed title, "What happens next" as a small info button beside it */
+function titleCompact(title, next) {
+  const id = nid('wn');
+  const btn = next ? `<button type="button" class="f-iconbtn f-whatbtn" data-disclose aria-expanded="false" aria-controls="${id}" aria-label="What happens next">${icon('info-circle')}</button>` : '';
+  const fold = next ? `<p class="f-whatfold" id="${id}" hidden><b>What happens next:</b> ${next}</p>` : '';
+  return `<div class="f-titleblock f-titleblock--compact d2-titleblock--compact"><div class="f-titlerow"><h1 class="f-title" tabindex="-1">${title}</h1>${btn}</div>${fold}</div>`;
+}
+const pageTitle = (ctx, title, kicker, next) => ctx === 'phone' ? titleCompact(title, next) : titleBlock(title, kicker, next);
+const back = (label, act = 'back') => `<button type="button" class="f-back" data-act="${esc(act)}">${icon('nav-arrow-left')}<span>Back to ${label}</span></button>`;
+const provBanner = (compact) => compact
+  ? `<div class="banner banner--prov banner--line" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional</b> until you set your priorities.</span></span><button type="button" class="f-link" data-toast="Opens the criteria sort (screen 3).">Set them</button></div>`
+  : `<div class="banner banner--prov" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional.</b> Set your priorities to make this ranking yours.</span></span><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the criteria sort (screen 3).">Set priorities</button></div>`;
+function updBanner(compact) {
+  const id = nid('upd');
+  const changes = `<div class="banner__changes" id="${id}" hidden><span>Austria · Cost · Price level: 102 → 104</span><span>Costa Rica moved from Possible to Matches</span><span>Germany · Internet · Speed tests: now E1, was unknown</span></div>`;
+  return compact
+    ? `<div class="banner banner--upd banner--line" role="status"><span class="banner__txt">${icon('refresh')}<span><b>Data updated,</b> results recalculated. 3 changes.</span></span><button type="button" class="f-link" data-disclose aria-expanded="false" aria-controls="${id}">Show</button>${changes}</div>`
+    : `<div class="banner banner--upd" role="status"><span class="banner__txt">${icon('refresh')}<span><b>Data updated, your results were recalculated.</b> 3 changes.</span></span><button type="button" class="btn btn--ghost btn--sm" data-disclose aria-expanded="false" aria-controls="${id}">Show changes</button>${changes}</div>`;
+}
+const staleAlert = () => `<div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>Some facts are out of date.</b>3 values come from 2021 or earlier. They are marked on each country page.</div></div>`;
+const offlineBar = offlineLine;
+const storageAlert = () => `<div class="alert alert--warning" role="note">${icon('database-restore')}<div><b>Nothing can be kept on this device.</b>Private browsing or blocked storage: the app works, but your plan is gone when you close this tab. Export it to keep it.</div></div>`;
+const skeleton = () => `<div class="f-titleblock"><div class="skel" aria-busy="true" aria-label="Loading"><i></i><i></i><i></i></div></div><div class="f-section"><div class="skel" aria-busy="true" aria-label="Loading"><i></i><i></i><i></i><i></i></div></div><div class="f-section"><div class="skel" aria-busy="true" aria-label="Loading"><i></i><i></i></div></div>`;
+function keyBody() {
+  return `<ul class="f-keylist">${[0, 1, 3].map(l => `<li><span class="f-keymark">${mark(l, 'low', { compact: true, name: 'A. Hofer' })}</span><p>${LEVEL_MEANING[l]}</p></li>`).join('')}
+    <li><span class="f-keymark"><span class="f-ref" aria-hidden="true">1</span></span><p><b>Note mark.</b> Tap any note mark to see where a fact comes from.</p></li>
+    <li><span class="f-keymark">${routeCheck('available')}</span><p><b>Route check.</b> Says whether we can run the check for this country. Results for your household appear after Route.</p></li>
+    <li><span class="f-keymark">${coverage(9, 11, { button: false })}</span><p><b>Coverage.</b> One box per criterion you selected; filled when the value is known.</p></li></ul>`;
+}
+function keyFold() { const id = nid('key'); return `<div class="f-key"><button type="button" class="f-key__btn" data-disclose aria-expanded="false" aria-controls="${id}">${icon('info-circle')}<span>How to read this</span><span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="f-key__body" id="${id}" hidden>${keyBody()}</div></div>`; }
+const findCard = (items) => `<section class="f-card"><h2 class="f-card__title">Where to find things</h2><ul class="f-find">${(items || [['Your progress', 'The steps at the top.'], ['Sources', 'The note mark next to every fact.'], ['Your travel folder, help', 'The Menu, top right.']]).map(([b, s]) => `<li><b>${b}</b><span>${s}</span></li>`).join('')}</ul></section>`;
+const keyCard = () => `<section class="f-card"><h2 class="f-card__title">How to read this</h2>${keyBody()}</section>`;
+const privacyCard = () => `<section class="f-card"><h2 class="f-card__title">Nothing leaves this device</h2><p class="f-find">${PRIVACY}</p></section>`;
+const statusCard = (matches = 12, possible = 41, ruled = 140, note = 'All 193 countries, checked against your criteria.', compact = false, link = '') => compact
+  ? `<div class="f-status d2-status--line"><p class="f-status__counts"><span>${matches ? hl(`<b>${matches}</b>`) : `<b>${matches}</b>`} match</span><span><b>${possible}</b> possible</span><span><b>${ruled}</b> ruled out</span></p><p class="f-status__note">${note}${link}</p></div>`
+  : `<div class="f-status"><p class="f-status__counts"><span>${matches ? hl(`<b>${matches}</b>`) : `<b>${matches}</b>`} match</span><span><b>${possible}</b> possible, need checking</span><span><b>${ruled}</b> ruled out</span></p><p class="f-status__note">${note}</p></div>`;
+
+/* ── The artboard shell ──────────────────────────────────────────────── */
+/* parts: rail ('shortlist' | 'route' | 'plan'), body, side (desktop column), next, noFine, full (desktop main spans
+   all columns), overlay (html placed over the screen), offline, updated, loading */
+/* The shell. Phone: header with the Menu, the compact rail, the screen, the one action, the footer with the disclaimer
+   line. Desktop: the header on every screen (wordmark, rail, the one action, Menu), the screen with its
+   help column, the footer with the Disclaimer and Terms of use links. The disclaimer is the same everywhere: those two
+   footer links, nothing in the body. */
+function shell(ctx, p) {
+  const body = p.loading ? skeleton() : `${p.updated ? updBanner(ctx === 'phone') : ''}${p.body}`;
+  const next = p.loading ? { label: 'Loading…', hint: 'One moment.', disabled: true } : p.next;
+  const railState = p.rail || 'shortlist';
+  if (ctx === 'phone') {
+    return `<div class="od-screen">
+      <div class="f-top"><header class="f-head">${WORDMARK}<span class="od-fill"></span>${menuBtn(ctx)}</header><div class="f-railrow">${rail(railState, { compact: true })}</div>${p.offline ? offlineBar() : ''}</div>
+      <div class="od-scroll" data-scroll><main class="f-screen">${body}</main></div>
+      <div class="d2-bottom">${nextBar('phone', next)}${phoneFoot()}</div>
+    </div>${appMenu(ctx)}${p.overlay || ''}`;
+  }
+  return `<div class="od-screen">
+    <div class="f-top">${deskHeader({ rail: railState, next, ctx })}${p.offline ? offlineBar() : ''}</div>
+    <div class="od-scroll" data-scroll><div class="f-desk${p.full ? ' d2-full' : ''}"><main class="f-desk__main f-screen">${body}</main>${p.full || p.loading ? '' : `<aside class="f-side" aria-label="Help on this screen">${p.side || `${keyCard()}${findCard()}`}</aside>`}</div></div>
+    ${deskFoot()}
+  </div>${appMenu(ctx)}${p.overlay || ''}`;
+}
+/* overlays: a sheet (phone) or side panel (desktop), and a dialog */
+const sheet = (title, inner, titleId) => `<div class="k-scrim" data-close></div><div class="k-panel k-panel--overlay d2-sheetpanel" role="dialog" aria-modal="true" aria-labelledby="${titleId}"><div class="f-panel__top"><div class="f-panel__grab" aria-hidden="true"></div><div class="f-panel__head"><div class="f-panel__titles"><span class="f-panel__kicker">Your travel folder · your own papers</span><h2 class="f-panel__title" id="${titleId}" tabindex="-1">${title}</h2></div><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div></div><div class="k-panel__body f-panel__body d2-sheet">${inner}</div></div>`;
+const dialog = inner => `<div class="k-scrim" data-close></div><div class="dlg dlg--static" role="dialog" aria-modal="true">${inner}</div>`;
+
+/* ── Screen registry ─────────────────────────────────────────────────── */
+/* Each screen: no, title, note, states [[key, label]], init(S), render(ctx, S) → shell parts */
+const SYSTEM_STATES = [['loading', 'Loading'], ['offline', 'Offline'], ['updated', 'Data updated']];
+const SCREENS = {};
+const defState = () => ({ list: new Set(), country: 'AUT', search: '', region: 'All regions', coveredOnly: false, sort: JSON.parse(JSON.stringify(PILES)), second: null });
+
+SCREENS.start = {
+  no: '1 · 1a', title: 'Start, with Terms of use',
+  note: 'The first impression, in the chosen B2 direction: the full photo as the stage, the papers card over its lower part with the headline about the life, the rational line, the boarding pass as the one object, and the three journey legs. Terms of use (1a) take the card over until accepted; then the only button is "Accept". The cover is provisional and comes from one setting, START.cover, in the D1 engine; D1\'s "Cover with the papers card" is this same component. The footers carry the privacy promise and the Disclaimer and Terms of use links.',
+  states: [['first', 'First visit'], ['terms', 'Terms not accepted'], ['changed', 'Terms changed'], ['returning', 'Returning with a plan'], ['firstload', 'Data loading for the first time']],
+  system: [['offline', 'Offline']],
+  render(ctx, S) {
+    const v = S.state === 'offline' ? 'first' : S.state;
+    return { body: startB2(v, ctx), startShell: true, full: true, next: null, offline: S.state === 'offline' };
+  }
+};
+
+/* 2 · Quick profile */
+function question(n, total, q, why, control, foot) {
+  return `<div class="qp"><span class="qp__step">Question ${n} of ${total}</span><div class="prog"><div class="prog__track" role="progressbar" aria-valuenow="${n}" aria-valuemin="0" aria-valuemax="${total}" aria-label="Question ${n} of ${total}"><span class="prog__bar" style="width:${Math.round((n / total) * 100)}%"></span></div></div><p class="qp__q">${q}</p><p class="qp__why">${icon('info-circle')}<span>Why we ask: ${why}</span></p>${control}<div class="qp__foot">${foot}</div></div>`;
+}
+SCREENS.profile = {
+  no: '2', title: 'Quick profile',
+  note: 'Three questions, each with "why we ask", each skippable. Languages stay here because Language · Official languages needs them; the climate question moved to its criterion card.',
+  states: [['empty', 'Empty'], ['partly', 'Partly answered'], ['complete', 'Complete']],
+  render(ctx, S) {
+    const a = S.state === 'complete' ? 3 : S.state === 'partly' ? 1 : 0;
+    const chips = a >= 2 ? ['German', 'Portuguese', 'English'] : [];
+    const body = `${pageTitle(ctx, 'A few quick questions', 'Quick profile', 'three short questions, then your first ranking. Skip any of them; we use a sensible default.')}
+      <div class="f-status"><p class="f-status__counts" role="status"><span><b>${a}</b> of 3 answered</span></p><p class="f-status__note">${a === 3 ? 'Ready for your first ranking.' : 'All three can be skipped; we use a sensible default.'}</p></div>
+      ${question(1, 3, 'Where do you live now?', 'to compare prices from where you are.', selectMenu({ ariaLabel: 'Where do you live now?', items: COUNTRY_ITEMS(), value: a >= 1 ? 'Austria' : '', placeholder: 'Choose a country', searchPlaceholder: 'Type a country' }), '<button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. We use no home country for prices.">Skip</button>')}
+      ${question(2, 3, 'Which languages does your household speak?', '"Language · Official languages" checks whether a country\'s official language is one of these.', `${selectMenu({ ariaLabel: 'Languages your household speaks', items: LANGUAGES, value: chips, multiple: true, icon: 'language', placeholder: 'Add a language', searchPlaceholder: 'Type a language' })}<div class="chips" data-chips>${chips.map(l => `<button type="button" class="chip-x" data-lang="${l}"><span>${l}</span>${icon('xmark')}<span class="sr-only"> remove</span></button>`).join('')}</div>`, `<span class="field__why" data-lang-count aria-live="polite">${chips.length} languages chosen</span><button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. Language · Official languages then counts as not known for you.">Skip</button>`)}
+      ${question(3, 3, 'How much does cost of living matter?', 'sets how strongly Cost · Price level counts. You can change it in the sort.', `<div class="segc" role="group" aria-label="Cost importance">${['Not much', 'Somewhat', 'A lot'].map(t => `<button type="button" aria-pressed="${a === 3 && t === 'Somewhat'}">${t}</button>`).join('')}</div>`, '<span class="field__why">7 inputs or fewer before your first ranking.</span>')}`;
+    const next = { label: 'Show my first ranking', hint: a === 3 ? 'Step 1 of 3 · all three answered' : `Step 1 of 3 · ${a} of 3 answered, the rest use defaults`, toast: 'Opens the criteria sort with your first ranking (screen 3).' };
+    return { body, next, side: `${findCard([['Why we ask', 'Under every question.'], ['Skipping', 'Each question has a default.'], ['Your answers', 'They stay on this device.']])}${privacyCard()}` };
+  }
+};
+
+/* 3 · Criteria sort */
+const CRIT_ASK = {
+  timezone: () => selectMenu({ label: 'Which time zone do you work with?', items: TIME_ZONES, value: 'Central European Time (Vienna, Berlin)', searchPlaceholder: 'Type a city or UTC offset' }),
+  driving: () => { const u = nid('askd'); return `<span class="field__label" id="${u}">Which side of the road do you prefer?</span><div class="segc" role="group" aria-labelledby="${u}">${['Left', 'Right', 'No preference'].map(t => `<button type="button" aria-pressed="${t === 'Right'}">${t}</button>`).join('')}</div>`; },
+  climate: () => { const u = nid('clz'); return `<fieldset class="chk-chips"><legend class="field__label">Which climate zones do you like?</legend><div class="chk-chips__row">${CLIMATE_ZONES.map(z => `<label class="chk-chip"><input type="checkbox" name="${u}"${['Temperate', 'Cold'].includes(z) ? ' checked' : ''}><span class="chk-chip__box" aria-hidden="true">${icon('check')}</span><span>${z}</span></label>`).join('')}</div></fieldset>`; }
+};
+function critCard(id, pile) {
+  const c = critBy(id);
+  return `<li class="crit crit--${c.kind}" tabindex="0" data-crit="${id}" aria-label="${critName(c)}, ${c.kind === 'yesno' ? 'yes or no' : 'scored'}, in ${PILE_NAMES[pile]}. Press 1 to 4 to move it.">
+    <span class="crit__grip" aria-hidden="true">${icon('drag-hand-gesture')}</span>
+    <div class="crit__body"><span class="crit__name">${critName(c)}</span><span class="crit__line">${[c.meaning, c.limit].filter(Boolean).join(' ')}</span><span class="tagx ${c.kind === 'yesno' ? 'tagx--quiet' : ''} crit__kind">${c.kind === 'yesno' ? 'Yes / no' : `Scored · ${c.unit}`}</span>${pile !== 'unused' && CRIT_ASK[id] ? `<div class="crit__ask">${CRIT_ASK[id]()}</div>` : ''}</div>
+    <button type="button" class="crit__move" data-move="${id}" aria-label="Move ${critName(c)} to another pile">${icon('sort')}</button></li>`;
+}
+function sortCounts(S) {
+  const non = S.sort.non.length;
+  if (S.state === 'nomatch') return [0, 23, 170];
+  if (S.state === 'provisional') return [12, 41, 140];
+  return [Math.max(0, 12 - (non - 2) * 4), 41 + (non - 2) * 2, Math.max(0, 140 + (non - 2) * 2)];
+}
+function pilesHtml(S) {
+  return `<div class="d2-piles" data-piles>${Object.keys(PILE_NAMES).map(p => `<section class="pile pile--${p}" data-pile="${p}" aria-label="${PILE_NAMES[p]}"><div class="pile__head"><span class="pile__title">${PILE_NAMES[p]}</span><span class="countbadge">${S.sort[p].length}</span></div>${S.sort[p].length ? `<ul class="d2-critlist">${S.sort[p].map(id => critCard(id, p)).join('')}</ul>` : '<p class="pile__empty">Empty. Move a criterion here.</p>'}</section>`).join('')}</div>`;
+}
+function sortSummary(S, compact) {
+  const [m, p, r] = sortCounts(S), top = COUNTRIES.filter(c => c.band === 'match').slice(0, 3).map(c => c.name);
+  if (compact) return `<div class="d2-livebar" role="status" aria-live="polite"><span>${m ? hl(`<b>${m}</b>`) : `<b>${m}</b>`} match · <b>${p}</b> possible · <b>${r}</b> ruled out</span><span class="f-muted">Top: ${m ? top.join(', ') : 'none yet'}</span></div>`;
+  return `<section class="f-card"><h2 class="f-card__title">Live result</h2><p class="f-status__counts" role="status" aria-live="polite"><span>${m ? hl(`<b>${m}</b>`) : `<b>${m}</b>`} match</span><span><b>${p}</b> possible</span><span><b>${r}</b> ruled out</span></p><p class="f-find">${m ? `Top matches: ${top.join(', ')}.` : 'No country meets every Non-negotiable yet.'} Updates after every move.</p></section>`;
+}
+SCREENS.criteria = {
+  no: '3', title: 'Criteria sort',
+  note: 'Four piles. Yes/no cards have a light edge, scored cards a darker one. Move a card by its move button and a pile menu, or focus it and press 1 to 4; every move is announced and the counts update. Time zone, Driving side and Climate zone ask their one question on the card once picked.',
+  states: [['provisional', 'Provisional'], ['sorted', 'Sorted'], ['nomatch', 'A Non-negotiable leaves no Match'], ['unknownall', 'A criterion unknown for every country']],
+  init(S) {
+    if (S.state === 'provisional') S.sort = { non: [], important: [], nice: [], unused: CRITERIA.map(c => c.id) };
+    if (S.state === 'sorted') S.sort = JSON.parse(JSON.stringify(PILES));
+    if (S.state === 'nomatch') { S.sort = JSON.parse(JSON.stringify(PILES)); S.sort.non = ['safety', 'health', 'eu']; S.sort.unused = S.sort.unused.filter(x => x !== 'eu'); }
+    if (S.state === 'unknownall') { S.sort = JSON.parse(JSON.stringify(PILES)); S.sort.important.push('community'); S.sort.unused = S.sort.unused.filter(x => x !== 'community'); }
+  },
+  render(ctx, S) {
+    const [m] = sortCounts(S);
+    const alert = S.state === 'nomatch' ? `<div class="alert alert--info" role="status">${icon('info-circle')}<div><b>No country meets all your Non-negotiables.</b><p>EU member rules out 166 countries on its own. Move it to Important to see matches again; nothing is lost.</p></div></div>`
+      : S.state === 'unknownall' ? `<div class="alert alert--info" role="status">${icon('help-circle')}<div><b>Community · People born abroad is not known for any country yet.</b><p>No usable source: the figures we found may not be used under their license. It counts neither for nor against any country until a source is found.</p></div></div>` : '';
+    const body = `${pageTitle(ctx, 'What matters to you?', 'Criteria sort', 'sort each criterion into a pile. The ranking updates after every move. Drag a card, tap its move button, or focus it and press 1 to 4.')}
+      ${S.state === 'provisional' ? provBanner(ctx === 'phone') : ''}${alert}${ctx === 'phone' ? sortSummary(S, true) : ''}${pilesHtml(S)}
+      <div class="na-line"><p class="f-iconline">${icon('help-circle')}<b>Not available yet</b></p><p class="f-muted">No source we may legally use yet, unless the line says otherwise.</p><div class="na-line__list">${naTags()}</div></div>
+      <p class="sr-only" role="status" aria-live="polite" data-sortlive></p>`;
+    const next = { label: 'See results', hint: m ? `Step 1 of 3 · ${m} matches so far` : 'Step 1 of 3 · no matches yet, results still open', toast: 'Opens Results (screen 4).' };
+    return { body, next, side: `${sortSummary(S)}${keyCard()}` };
+  }
+};
+
+/* 4 · Results */
+function resultRows(S, band) {
+  const q = S.search.trim().toLowerCase();
+  return COUNTRIES.filter(c => c.band === band && (!q || c.name.toLowerCase().includes(q)) && (S.region === 'All regions' || c.region === S.region) && (!S.coveredOnly || c.routeCheck !== 'none'));
+}
+function rowState(S, c) { return S.list.has(c.iso) ? 'added' : S.list.size >= 3 ? 'full' : 'idle'; }
+/* The band cap, shown: in the "Band capped" state the first Possible country has every criterion but Safety known,
+   so by count it would be Strong; Safety is a Non-negotiable, so it shows Partial with the one line that says why. */
+const CAP_DEMO = { iso: 'VCT', known: 10, cap: 'Safety' };
+function capRow(S, c) {
+  if (S.state !== 'capped' || c.iso !== CAP_DEMO.iso) return countryRow(c, { state: rowState(S, c) });
+  return countryRow({ ...c, known: CAP_DEMO.known, score: '7.1', unknownCrit: 'safety' }, { state: rowState(S, c), cap: CAP_DEMO.cap });
+}
+function resultBands(S) {
+  const nm = S.state === 'nomatch';
+  const total = BANDS.reduce((n, b) => n + resultRows(S, b.id).length, 0);
+  if (!total) return `<div class="empty">${icon('search')}<p class="empty__title">No country matches this filter</p><p>Clear the search, choose another region or switch off "Route check available only".</p><button type="button" class="btn btn--secondary btn--sm" data-act="clearfilter">Clear the filters</button></div>`;
+  return `<div class="f-bands">${BANDS.map(b => {
+    let rows = resultRows(S, b.id);
+    if (nm && b.id === 'match') rows = [];
+    const id = nid('rb'), open = b.id !== 'ruled' && (rows.length > 0 || nm) && !(S.state === 'capped' && b.id === 'match');
+    const empty = b.id === 'match' && !rows.length && nm ? `<div class="f-unknown"><p class="f-iconline f-unknown__title">${icon('help-circle')}<span>No country meets all your Non-negotiables</span></p><p class="f-unknown__why">EU member rules out 166 countries on its own. Move it to Important in the sort to see matches again.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the criteria sort (screen 3).">Loosen a Non-negotiable</button></div>` : '';
+    return `<section class="f-band f-band--${b.id}"><button type="button" class="f-band__btn" data-disclose aria-expanded="${open}" aria-controls="${id}"><span class="f-band__title">${b.title}</span><span class="f-band__count">${rows.length}</span><span class="k-chev">${icon('nav-arrow-down')}</span><span class="f-band__means">${b.means}</span></button>
+      <div class="f-band__body" id="${id}"${open ? '' : ' hidden'}>${empty}${rows.length ? `<ul class="clist">${rows.map(c => capRow(S, c)).join('')}</ul>` : ''}</div></section>`;
+  }).join('')}</div>`;
+}
+function filters(S, ctx) {
+  const q = nid('q'), more = nid('more'), folded = ctx === 'phone', active = (S.search.trim() ? 1 : 0) + (S.region !== 'All regions' ? 1 : 0) + (S.coveredOnly ? 1 : 0);
+  return `<div class="d2-filters f-section${folded ? ' d2-filters--folded' : ''}">${folded ? `<button type="button" class="d2-whatfold__btn" data-disclose aria-expanded="${active > 0}" aria-controls="${more}">${icon('filter')}<span>Search and filters${active ? ` · ${active} on` : ''}</span><span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="d2-filters__more" id="${more}"${active ? '' : ' hidden'}>` : ''}<div class="field"><label class="field__label" for="${q}">Search by name</label><input class="input" id="${q}" data-search value="${esc(S.search)}" placeholder="e.g. Saint"></div>
+    <div class="field">${selectMenu({ label: 'Region', items: REGIONS(), value: S.region, searchPlaceholder: 'Type a region' }).replace('data-smenu', 'data-smenu data-region')}</div>
+    <label class="switch"><input type="checkbox" role="switch" data-covered${S.coveredOnly ? ' checked' : ''}><span class="switch__track" aria-hidden="true"></span><span>Route check available only</span><span class="switch__state" aria-hidden="true">${S.coveredOnly ? 'On' : 'Off'}</span></label>${folded ? '</div>' : ''}</div>`;
+}
+function resultsNext(S) {
+  const n = S.list.size;
+  return n ? { label: 'Compare your shortlist', hint: `Step 1 of 3 · ${plural(n, 'country', 'countries')} on your shortlist`, toast: 'Opens Shortlist and compare (screen 6).' } : { label: 'Compare your shortlist', hint: 'Choose up to three countries to compare them.', disabled: true };
+}
+SCREENS.results = {
+  no: '4', title: 'Results',
+  note: 'All 193 countries in three bands, Ruled out collapsed. Compact country rows: postage stamp, name, score, evidence band, and the quiet route-check tag only where a check is available or partly available. Add up to three; the fourth explains the limit. No rank numbers.',
+  states: [['provisional', 'Provisional'], ['sorted', 'Priorities set'], ['nomatch', 'No Matches'], ['emptyfilter', 'A filter leaves nothing'], ['stale', 'Some facts out of date'], ['full', 'Shortlist full'], ['capped', 'Band capped']],
+  init(S) { S.search = S.state === 'emptyfilter' ? 'Zzz' : ''; S.region = 'All regions'; S.coveredOnly = false; S.list = new Set(S.state === 'full' ? ['AUT', 'CRI', 'DEU'] : ['sorted', 'capped'].includes(S.state) ? ['AUT'] : []); },
+  render(ctx, S) {
+    const nm = S.state === 'nomatch';
+    const counts = nm ? [0, 23, 170] : [12, 41, 140];
+    const phone = ctx === 'phone';
+    const capAlert = S.state === 'capped' ? `<div class="alert alert--info" role="note">${icon('info-circle')}<div><b>The evidence band is capped while a Non-negotiable is unknown.</b>Saint Vincent and the Grenadines has 10 of 11 criteria known, which would read Strong. Safety is one of your Non-negotiables and not known yet, so the band shows Partial, with the reason on the row.</div></div>` : '';
+    const body = `${pageTitle(ctx, 'Where could you go?', 'Results', 'add up to three countries to your shortlist. Then compare them side by side.')}
+      ${S.state === 'provisional' && !phone ? provBanner() : ''}${S.state === 'stale' ? staleAlert() : ''}${capAlert}
+      ${statusCard(...counts, nm ? 'All 193 countries. EU member rules out 166 of them on its own.' : S.state === 'provisional' ? (phone ? 'Provisional until you set your priorities. ' : 'All 193 countries. The order is provisional until you set your priorities.') : 'All 193 countries, checked against your 11 criteria.', phone, phone && S.state === 'provisional' ? '<a href="#" class="d2-status__link" data-toast="Opens the criteria sort (screen 3).">Set them</a>' : '')}
+      ${filters(S, ctx)}<div data-bands>${resultBands(S)}</div>${phone ? keyFold() : ''}`;
+    return { body, next: resultsNext(S), side: `${keyCard()}${findCard([['Add to shortlist', 'The Add button on every row, up to three.'], ['Ruled out', 'Collapsed at the bottom, each with the reason.'], ['Route check', 'The quiet tag: where we can run the check.']])}` };
+  }
+};
+
+/* 5 · Country */
+function factRow(iso, id, opts = {}) {
+  const c = critBy(id), v = (VALUES[iso] || {})[id], note = noteFor(iso, id), d = NOTES[note];
+  const report = `<button type="button" class="f-link d2-report" data-report="${esc(d.claim)}">${icon('message-alert')}<span>Report an error</span></button>`;
+  if (!v || !v[0]) return `<li class="d2-fact d2-fact--unknown"><span class="d2-fact__name">${critName(c)}</span><div class="d2-fact__body">${unknownBlock(d.reason || 'source', opts.decide ? { decide: opts.decide } : {})}</div><div class="d2-fact__meta">${report}</div></li>`;
+  const from = v[5] || d.dataFrom || v[4], stale = d.stale || dataYear(from) < '2024';
+  return `<li class="d2-fact"><span class="d2-fact__name">${critName(c)}</span><div class="d2-fact__body">${valButton(note, `<span class="f-val__n">${esc(v[0])}</span>${v[1] ? `<span class="f-val__u">${esc(v[1])}</span>` : ''}`, critName(c))}${evButton(note, { compact: true, level: v[2], risk: v[3], flagged: d.flagged, machineTranslation: !!d.machineTranslation })}</div><div class="d2-fact__meta">${stale ? staleNote(from) : `<span class="mono">Last checked ${v[4]}</span>`}${d.machineTranslation ? `<span class="f-iconline f-flag">${icon('translate')}<span>Via machine translation</span></span>` : ''}${report}</div></li>`;
+}
+/* The country page card. Desktop: the print above, the card over its lower edge. Phone: the compact card alone
+   (the crop is the photo), the "what happens next" info button beside the title, so the facts reach the first screen. */
+function countryHero(c, ctx, next) {
+  const dateOf = Object.values(VALUES[c.iso] || {}).map(v => v[4]).filter(d => d && d !== 'None').sort().pop() || 'Not yet';
+  const dms = `${Math.abs(c.lat).toFixed(0)}°${c.lat >= 0 ? 'N' : 'S'} ${Math.abs(c.lon).toFixed(0)}°${c.lon >= 0 ? 'E' : 'W'}`;
+  const mrz = mrzLines(c);
+  const phone = ctx === 'phone';
+  const id = nid('wn');
+  const title = phone
+    ? `<div class="f-titlerow cp__title"><h1 class="f-title" tabindex="-1">${esc(c.name)}</h1><button type="button" class="f-iconbtn f-whatbtn" data-disclose aria-expanded="false" aria-controls="${id}" aria-label="What happens next">${icon('info-circle')}</button></div>`
+    : `<h1 class="f-title cp__title" tabindex="-1">${esc(c.name)}</h1>`;
+  const card = `<section class="cp hero__card${phone ? ' cp--compact' : ''}" aria-label="Country page for ${esc(c.name)}">
+      ${phone ? '' : `<div class="cp__band"><span class="cp__label">Country page · your own notes</span><span class="ph__credit">${credit(c)}</span></div>`}
+      <div class="cp__body"><div class="cp__crop ph">${phImg(c, 'crop', false)}</div>
+        ${title}
+        <div class="cp__answer">${answerLine(c)}<span class="f-entry__code">${c.iso}${c.capital ? ` · ${esc(c.capital[0])}` : ''} · ${esc(c.region)}</span><div class="d2-cp-marks">${coverage(c.known, c.total, { cap: bandCap(c) })}${routeCheck(c.routeCheck)}</div>${phone ? `<p class="f-whatfold" id="${id}" hidden><b>What happens next:</b> ${next}</p>` : ''}</div>
+        <dl class="cp__fields">
+          <div><dt>Score</dt><dd class="d2-nowrap">${c.band === 'ruled' ? 'Ruled out' : c.score ? `<span class="mono">${hl(c.score)}</span> / 10` : 'No score yet'}</dd></div>
+          <div><dt>Capital</dt><dd>${c.capital ? `${esc(c.capital[0])} · <span class="mono">${c.capital[1]}</span>` : '–'}</dd></div>
+          <div><dt>Position</dt><dd class="mono">${dms}</dd></div>
+          <div><dt>Last checked</dt><dd class="mono">${esc(dateOf)}</dd></div>${phone ? `<div class="cp__credit"><dt>Photo</dt><dd class="ph__credit">${credit(c)}</dd></div>` : ''}
+        </dl></div>
+      <div class="mrz" aria-hidden="true">${mrz[0]}<br>${mrz[1]}</div>
+    </section>`;
+  return phone ? card : `<div class="hero"><figure class="ph ph--print hero__photo">${phImg(c, 'print')}</figure>${card}</div>`;
+}
+SCREENS.country = {
+  no: '5', title: 'Country',
+  note: 'A ticket-style country page: the photo print without fastening, the country-page card over its lower edge, the answer from the criteria, the locator map, then every criterion with its value, evidence mark, last-checked date and "Report an error". Unknown values say why. Facts the household did not select come last, grouped.',
+  states: [['notin', 'Not in shortlist'], ['in', 'In shortlist'], ['full', 'Shortlist full'], ['partly', 'Partly unknown'], ['stale', 'Out of date'], ['mt', 'Machine translation (Costa Rica)'], ['noroute', 'Route check not available']],
+  init(S) { S.country = ['partly', 'stale', 'mt'].includes(S.state) ? 'CRI' : S.state === 'noroute' ? 'NLD' : 'AUT'; S.list = new Set(S.state === 'in' ? ['AUT'] : S.state === 'full' ? ['CRI', 'DEU', 'PRT'] : []); },
+  render(ctx, S) {
+    const c = countryBy(S.country), sel = SELECTED, unknown = sel.filter(id => !((VALUES[c.iso] || {})[id] || [])[0]);
+    const phone = ctx === 'phone';
+    const nextTxt = S.list.has(c.iso) ? `${esc(c.name)} is on your shortlist. Compare it with the others, or check the route${c.routeCheck === 'none' ? ' once it is available' : ''}.` : `if ${esc(c.name)} looks right, add it to your shortlist. Then we check whether all of you can live there.`;
+    const noRoute = c.routeCheck === 'none' ? `<div class="alert alert--info" role="note">${icon('circle')}<div><b>Route check not available yet for ${esc(c.name)}.</b>We have no verified residence rules for it in this release. You can still shortlist and compare it.</div></div>` : '';
+    const body = `${back('your results', 'toast:Opens Results (screen 4).')}${countryHero(c, ctx, nextTxt)}
+      ${phone ? '' : what(nextTxt)}${noRoute}
+      <div class="f-section"><h2 class="f-h2">Your criteria, with their sources</h2><p class="f-muted">${sel.length - unknown.length} of ${sel.length} known. Tap a value or an evidence mark to open its source note.</p><ul class="d2-facts">${sel.filter(id => !unknown.includes(id)).map(id => factRow(c.iso, id)).join('')}</ul></div>
+      ${unknown.length ? `<div class="f-section"><h2 class="f-h2">Not known yet</h2><p class="f-muted">These count neither for nor against ${esc(c.name)}.</p><ul class="d2-facts">${unknown.map(id => factRow(c.iso, id, id === 'health' ? { decide: 'The next World Bank release.' } : {})).join('')}</ul></div>` : ''}
+      ${phone ? `${mapCard(c.iso, { size: 'sm' })}${keyFold()}` : ''}
+      <div class="f-section"><h2 class="f-h2">Facts you did not select</h2><p class="f-muted">Shown for completeness. They do not count in the ranking.</p>${OTHER_GROUPS.map(([g, ids]) => `<h3 class="lbl d2-group">${g}</h3><ul class="d2-facts">${ids.map(id => factRow(c.iso, id)).join('')}</ul>`).join('')}</div>`;
+    const on = S.list.has(c.iso), full = !on && S.list.size >= 3;
+    const next = full ? { label: `Add ${esc(c.name)}`, hint: `Your shortlist already has three countries. Remove one to add ${esc(c.name)}.`, disabled: true }
+      : !on ? { label: `Add ${esc(c.name)} to your shortlist`, hint: 'Then we check whether all of you can live there.', act: 'addcountry' }
+        : c.routeCheck === 'none' ? { label: 'Compare your shortlist', hint: `${esc(c.name)} is on your shortlist · route check not available yet`, toast: 'Opens Shortlist and compare (screen 6).' }
+          : { label: `Check the route for ${esc(c.name)}`, hint: `${esc(c.name)} is on your shortlist`, toast: 'Opens Route (screen 7, delivery D3). The household is asked there, never earlier.' };
+    return { body, next, side: `${mapCard(c.iso)}${keyCard()}` };
+  }
+};
+
+/* 6 · Shortlist and compare */
+function compareTable(cols, stack) {
+  const rows = [['non', PILES.non], ['important', PILES.important], ['nice', PILES.nice]];
+  const u = nid('cmp'), hid = k => `${u}-${k}`;
+  const cell = (iso, id) => {
+    const v = (VALUES[iso] || {})[id], hd = stack ? ` headers="${hid(iso)} ${hid(id)}"` : '';
+    if (!v || !v[0]) return `<td${hd}><span class="cmp__cell"><span class="f-iconline f-val--unknown">${icon('help-circle')}<span>Not known yet</span></span></span></td>`;
+    const note = noteFor(iso, id);
+    return `<td${hd}><span class="cmp__cell"><span class="cmp__v">${esc(v[0])} <small>${esc(v[1])}</small></span>${evButton(note, { compact: true, level: v[2], risk: v[3] })}${v[5] || v[4] < '2024' ? staleNote(v[5] || v[4]) : ''}</span></td>`;
+  };
+  if (stack) return `<div class="cmp-wrap"><table class="cmp cmp--stack"><thead><tr>${cols.map(i => `<th scope="col" id="${hid(i)}">${countryBy(i).name}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(([p, ids]) => `<tr class="cmp__pile"><th colspan="${cols.length}">${PILE_NAMES[p]}</th></tr>${ids.map(id => `<tr class="cmp__crit"><th colspan="${cols.length}" id="${hid(id)}">${critName(critBy(id))}</th></tr><tr>${cols.map(i => cell(i, id)).join('')}</tr>`).join('')}`).join('')}</tbody></table></div>`;
+  return `<div class="cmp-wrap"><table class="cmp"><thead><tr><th scope="col">Criterion</th>${cols.map(i => `<th scope="col">${countryBy(i).name}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(([p, ids]) => `<tr class="cmp__pile"><th colspan="${cols.length + 1}">${PILE_NAMES[p]}</th></tr>${ids.map(id => `<tr><th scope="row">${critName(critBy(id))}</th>${cols.map(i => cell(i, id)).join('')}</tr>`).join('')}`).join('')}</tbody></table></div>`;
+}
+SCREENS.compare = {
+  no: '6', title: 'Shortlist and compare',
+  note: 'Up to three tickets, then the comparison table: criteria as rows grouped by pile, unknowns visible in their cell, an evidence mark per cell. On phone: two columns and a switch for the third. Remove a country on its ticket.',
+  states: [['one', 'One country'], ['two', 'Two countries'], ['three', 'Three countries'], ['allunknown', 'A column all unknown'], ['empty', 'Empty']],
+  init(S) { S.list = new Set({ one: ['AUT'], two: ['AUT', 'CRI'], three: ['AUT', 'CRI', 'DEU'], allunknown: ['AUT', 'VCT'], empty: [] }[S.state] || ['AUT']); S.second = null; },
+  render(ctx, S) {
+    const isos = [...S.list];
+    if (!isos.length) return { body: `${pageTitle(ctx, 'Your shortlist', 'Shortlist', 'add up to three countries from your results to compare them side by side.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Your shortlist is empty</p><p>Add up to three countries from your results to compare them.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See results</button></div>`, next: { label: 'Check whether all of you can live there', hint: 'Add at least one country to your shortlist first.', disabled: true }, side: findCard([['Add countries', 'From Results, the Add button on a row.'], ['Remove', 'On each ticket.']]) };
+    const second = S.second && isos.includes(S.second) ? S.second : isos[1];
+    const phoneCols = isos.length === 1 ? isos : [isos[0], second];
+    const sw = isos.length === 3 && ctx === 'phone' ? `<div class="cmp-switch"><span class="lbl">Second column</span><div class="segc" role="group" aria-label="Second country" data-cmp-switch>${isos.slice(1).map(i => `<button type="button" aria-pressed="${i === second}" data-iso="${i}">${countryBy(i).name}</button>`).join('')}</div></div>` : '';
+    const allUnknown = isos.find(i => !VALUES[i] || !Object.values(VALUES[i]).some(v => v[0]));
+    const body = `${pageTitle(ctx, 'Your shortlist', 'Shortlist and compare', `compare ${plural(isos.length, 'country', 'countries')} criterion by criterion. Then we check whether all of you can legally live there.`)}
+      ${allUnknown ? `<div class="alert alert--info" role="note">${icon('help-circle')}<div><b>Nothing is known yet for ${esc(countryBy(allUnknown).name)}.</b>We have no usable source for any of your criteria there. It stays on your shortlist; the column shows what is missing.</div></div>` : ''}
+      <div class="d2-tickets">${isos.map(i => ticket(i, { remove: true })).join('')}</div>
+      ${ctx === 'phone' ? keyFold() : ''}
+      <div class="f-section"><h2 class="f-h2">Side by side</h2>${sw}<div data-cmp-table>${ctx === 'phone' ? compareTable(phoneCols, true) : compareTable(isos)}</div></div>`;
+    return { body, next: { label: 'Check whether all of you can live there', hint: `Step 1 of 3 · ${plural(isos.length, 'country', 'countries')} on your shortlist`, toast: 'Opens Route (screen 7, delivery D3). The household is asked there.' }, side: `${keyCard()}${findCard([['Remove a country', 'On its ticket.'], ['A cell', 'Tap the evidence mark for its source.']])}` };
+  }
+};
+
+/* 10 · Your travel folder, with 11 Save, 12 Open and 13 Delete as sheets and dialogs over it */
+function planBody(S, ctx) {
+  const routeDone = S.state === 'routedone' || S.state === 'updated';
+  const isos = S.state === 'empty' ? [] : ['AUT', 'CRI'];
+  const crits = `<section class="f-section"><h2 class="f-h2">Your criteria, in short</h2>${['non', 'important', 'nice'].map(p => `<p class="d2-critline"><span class="lbl">${PILE_NAMES[p]}</span><span>${PILES[p].map(id => critName(critBy(id))).join(' · ')}</span></p>`).join('')}<div><button type="button" class="btn btn--ghost btn--sm" data-toast="Opens the criteria sort (screen 3).">Change the sort</button></div></section>`;
+  const version = `<section class="f-section"><h2 class="f-h2">Data version</h2><p><span class="mono">${DATA_VERSION}</span> · your results were calculated on it.</p>${S.state === 'updated' ? '<p class="f-muted">3 facts changed since your last visit, listed at the top.</p>' : '<p class="f-muted">Nothing changed since your last visit.</p>'}</section>`;
+  const data = `<section class="f-section"><h2 class="f-h2">Your data</h2><p class="f-muted">${PRIVACY}</p><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:export">${icon('download')}<span>Save your travel folder</span></button><button type="button" class="btn btn--secondary" data-act="sheet:import">${icon('upload')}<span>Open a travel folder</span></button><button type="button" class="btn btn--danger" data-act="dialog:delete">${icon('trash')}<span>Delete your travel folder</span></button></div></section>`;
+  if (!isos.length) return `${pageTitle(ctx, 'Your travel folder', 'Travel folder', 'your travel folder fills as you go: shortlist first, then the routes. Everything stays on this device.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Nothing in your travel folder yet</p><p>Find where you could go, or open a travel folder file you saved earlier.</p></div>${data}`;
+  return `${pageTitle(ctx, 'Your travel folder', 'Travel folder', routeDone ? 'save your travel folder to keep it. Plan, the step-by-step part, comes in a later release.' : 'check whether all of you can legally live in the countries on your shortlist.')}
+    <section class="f-section"><h2 class="f-h2">Your shortlist · ${plural(isos.length, 'country', 'countries')}</h2><p class="f-muted">${routeDone ? 'Route checked for both. Each ticket shows what appears to apply per member.' : 'Route not checked yet. Each ticket shows whether a route check is available.'}</p></section>
+    <div class="d2-tickets">${ticket('AUT', { routeDone: routeDone ? [['You', 'covered'], ['Partner', 'partly']] : null })}${ticket('CRI', { routeDone: routeDone ? [['You', 'covered'], ['Partner', 'covered']] : null })}</div>
+    ${crits}${version}${data}`;
+}
+function exportSheet(st) {
+  const pw = nid('pw');
+  const body = st === 'saved' ? `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Saved as our-move-2027.emigrant.</b><p>Keep the travel folder file somewhere safe. Open it on any device to continue.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Done</button></div>`
+    : st === 'failed' ? `<div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>The file could not be saved.</b><p>Your browser blocked the download. Nothing was sent anywhere. Try again, or allow downloads for this site.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="sheet:export">Try again</button><button type="button" class="btn btn--secondary" data-close>Close</button></div>`
+      : `<div class="acc"><div class="acc__item"><button type="button" class="acc__btn" data-disclose aria-expanded="true" aria-controls="${pw}-what">What the file holds<span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="acc__body" id="${pw}-what">Your criteria and piles, your shortlist, your household if you entered it, your route results, and the data version. Nothing else.</div></div></div>
+      <div class="field"><label class="field__label" for="${pw}">Password (optional)</label><span class="field__why">Protects the file if someone else finds it.</span><div class="pw"><input class="input" id="${pw}" type="password" value="${st === 'pw' ? 'olive-harbor-17' : ''}"><button type="button" class="f-iconbtn" data-toggle-pw="${pw}" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>
+      <div class="strength" aria-live="polite"><span class="strength__bars" aria-hidden="true">${[1, 2, 3, 4].map(i => `<i class="${st === 'pw' && i <= 3 ? 'on' : ''}"></i>`).join('')}</span><span class="field__why">${st === 'pw' ? '<b>Good.</b> ' : ''}A lost password cannot be recovered. We cannot reset it.</span></div></div>
+      <div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="export:save">${icon('download')}<span>Save</span></button></div>`;
+  return sheet('Save your travel folder', body, nid('xt'));
+}
+function importSheet(st) {
+  const pw = nid('ipw');
+  const cmp = (newer) => `<div class="d2-copies"><div class="f-card${newer === 'file' ? ' is-newer' : ''}"><span class="lbl">The file</span><b>our-move-2027.emigrant</b><span class="mono">Saved ${newer === 'file' ? '2026-10-20' : '2026-09-30'}</span><span class="f-muted">3 countries, 1 route checked</span>${newer === 'file' ? '<span class="tagx">Newer</span>' : ''}</div><div class="f-card${newer === 'device' ? ' is-newer' : ''}"><span class="lbl">On this device</span><b>Your current travel folder</b><span class="mono">Changed 2026-10-12</span><span class="f-muted">2 countries, 1 route checked</span>${newer === 'device' ? '<span class="tagx">Newer</span>' : ''}</div></div>`;
+  const acts = '<div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:replace">Replace my travel folder with the file</button><button type="button" class="btn btn--secondary" data-close>Keep mine</button></div>';
+  let body;
+  if (st === 'imported') body = `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Opened.</b><p>Your travel folder now matches the file: 3 countries, 1 route checked. Your results were recalculated on ${DATA_VERSION.toLowerCase()}.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Go to your travel folder</button></div>`;
+  else if (st === 'cant') body = `<div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}holiday-photos.zip</span><span class="field__error">Not a travel folder file. Nothing was changed.</span></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be opened.</b><p>It is not a travel folder file, it is damaged, or it comes from a newer version of the app. Your travel folder on this device is unchanged.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:import">Choose another file</button></div>`;
+  else if (st === 'pwask' || st === 'wrongpw') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-10-20 · protected with a password</span></div>
+      <div class="field"><label class="field__label" for="${pw}">Password for this file</label><div class="pw"><input class="input" id="${pw}" type="password" value="${st === 'wrongpw' ? 'olive-harbor-71' : ''}"${st === 'wrongpw' ? ` aria-invalid="true" aria-describedby="${pw}e"` : ''}><button type="button" class="f-iconbtn" data-toggle-pw="${pw}" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>${st === 'wrongpw' ? `<span class="field__error" id="${pw}e">That password does not open this file. Check it and try again; we cannot reset it.</span>` : ''}</div>
+      <div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:unlock">Open the file</button><button type="button" class="btn btn--secondary" data-close>Cancel</button></div>`;
+  else if (st === 'older') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-09-30 · 3 countries, 1 route checked</span></div><div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>This file is older than the travel folder on this device.</b>Replacing would lose what you changed since 2026-09-30.</div></div>${cmp('device')}${acts}`;
+  else if (st === 'chosen') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-10-20 · 3 countries, 1 route checked</span></div><p class="f-muted">Before anything is replaced: which copy is newer?</p>${cmp('file')}${acts}`;
+  else body = `<div class="drop">${icon('upload')}<b>Drop a travel folder file here</b><button type="button" class="btn btn--secondary btn--sm" data-act="import:chosen">Choose a file</button></div><p class="f-muted">Nothing is replaced until you say so. We show you which copy is newer first.</p>`;
+  return sheet('Open a travel folder', body, nid('it'));
+}
+function deleteDialog(st) {
+  const head = `<div class="dlg__head"><h2 class="dlg__title" tabindex="-1">Delete your travel folder?</h2><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div>`;
+  if (st === 'deleted') return `${head}<div class="dlg__body"><div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Deleted.</b><p>Your travel folder and the stored data are gone from this device. You are back at the start.</p></div></div></div><div class="dlg__foot"><button type="button" class="btn btn--primary" data-act="deleted:start">Back to Start</button></div>`;
+  return `${head}<div class="dlg__body"><p>This deletes your travel folder and the stored data on this device: criteria, shortlist, household and route results.</p><div class="alert alert--warning">${icon('warning-triangle')}<div><b>This cannot be undone.</b>Save your travel folder first if you might want it back.</div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-act="sheet:export">${icon('download')}<span>Save it first</span></button><button type="button" class="btn btn--danger-solid btn--primary" data-act="delete:confirm">${icon('trash')}<span>Delete</span></button></div>`;
+}
+SCREENS.plan = {
+  no: '10', title: 'Your travel folder',
+  note: 'The plan rail (no step current while the folder is empty), the shortlist with the route status per country, the chosen criteria in short, the data version and what changed, and Save, Open and Delete. Everything lives only in this browser. "Folder" in the menu and the desktop header leads here; the rail step keeps its name, Plan · coming.',
+  states: [['empty', 'Empty'], ['shortlistdone', 'Shortlist done'], ['routedone', 'Route done for both'], ['updated', 'Data updated since last visit']],
+  render(ctx, S) {
+    const rd = S.state === 'routedone' || S.state === 'updated';
+    const next = S.state === 'empty' ? { label: 'Find where you could go', hint: 'Nothing in your travel folder yet', toast: 'Opens the quick profile (screen 2).' }
+      : rd ? { label: 'Save your travel folder', hint: 'Step 2 of 3 done · Plan comes in a later release', act: 'sheet:export' } : { label: 'Check routes for 2 countries', hint: 'Step 1 of 3 done · 2 countries on your shortlist', toast: 'Opens Route (screen 7, delivery D3).' };
+    return { body: planBody(S, ctx), rail: rd ? 'plan' : S.state === 'empty' ? 'none' : 'route', updated: S.state === 'updated', next, side: `${findCard([['Save, open, delete', 'Under "Your data" and in the menu.'], ['Route status', 'On each ticket, per member.'], ['Data version', 'What your results were calculated on.']])}${privacyCard()}` };
+  }
+};
+SCREENS.export = {
+  no: '11', title: 'Save your travel folder', note: 'A sheet on the travel folder (a bottom sheet on phone, a side panel on desktop): what the file holds, the optional password with its strength hint and the warning that a lost password cannot be recovered, Save. The disclaimer is in the footer, as on every screen.',
+  states: [['nopw', 'Without password'], ['pw', 'With password'], ['saved', 'Saved'], ['failed', 'Failed']],
+  render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'routedone' }); return { ...base, overlay: exportSheet(S.state) }; }
+};
+SCREENS.import = {
+  no: '12', title: 'Open a travel folder', note: 'A sheet on the travel folder, also reachable from Start: choose or drop a file, the password if the file has one, and before anything is replaced, which copy is newer, each with its date and a one-line summary.',
+  states: [['idle', 'Choose a file'], ['chosen', 'File chosen'], ['pwask', 'Password asked'], ['wrongpw', 'Wrong password'], ['cant', "Can't be opened"], ['older', 'File older than this device'], ['imported', 'Opened']],
+  render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'shortlistdone' }); return { ...base, overlay: importSheet(S.state) }; }
+};
+SCREENS.delete = {
+  no: '13', title: 'Delete your travel folder', note: 'A dialog: what gets deleted, that it cannot be undone, a suggestion to save the folder first. After deleting, the app is back at the first-visit Start.',
+  states: [['confirm', 'Confirm'], ['deleted', 'Deleted']],
+  render(ctx, S) { const base = SCREENS.plan.render(ctx, { ...S, state: 'routedone' }); return { ...base, overlay: dialog(deleteDialog(S.state)) }; }
+};
+
+/* 14–16 · Reading pages */
+/* Reading pages are neutral: a Back link at the top, no next action (oxblood is for real next steps), no current step */
+function reading(kicker, title, intro, sections, ctx) {
+  const ids = sections.map(() => nid('rd'));
+  const jump = `<nav class="d2-jump" aria-label="On this page"><span class="lbl">On this page</span>${sections.map((s, i) => `<a href="#${ids[i]}" data-jump="${ids[i]}">${s[0]}</a>`).join('')}</nav>`;
+  const body = `${back('where you were', 'toast:Returns to where you came from.')}${pageTitle(ctx, title, kicker)}<p class="f-fine d2-version">${icon('calendar')}<span>Version 2026-10-24 · ${intro}</span></p>${ctx === 'phone' ? `<div class="f-section">${jump}</div>` : ''}${sections.map((s, i) => `<section class="f-section d2-read" id="${ids[i]}" tabindex="-1"><h2 class="f-h2">${s[0]}</h2>${s[1]}</section>`).join('')}`;
+  return { body, rail: 'none', next: null, side: `<section class="f-card">${jump}</section>${findCard([['Back', 'The link at the top, or the wordmark.'], ['Questions', 'Every evidence mark links here.']])}` };
+}
+const P = t => `<p>${t}</p>`;
+SCREENS.terms = {
+  no: '14', title: 'Terms of use, full text', note: 'Long-form reading: headings, jump links, the version date.', states: [['default', 'Reading']],
+  render(ctx) {
+    return { ...reading('Terms of use', 'Terms of use', 'these terms apply to release 1, the private release.', [
+      ['1 · What The Emigrant is', P('The Emigrant helps a household decide where it could move abroad, and whether all of its members appear to meet the conditions to live there. It is an information tool. It is not legal advice, and it does not decide anything.')],
+      ['2 · No responsibility for accuracy', P('We take no responsibility for the accuracy, completeness or currency of the information. Every fact carries its source, its evidence level and the date it was last checked, so you can judge it yourself. Confirm anything you rely on with the authority or an adviser.')],
+      ['3 · Liability', P('Our liability is limited as far as the law allows. We are not liable for decisions you take on the basis of the information shown, nor for loss that follows from them.')],
+      ['4 · Route results are not decisions', P('A route result lists the conditions that appear to apply to your household. It is never an eligibility verdict. Only the authority decides, after its own procedure.')],
+      ['5 · Your data', P('Your plan stays on this device. No profile or plan data is sent to our server. An error report carries only the fact and one fixed reason. See Privacy for what our server sees.')],
+      ['6 · Changes to these terms', P('When these terms change, you are asked to read and accept them again before you continue. The version date is at the top of this page.')]
+    ], ctx) };
+  }
+};
+SCREENS.privacy = {
+  no: '15', title: 'Privacy', note: 'What stays on the device, and what our server sees in release 1.', states: [['default', 'Reading']],
+  render(ctx) {
+    return { ...reading('Privacy', 'Privacy', 'what stays on your device, and what our server sees in release 1.', [
+      ['What stays on this device', `${P('Everything you enter and everything the app works out: your quick profile, your criteria and piles, your shortlist, your household, your route results. It is stored in this browser only.')}<p class="start-card__promise">${icon('lock')}<span>${PRIVACY}</span></p>`],
+      ['What our server sees', P('The app itself and the data file it downloads once. When you report an error: the fact and the reason you chose, nothing else. Server logs, with the usual connection data, are kept for seven days and then deleted.')],
+      ['Saving and opening a travel folder', P('A saved travel folder is a file you keep. If you set a password, the file is encrypted with it, and we cannot recover a lost password. Opening a file reads it on this device only.')],
+      ['Addresses', P('Nothing about your household ever appears in a web address. An address shows at most a country or route name.')],
+      ['Deleting your data', P('"Delete your travel folder" removes your travel folder and the stored data from this device. It cannot be undone. Save it first if you might want it back.')]
+    ], ctx) };
+  }
+};
+SCREENS.evidence = {
+  no: '16', title: 'How the evidence works', note: 'In plain words: the levels, the risk classes, the minimum level per purpose, the bands, the evidence band, why unknown never becomes a recommendation, the machine-translation exception. Reached from every evidence mark.', states: [['default', 'Reading']],
+  render(ctx) {
+    return { ...reading('Help', 'How the evidence works', 'in plain words. Every evidence mark links here.', [
+      ['The four evidence levels', `<ul class="f-keylist">${[0, 1, 2, 3].map(l => `<li><span class="f-keymark">${mark(l, 'low', { compact: true, name: 'A. Hofer' })}</span><p>${LEVEL_MEANING[l]}</p></li>`).join('')}</ul>${P('The ring tells the level even without color: a light line for E0, single for E1, double for E2, and double with our mark after the name for E3.')}`],
+      ['The three risk classes', `<ul class="f-keylist">${[['low', 'The source is stable and official. The value rarely changes.'], ['medium', 'The source is reliable but changes often, or is an estimate. At E1, medium risk is flagged.'], ['high', 'The source is thin or contested. We show the value, but treat it with care.']].map(([r, t]) => `<li><span class="f-keymark"><span class="stamp-row__risk">${meter(RISK[r][0])}<span>${RISK[r][1]}</span></span></span><p>${t}</p></li>`).join('')}</ul>`],
+      ['The minimum level per purpose', '<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Purpose</th><th scope="col">Minimum level</th><th scope="col">Below it</th></tr></thead><tbody><tr><td>A value in the ranking</td><td>E1 Sourced</td><td>Shown but not counted</td></tr><tr><td>A yes / no criterion</td><td>E1 Sourced</td><td>Counts as not known</td></tr><tr><td>A route condition</td><td>E3 Verified by a named person</td><td>Not shown as a condition</td></tr></tbody></table></div>'],
+      ['The three bands', `${P('<b>Matches</b> fit every Non-negotiable you set. <b>Possible, needs checking</b> fit, with questions still open. <b>Ruled out</b> miss at least one Non-negotiable, and stay listed with the reason.')}${P('There is no winner and no rank number. The order speaks for itself, and a score only counts the criteria that are known.')}`],
+      ['The evidence band', `<div class="g-col">${eband(10, 11)}${eband(7, 11)}${eband(4, 11)}</div>${P('How many of the criteria you selected are known for a country: Strong from 80 percent, Partial from 50, Thin below.')}`],
+      ['Why unknown never becomes a recommendation', `${unknownBlock('source')}${P('A value we do not know counts neither for nor against a country. We never fill a gap with a guess, an average or a zero. The reason is always shown.')}`],
+      ['The machine-translation exception', `<div class="f-mt"><p class="f-iconline">${icon('translate')}<b>Verified through machine translation</b></p><p>Where a named person verified a source in a language we do not read, the note says so and quotes the key terms as written, for example <q>residencia temporal</q>.</p></div>`]
+    ], ctx) };
+  }
+};
+
+/* 17 · System states */
+SCREENS.system = {
+  no: '17', title: 'System states', note: 'The five states that can appear anywhere: first load, data updated, offline, storage unavailable, not found. Loading, offline and data updated are also on every other screen\'s switcher.',
+  states: [['firstload', 'First load'], ['updated', 'Data updated'], ['offline', 'Offline'], ['storage', 'Storage unavailable'], ['notfound', 'Not found']],
+  system: [],
+  render(ctx, S) {
+    if (S.state === 'firstload') return { body: startB2('firstload', ctx), startShell: true, full: true, next: null };
+    if (S.state === 'notfound') return { body: `${back('your travel folder', `toast:${MENU_ITEMS.folder[1]}`)}${pageTitle(ctx, 'This page does not exist', 'Not found', 'check the address, or go back to your travel folder. Nothing in it was lost.')}<div class="empty">${icon('search')}<p class="empty__title">We could not find that page</p><p>An address shows at most a country or route name, for example <span class="mono">/countries/austria</span>.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See your results</button></div>`, rail: 'none', next: null, side: findCard() };
+    const res = SCREENS.results.render(ctx, { ...S, state: 'sorted', list: new Set(['AUT']), search: '', region: 'All regions', coveredOnly: false });
+    if (S.state === 'storage') res.body = res.body.replace('<div class="f-status">', `${storageAlert()}<div class="f-status">`);
+    return { ...res, updated: S.state === 'updated', offline: S.state === 'offline' };
+  }
+};
+
+/* ── Start: the prototype's cover and headline switchers (the three files in assets/photos) ── */
+const START_COVERS = {
   houses: { label: 'Everyday life: hillside homes', src: './assets/photos/cole-sears-OL-nSRo19mQ-unsplash.jpg', w: 2400, h: 1800, alt: 'Houses nestled near a mountain with palm trees', credit: 'Photo: Cole Sears / Unsplash', place: 'Cover: [place name] · [latitude] (sample)', objDesk: '50% 40%', objPhone: '50% 40%' },
   family: { label: 'Family by the sea', src: './assets/photos/natalya-zaritskaya-SIOdjcYotms-unsplash%20(1).jpg', w: 2400, h: 1600, alt: 'A man, a woman and a child holding hands on the seashore, seen from behind', credit: 'Photo: Natalya Zaritskaya / Unsplash', place: 'Cover: Paphos, Cyprus · 34.8°N (sample)', objDesk: '50% 42%', objPhone: '50% 40%' },
   coast: { label: 'Coastal road (generated placeholder)', src: './assets/photos/Gemini_Generated_Image_7b41ds7b41ds7b41.jpg', w: 1368, h: 768, alt: 'A road winding down through palms to a village by a turquoise bay', credit: 'Generated image, placeholder only', place: 'Cover: [place name] · [latitude] (sample)', objDesk: '50% 45%', objPhone: '45% 50%' }
 };
-let activeCover = 'houses';
-const COVER_ORDER = ['houses', 'family', 'coast'];
-function applyStart() { START.cover = { provisional: true, ...COVERS[activeCover] }; START.headline = HEADLINES_B2[b2Headline]; }
-/* A 4× close-up of the ticket at the perforation, next to the boards */
-function zoomCard() {
-  return `<div class="st-zoomcard"><span class="g-frame__label">Ticket close-up · 4× · the perforation, the upper notch and the destination</span><div class="st-zoom" aria-hidden="true"><div class="st-zoom__in">${startPass('???', { flap: true })}</div></div></div>`;
-}
-function fontStatus() {
-  const el = $('#fontStatus'); if (!el) return;
-  document.fonts.ready.then(() => { const ok = document.fonts.check('800 48px Archivo') && [...document.fonts].some(f => f.family === 'Archivo' && f.status === 'loaded'); el.textContent = ok ? 'Fonts: Archivo (width axis 62–125%) and Martian Mono loaded from this project' : 'Fonts: Archivo did not load in this viewer, a fallback is showing'; el.dataset.ok = ok; });
-}
-const STUDY_NOTE = 'The chosen direction, as D2 renders it on screen 1 and D1 shows it as "Cover with the papers card": the photo first, the papers card on its lower part, the headline about the life with the rational line under it, one strong object (the boarding pass, the destination "???" in navy on a light underline) above the button, the proof line as plain mono text, and the three journey legs as clean typography with hairline dividers; Plan marked "coming" with a light tag. The card band carries the cover\'s place line. On desktop the card ends 24px above the footer with the journey row fully visible, and the pass is about 15% larger. The boarding pass perforation is a line of punched holes. On desktop the card lies over the lower part of the photo and ends on the paper ground. The footers carry the cover credit, the privacy promise and the Disclaimer and Terms of use links. On arrival the photo drifts slowly and the legs appear one after another; all motion is off under reduced motion. The cover switcher swaps the cover photo, its credit, place line and focal point. Sample data.';
-function sectionHtml() {
-  const coverRow = `<div class="d2-states__row">${COVER_ORDER.map(id => `<button type="button" class="d2-state" aria-pressed="${id === activeCover}" data-cover="${id}">${COVERS[id].label}</button>`).join('')}<span class="st-covernote">The three files in assets/photos. The coastal road is a generated image, a placeholder, not for release.</span></div>`;
-  const sw = `<div class="d2-states" role="group" aria-label="Prototype controls"><span class="d2-states__tag">${icon('eye')}<span>Prototype · headline</span></span><div class="d2-states__row">${HEADLINES_B2.map((h, i) => `<button type="button" class="d2-state" aria-pressed="${i === b2Headline}" data-b2h="${i}">${i + 1} · ${h}</button>`).join('')}<a class="d2-state" href="#" data-replay>Replay the destination board</a></div><span class="d2-states__tag" style="margin-top:8px">${icon('eye')}<span>Prototype · cover</span></span>${coverRow}<p class="st-fontstatus" id="fontStatus" role="status">Fonts: checking…</p></div>`;
-  return `<section class="d2-screen" id="v-b2" aria-labelledby="h-b2"><div class="dep"><div class="dep__row"><span class="dep__no">B2</span><h2 class="cond" id="h-b2">Journey, on the full photo</h2></div><p>${STUDY_NOTE}</p>${sw}</div>
-    <div class="k-boards"><div class="k-board"><div class="board-label"><b>Phone</b><span>390 × 844</span><span class="sample">Sample data</span></div><div class="k-artboard k-phone" data-frame data-v="b2" data-ctx="phone"></div></div>
-    <div class="k-board k-board--desktop"><div class="board-label"><b>Desktop</b><span data-fit-label>1440 × 900</span><span class="sample">Sample data</span></div><div class="k-fit k-artboard" data-fit><div class="k-desk" data-frame data-v="b2" data-ctx="desktop"></div></div></div>${zoomCard()}</div></section>`;
-}
-function renderBoards(replay = false) {
-  applyStart();
-  $$('[data-v="b2"][data-ctx]').forEach(b => { b.innerHTML = startShell(b.dataset.ctx, { body: startB2('first', b.dataset.ctx), menuId: `study-${b.dataset.ctx}` }); if (replay) runStartFlaps(b, true); });
-}
-function studyInit() {
-  $('#toc').innerHTML = '<a href="#v-b2">B2 · Journey, on the full photo</a>';
-  $('#screens').innerHTML = sectionHtml();
-  renderBoards();
-  armStartFlaps($('#v-b2'), () => $$('[data-v="b2"][data-ctx]'));
-  fontStatus();
-  fitDesks(); addEventListener('resize', fitDesks); document.fonts.ready.then(fitDesks);
-  document.addEventListener('click', e => {
-    const cv = e.target.closest('[data-cover]');
-    if (cv) { activeCover = cv.dataset.cover; $$('[data-cover]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cover === activeCover))); renderBoards(); return; }
-    const hb = e.target.closest('[data-b2h]');
-    if (hb) { b2Headline = +hb.dataset.b2h; $$('[data-b2h]').forEach(b => b.setAttribute('aria-pressed', String(b === hb))); renderBoards(true); return; }
-    const rp = e.target.closest('[data-replay]');
-    if (rp) { e.preventDefault(); $$('[data-v="b2"][data-ctx]').forEach(b => runStartFlaps(b, true)); return; }
-    const t = e.target.closest('[data-menu], .f-mi'); if (!t) return;
-    const board = t.closest('[data-v]'); if (!board) return;
-    const m = board.querySelector('.k-menu'), btn = board.querySelector('[data-menu]');
-    if (t.matches('[data-menu]')) { const open = m.hidden; m.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open) m.querySelector('.f-mi').focus(); }
-    else { m.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
-  });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('[data-v] .k-menu:not([hidden])').forEach(m => { m.hidden = true; const b = m.closest('[data-v]').querySelector('[data-menu]'); b.setAttribute('aria-expanded', 'false'); b.focus(); }); });
+const START_HEADLINES = ['Somewhere, your next home is waiting.', 'Where will your family wake up next year?'];
+let startCoverKey = 'houses';
+function startControls() {
+  const cv = Object.entries(START_COVERS).map(([k, c]) => `<button type="button" class="d2-state" aria-pressed="${k === startCoverKey}" data-cover="${k}">${c.label}</button>`).join('');
+  const hl = START_HEADLINES.map((h, i) => `<button type="button" class="d2-state" aria-pressed="${START.headline === h}" data-headline="${i}">${i + 1} · ${h}</button>`).join('');
+  return `<span class="d2-states__tag" style="margin-top:8px">${icon('eye')}<span>Prototype · cover</span></span><div class="d2-states__row">${cv}</div>
+    <span class="d2-states__tag" style="margin-top:8px">${icon('eye')}<span>Prototype · headline</span></span><div class="d2-states__row">${hl}<button type="button" class="d2-state" data-replay>Replay the destination board</button></div>`;
 }
 
+/* ── Page composition ────────────────────────────────────────────────── */
+const PAIRS = {};
+function stateButtons(id, scr) {
+  const all = [...scr.states, ...(scr.system || SYSTEM_STATES)];
+  const S = PAIRS[id];
+  return `<div class="d2-states" role="group" aria-label="Prototype state switcher for ${scr.title}"><span class="d2-states__tag">${icon('eye')}<span>Prototype · state</span></span><div class="d2-states__row">${all.map(([k, l]) => `<button type="button" class="d2-state" aria-pressed="${S.state === k}" data-state="${k}" data-pair="${id}">${l}</button>`).join('')}</div>${scr === SCREENS.start ? startControls() : ''}</div>`;
+}
+function renderPair(id) {
+  const S = PAIRS[id], scr = SCREENS[S.screen];
+  const sys = (scr.system || SYSTEM_STATES).some(([k]) => k === S.state);
+  if (scr.init && !sys && S.inited !== S.state) { scr.init(S); S.inited = S.state; }
+  ['phone', 'desktop'].forEach(ctx => {
+    const board = $(`[data-pair="${id}"][data-ctx="${ctx}"]`);
+    const parts = scr.render(ctx, sys ? { ...S, state: scr.states[0][0] } : S);
+    if (sys) { parts.loading = S.state === 'loading'; parts.offline = S.state === 'offline' || parts.offline; parts.updated = S.state === 'updated' || parts.updated; if (S.state !== 'updated' && parts.overlay) parts.overlay = ''; }
+    board.classList.toggle('cover-phone', !!parts.cover && ctx === 'phone');
+    board.classList.toggle('cover-desk', !!parts.cover && ctx === 'desktop');
+    board.innerHTML = parts.startShell ? startShell(ctx, parts) : shell(ctx, parts);
+    board.querySelectorAll('[data-smenu]').forEach(r => { if (!r.querySelector('.smenu__pop').hidden) smDraw(r); });
+  });
+  if (S.screen === 'start' && S.state === 'first') armStartFlaps($('#s-start'), () => $$(`[data-pair="${id}"]`));
+  $$(`.d2-state[data-pair="${id}"]`).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.state === S.state)));
+  fitDesks();
+}
+function sectionHtml(id, key) {
+  const scr = SCREENS[key];
+  return `<section class="d2-screen" id="s-${key}" aria-labelledby="h-${key}"><div class="dep"><div class="dep__row"><span class="dep__no">${scr.no}</span><h2 class="cond" id="h-${key}">${scr.title}</h2></div><p>${scr.note || ''}</p>${stateButtons(id, scr)}</div>
+    <div class="k-boards"><div class="k-board"><div class="board-label"><b>Phone</b><span>390 × 844</span><span class="sample">Sample data</span></div><div class="k-artboard k-phone" data-frame data-pair="${id}" data-ctx="phone"></div></div>
+    <div class="k-board k-board--desktop"><div class="board-label"><b>Desktop</b><span data-fit-label>1440 × 900</span><span class="sample">Sample data</span></div><div class="k-fit k-artboard" data-fit><div class="k-desk" data-frame data-pair="${id}" data-ctx="desktop"></div></div></div></div></section>`;
+}
+function pageInit(keys) {
+  $('#toc').innerHTML = keys.map(k => `<a href="#s-${k}">${SCREENS[k].no} · ${SCREENS[k].title}</a>`).join('');
+  keys.forEach(k => { PAIRS[k] = { ...defState(), screen: k, state: SCREENS[k].states[0][0] }; });
+  $('#screens').innerHTML = keys.map(k => sectionHtml(k, k)).join('');
+  keys.forEach(renderPair);
+  addEventListener('resize', fitDesks); document.fonts.ready.then(fitDesks);
+  wire();
+}
+
+/* ── Behavior on top of initBehavior(): states, menus, shortlist, sort, filters, sheets ── */
+function refreshNext(board, S) {
+  const scr = SCREENS[S.screen], parts = scr.render(board.dataset.ctx, S);
+  board.querySelectorAll('[data-next]').forEach(n => { n.outerHTML = nextBar(board.dataset.ctx === 'phone' ? 'phone' : 'head', parts.next); });
+}
+const clearOverlays = board => board.querySelectorAll('.k-scrim, .k-panel--overlay, .dlg--static').forEach(n => n.remove());
+function showOverlay(board, html, focusSel) { clearOverlays(board); board.insertAdjacentHTML('beforeend', html); const f = board.querySelector(focusSel); if (f) f.focus(); }
+function wire() {
+  document.addEventListener('click', e => {
+    const cvb = e.target.closest('[data-cover]');
+    if (cvb && PAIRS.start) { startCoverKey = cvb.dataset.cover; START.cover = { provisional: true, ...START_COVERS[startCoverKey] }; $$('[data-cover]').forEach(b => b.setAttribute('aria-pressed', String(b === cvb))); renderPair('start'); return; }
+    const hlb = e.target.closest('[data-headline]');
+    if (hlb && PAIRS.start) { START.headline = START_HEADLINES[+hlb.dataset.headline]; $$('[data-headline]').forEach(b => b.setAttribute('aria-pressed', String(b === hlb))); renderPair('start'); $$('[data-pair="start"]').forEach(b => runStartFlaps(b, true)); return; }
+    if (e.target.closest('[data-replay]')) { $$('[data-pair="start"]').forEach(b => runStartFlaps(b, true)); return; }
+    const sb = e.target.closest('.d2-state[data-pair]');
+    if (sb) { const S = PAIRS[sb.dataset.pair]; S.state = sb.dataset.state; S.second = null; renderPair(sb.dataset.pair); return; }
+    const t = e.target.closest('button, a, [data-close]');
+    if (!t) return;
+    const board = t.closest('[data-pair]');
+    if (!board) return;
+    const S = PAIRS[board.dataset.pair], ctx = board.dataset.ctx;
+    if (t.matches('[data-menu]')) {
+      const m = board.querySelector(`#menu-${ctx}`), open = m.hidden;
+      m.hidden = !open; t.setAttribute('aria-expanded', String(open));
+      if (open) m.querySelector('.f-mi').focus();
+      return;
+    }
+    if (t.matches('.f-mi')) { const m = t.closest('.k-menu'); m.hidden = true; board.querySelector('[data-menu]').setAttribute('aria-expanded', 'false'); }
+    if (t.matches('[data-close]')) { if (t.matches('.k-scrim') || t.closest('.d2-sheetpanel, .dlg--static')) clearOverlays(board); return; }
+    if (t.matches('[data-add]')) {               /* initBehavior toggled the button and toasted; keep the list in step */
+      if (t.dataset.full) return;
+      const on = t.getAttribute('aria-pressed') === 'true';
+      S.list[on ? 'add' : 'delete'](t.dataset.add);
+      board.querySelectorAll('[data-add]').forEach(b => { if (b.getAttribute('aria-pressed') !== 'true') { if (S.list.size >= 3) b.dataset.full = 'true'; else delete b.dataset.full; b.closest('.crow').classList.toggle('crow--full', S.list.size >= 3); } });
+      refreshNext(board, S); return;
+    }
+    if (t.matches('[data-act]')) {
+      const [act, arg] = t.dataset.act.split(/:(.*)/s);
+      if (act === 'toast') { toast(arg); return; }
+      if (act === 'accept') { S.state = 'first'; renderPair(board.dataset.pair); toast('Accepted. The terms are not shown again unless they change.'); return; }
+      if (act === 'addcountry') { S.list.add(S.country); toast(`${countryBy(S.country).name} added to your shortlist.`); refreshNext(board, S); return; }
+      if (act === 'clearfilter') { S.search = ''; S.region = 'All regions'; S.coveredOnly = false; renderPair(board.dataset.pair); return; }
+      if (act === 'sheet') { showOverlay(board, arg === 'export' ? exportSheet('nopw') : importSheet('idle'), '.f-panel__title'); return; }
+      if (act === 'dialog') { showOverlay(board, dialog(deleteDialog('confirm')), '.dlg__title'); return; }
+      if (act === 'export') { showOverlay(board, exportSheet('saved'), '.f-panel__title'); return; }
+      if (act === 'import') { showOverlay(board, importSheet(arg === 'chosen' ? 'chosen' : arg === 'unlock' ? 'chosen' : 'imported'), '.f-panel__title'); return; }
+      if (act === 'delete') { showOverlay(board, dialog(deleteDialog('deleted')), '.dlg__title'); return; }
+      if (act === 'deleted') { clearOverlays(board); toast('Back at the first-visit Start (screen 1). Your travel folder and data are gone from this device.'); return; }
+    }
+    if (t.matches('[data-jump]')) { e.preventDefault(); const el = board.querySelector(`#${t.dataset.jump}`); if (el) { el.scrollIntoView({ block: 'start' }); el.focus({ preventScroll: true }); } return; }
+    const seg = t.closest('.segc button');
+    if (seg) {
+      seg.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === seg)));
+      if (seg.closest('[data-cmp-switch]')) { S.second = seg.dataset.iso; board.querySelector('[data-cmp-table]').innerHTML = compareTable([[...S.list][0], S.second], true); }
+      return;
+    }
+    const chip = t.closest('[data-lang]');
+    if (chip) { const sm = board.querySelector('[data-smenu][data-multiple="true"]'); smSet(sm, smValue(sm).filter(x => x !== chip.dataset.lang)); return; }
+    const mv = t.closest('[data-move]');
+    const menu = $('#pileMenu');
+    if (mv) {
+      const r = mv.getBoundingClientRect();
+      menu.innerHTML = Object.keys(PILE_NAMES).map(p => `<button type="button" class="f-mi" role="menuitem" data-pile-to="${p}" data-crit-id="${mv.dataset.move}" data-pair-id="${board.dataset.pair}" data-ctx-id="${ctx}">${PILE_NAMES[p]}</button>`).join('');
+      menu.style.top = `${Math.round(Math.min(r.bottom + 4, innerHeight - 240))}px`; menu.style.left = `${Math.round(Math.max(8, Math.min(r.right - 240, innerWidth - 248)))}px`; menu.style.width = '240px';
+      menu.hidden = false; menu.querySelector('button').focus(); return;
+    }
+    const pw = t.closest('[data-toggle-pw]');
+    if (pw) { const inp = document.getElementById(pw.dataset.togglePw); const show = inp.type === 'password'; inp.type = show ? 'text' : 'password'; pw.setAttribute('aria-pressed', String(show)); pw.setAttribute('aria-label', show ? 'Hide password' : 'Show password'); pw.innerHTML = icon(show ? 'eye-closed' : 'eye'); return; }
+    if (t.matches('.btn--ghost') && t.closest('.tk')) {   /* remove from a shortlist ticket */
+      const name = t.closest('.tk').getAttribute('aria-label').replace('Ticket: ', ''); const c = COUNTRIES.find(x => x.name === name);
+      if (c && S.screen === 'compare') { S.list.delete(c.iso); S.state = ['', 'one', 'two', 'three'][S.list.size] || 'empty'; renderPair(board.dataset.pair); }
+    }
+  });
+  document.addEventListener('click', e => {
+    const to = e.target.closest('[data-pile-to]'), menu = $('#pileMenu');
+    if (to) { menu.hidden = true; moveCrit(to.dataset.pairId, to.dataset.ctxId, to.dataset.critId, to.dataset.pileTo); return; }
+    if (!e.target.closest('#pileMenu') && !e.target.closest('[data-move]')) menu.hidden = true;
+  });
+  document.addEventListener('keydown', e => {
+    const card = e.target.matches && e.target.matches('[data-pair] [data-crit]') ? e.target : null;
+    if (card && ['1', '2', '3', '4'].includes(e.key)) { const b = card.closest('[data-pair]'); moveCrit(b.dataset.pair, b.dataset.ctx, card.dataset.crit, ['non', 'important', 'nice', 'unused'][+e.key - 1]); e.preventDefault(); }
+    if (e.key === 'Escape') {
+      $('#pileMenu').hidden = true;
+      $$('[data-pair] .k-menu:not([hidden])').forEach(m => { m.hidden = true; const b = m.closest('[data-pair]'); const btn = b.querySelector('[data-menu]'); btn.setAttribute('aria-expanded', 'false'); btn.focus(); });
+    }
+  });
+  document.addEventListener('input', e => {
+    const board = e.target.closest('[data-pair]'); if (!board) return;
+    const S = PAIRS[board.dataset.pair];
+    if (e.target.matches('[data-search]')) { S.search = e.target.value; board.querySelector('[data-bands]').innerHTML = resultBands(S); }
+    if (e.target.matches('.pw .input')) {
+      const field = e.target.closest('.field'), bars = field.querySelectorAll('.strength__bars i'), txt = field.querySelector('.strength .field__why');
+      const n = Math.min(4, Math.floor(e.target.value.length / 4)); bars.forEach((b, i) => b.classList.toggle('on', i < n));
+      if (txt) txt.innerHTML = `${n === 0 ? '' : n < 2 ? '<b>Weak.</b> ' : n < 4 ? '<b>Good.</b> ' : '<b>Strong.</b> '}A lost password cannot be recovered. We cannot reset it.`;
+    }
+  });
+  document.addEventListener('change', e => {
+    const board = e.target.closest('[data-pair]'); if (!board) return;
+    const S = PAIRS[board.dataset.pair];
+    if (e.target.matches('[data-covered]')) { const s = e.target.closest('.switch').querySelector('.switch__state'); if (s) s.textContent = e.target.checked ? 'On' : 'Off'; S.coveredOnly = e.target.checked; board.querySelector('[data-bands]').innerHTML = resultBands(S); }
+  });
+  document.addEventListener('smenu-change', e => {
+    const board = e.target.closest('[data-pair]'); if (!board) return;
+    const S = PAIRS[board.dataset.pair];
+    if (e.target.matches('[data-region]')) { S.region = e.detail.value[0] || 'All regions'; board.querySelector('[data-bands]').innerHTML = resultBands(S); }
+    if (e.target.dataset.multiple === 'true' && board.querySelector('[data-chips]')) {
+      const chosen = e.detail.value;
+      board.querySelector('[data-chips]').innerHTML = chosen.map(l => `<button type="button" class="chip-x" data-lang="${esc(l)}"><span>${esc(l)}</span>${icon('xmark')}<span class="sr-only"> remove</span></button>`).join('');
+      board.querySelector('[data-lang-count]').textContent = `${chosen.length} ${chosen.length === 1 ? 'language' : 'languages'} chosen`;
+    }
+  });
+}
+function moveCrit(pairId, ctx, id, pile) {
+  const S = PAIRS[pairId];
+  Object.keys(S.sort).forEach(p => { S.sort[p] = S.sort[p].filter(x => x !== id); });
+  S.sort[pile].push(id);
+  if (S.state === 'provisional') S.state = 'sorted';
+  S.inited = S.state;                             /* the household's moves stay; init() must not reset the sort */
+  renderPair(pairId);
+  const board = $(`[data-pair="${pairId}"][data-ctx="${ctx}"]`);
+  const [m] = sortCounts(S);
+  const live = board.querySelector('[data-sortlive]'); if (live) live.textContent = `${critBy(id).topic} moved to ${PILE_NAMES[pile]}. ${m} matches.`;
+  const el = board.querySelector(`[data-crit="${id}"]`); if (el) el.focus({ preventScroll: true });
+}
 </script>
 <script>
   renderPatterns();
   initBehavior();
-  studyInit();
+  pageInit(['start', 'profile', 'criteria', 'results', 'country', 'compare', 'plan', 'export', 'import', 'delete', 'terms', 'privacy', 'evidence', 'system']);
 </script>
 </body>
 </html>

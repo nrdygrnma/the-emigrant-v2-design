@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Emigrant — D1 · Design system</title>
+<title>The Emigrant — D1 · Design system and components</title>
 <style data-od-inline-asset="./emigrant-ds.css?v=20261026z">/* The Emigrant — design system stylesheet (D1).
  * Developed from transit-papers-base: Direction P, Blue + citrus, background pattern A2,
  * photo prints without fastening. Light is the base mode for screens; dark is defined and
@@ -1025,7 +1025,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .clist-cond { display: grid; }
 .f-cond__meta { display: grid; gap: 2px; font-size: var(--fs-sm); color: var(--ink-text-2); }
 
-/* ── Disclaimer line, banners, footer ── */
+/* ── Disclaimer box (unused in screens), banners, footer ── */
 .disc { display: flex; align-items: flex-start; gap: 8px; font-size: var(--fs-sm); line-height: 1.5; color: var(--ink-text-2); --od-icon-size: 18px; }
 .disc > .od-icon { margin-top: 2px; flex: none; }
 .disc--box { padding: 12px 16px; border: 1px solid var(--line-hair); border-radius: var(--r-btn); background: var(--paper-page); }
@@ -1358,17 +1358,13 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .strength { gap: 6px; }
 /* ══ D1 round 5: the not-yet mark, the app header on every screen, the footers, and Start (B2) ══════ */
 
-/* The desktop header on every screen: wordmark, plan rail, the inline links, "More", and the one action.
-   "Menu" exists on phone only. The hint sits under the button so the row holds on one line at 1440. */
+/* The desktop header on every screen: the wordmark, the plan rail, the one action and the Menu. Nothing else. */
 .f-head--desk { min-height: 88px; height: auto; align-items: center; }
-.f-toplinks { display: flex; align-items: center; gap: 4px; margin-right: 4px; }
-.f-toplinks a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; color: var(--ink-navy); font-weight: 600; font-size: var(--fs-sm); text-decoration: none; border-radius: var(--r-btn); white-space: nowrap; }
-.f-toplinks a:hover, .f-toplinks a:focus-visible { text-decoration: underline; }
-.f-next--head { display: flex; flex-direction: column; align-items: flex-end; gap: 0; }
-.f-next--head .f-next__hint { max-width: 260px; text-align: right; font-size: var(--fs-xs); line-height: 1.3; }
-.f-next--head .f-next__btn { white-space: nowrap; }
-/* From 1024 to 1279px the inline links fold into "More" (they are there in any case), so the row holds on one line */
-@container app (max-width: 1279px) { .f-toplinks { display: none; } }
+/* Desktop header: the action carries no hint line; only a reason (why it is disabled) shows, small, beside it */
+.f-head--desk .f-next--head { flex-direction: row; align-items: center; gap: 12px; }
+.f-head--desk .f-next--head .f-next__hint:not(.f-next__reason) { display: none; }
+.f-head--desk .f-next--head .f-next__reason { max-width: 220px; font-size: var(--fs-xs); line-height: 1.3; text-align: right; }
+.f-head--desk { gap: 24px; }
 
 /* The compact rail on a narrow phone (360): no letter-spacing, tighter legs and tag, so the three steps hold one line */
 @container rail (max-width: 359px) { .f-rail--compact ol { gap: 3px; } .f-rail--compact .f-step { letter-spacing: 0; gap: 4px; } .f-rail--compact .f-step__soon { padding: 2px 5px; } }
@@ -1569,6 +1565,26 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
    file's opening does. The photo stops behind the card; below it the security paper shows, then the footer. */
 .k-desk .st-stage { background: none; }
 .k-desk .st-cover--stage { inset: 0 0 auto 0; height: auto; bottom: 168px; }
+
+/* ── Perforations, one look everywhere: a line of punched holes ───────────────────────────────────
+   Tickets tear off their stub along the same holes as the boarding pass: 6px holes every 10px, the paper ground
+   showing through, a faint inner shadow on each hole's upper edge, kept clear of the notches. No dashed tear lines. */
+.tk__stub { position: relative; border-top: 0; }
+.tk__stub::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 12px; pointer-events: none;
+  background-image: radial-gradient(circle 3px at 5px 6.4px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5px 5.6px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
+  background-size: 10px 12px; background-repeat: round no-repeat; }
+@container tk (min-width: 640px) {
+  .tk__stub { border-left: 0; }
+  .tk__stub::before { top: 16px; bottom: 16px; left: 0; right: auto; width: 12px; height: auto;
+    background-image: radial-gradient(circle 3px at 6.4px 5px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5.6px 5px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
+    background-size: 12px 10px; background-repeat: no-repeat round; }
+}
+
+/* the spacer in the desktop header grows, so the Menu sits at the right edge (Start has no rail to push it) */
+.f-head--desk > .od-fill { flex: 1 1 auto; }
+/* the two footer links and their separator share one centred line */
+.appfoot .st-quiet__links { display: flex; align-items: center; gap: 12px; }
+.appfoot .st-quiet__links > span { line-height: 1; }
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
 <style>
@@ -1593,12 +1609,11 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 <body>
 <a class="k-skip" href="#main">Skip to content</a>
 <div class="strip">
-  <span class="strip__title">The Emigrant — D1 · Design system</span>
+  <span class="strip__title">The Emigrant — D1 · Design system and components</span>
   <span class="sample">Sample data</span>
-  <nav aria-label="Shortlisted directions">
-    <a href="./the-emigrant_directions_d1-design-system.html" aria-current="page">D1 · Design system</a>
-    <a href="./the-emigrant_directions_d1-components.html">D1 · Components</a>
-    <a href="./the-emigrant_directions_transit-papers-base.html">Base · Transit Papers</a>
+  <nav aria-label="Deliveries">
+    <a href="./the-emigrant_directions_d1-design-system.html" aria-current="page">D1 · Design system and components</a>
+    <a href="./the-emigrant_directions_d2-screens.html">D2 · Screens</a>
   </nav>
 </div>
 
@@ -1723,9 +1738,16 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
     </div>
   </section>
 
-  <section aria-labelledby="h9" style="padding-bottom:88px"><div class="dep"><div class="dep__row"><span class="dep__no">09</span><h2 class="cond" id="h9">The package</h2></div><p>The design-system package in <span class="mono">the-emigrant/</span> now carries these values: tokens.css (light and dark), tailwind-v4.css (Nuxt UI 4 and Tailwind v4 binding), design-tokens.json, DESIGN.md and manifest.json. The earlier DS-1 version is kept in <span class="mono">the-emigrant/_archive/ds-1/</span>.</p></div>
-    <div class="card card--stretch"><p class="f-muted">The components are in the gallery: <a href="./the-emigrant_directions_d1-components.html">D1 · Components</a>.</p></div>
+  <section aria-labelledby="h9"><div class="dep"><div class="dep__row"><span class="dep__no">09</span><h2 class="cond" id="h9">The package</h2></div><p>The design-system package in <span class="mono">the-emigrant/</span> now carries these values: tokens.css (light and dark), tailwind-v4.css (Nuxt UI 4 and Tailwind v4 binding), design-tokens.json, DESIGN.md and manifest.json. The earlier DS-1 version is kept in <span class="mono">the-emigrant/_archive/ds-1/</span>.</p></div>
+    <div class="card card--stretch"><p class="f-muted">Every component, in every variant and state, follows below: <a href="#components">the component gallery</a>.</p></div>
   </section>
+  <section id="components" aria-labelledby="gTitle" style="margin-top:56px">
+    <div class="dep"><div class="dep__row"><span class="dep__no">D1</span><h1 class="cond" id="gTitle" style="font-size:var(--fs-h1)">Component gallery</h1></div>
+      <p>Every component from the brief, in every variant and state, before any screen uses it. Basics are restyled Nuxt UI 4; the rest are designed for The Emigrant. Sample household: an Austrian with a non-EU partner, 11 of the 16 criteria selected. Route checks only for Austria, Costa Rica and Germany. For review: nothing is frozen until you approve it.</p>
+      <nav class="g-toc" id="toc" aria-label="Components"></nav></div>
+  </section>
+  <div id="gallery"></div>
+  <div style="height:88px"></div>
 </main>
 
 <dialog class="k-dialog" id="kDialog" aria-labelledby="kDialogTitle"></dialog>
@@ -2257,7 +2279,7 @@ function nextBar(where, n) {
     : `<button type="button" class="btn btn--primary f-next__btn" ${n.act ? `data-act="${esc(n.act)}"` : `data-toast="${esc(n.toast || n.label)}"`}>${n.label}</button>`;
   return `<div class="f-next f-next--${where}" data-next><span class="f-next__hint${n.disabled ? ' f-next__reason' : ''}">${n.hint || ''}</span>${btn}</div>`;
 }
-/* The menu: "Folder" leads to the travel folder (screen 10). On desktop it sits under "More"; on phone it is the Menu. */
+/* The menu, the same on phone and desktop: "Folder" leads to the travel folder (screen 10), then help, about and your data. */
 const MENU_ITEMS = {
   folder: ['Folder', 'Opens your travel folder (screen 10).'], save: ['Save your travel folder', 'Opens Save your travel folder (screen 11).'], open: ['Open a travel folder', 'Opens Open a travel folder (screen 12).'],
   evidence: ['How the evidence works', 'Opens How the evidence works (screen 16).'], terms: ['Terms of use', 'Opens the full terms (screen 14).'], privacy: ['Privacy', 'Opens Privacy (screen 15).'], delete: ['Delete your travel folder', 'Opens Delete your travel folder (screen 13).']
@@ -2270,12 +2292,11 @@ function appMenu(ctx, opts = {}) {
 }
 const menuList = ctx => appMenu(ctx, { open: true });
 const menuBtn = ctx => `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}">${icon('menu')}<span>Menu</span></button>`;
-const moreBtn = ctx => `<button type="button" class="f-menubtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-${ctx}" data-menu="${ctx}"><span>More</span>${icon('nav-arrow-down')}</button>`;
-const topLinks = () => `<nav class="f-toplinks" aria-label="Main links"><a href="#" data-toast="${esc(MENU_ITEMS.evidence[1])}">How the evidence works</a><a href="#" data-toast="${esc(MENU_ITEMS.privacy[1])}">Privacy</a><a href="#" data-toast="${esc(MENU_ITEMS.open[1])}">Import a plan</a></nav>`;
-/* The desktop header on every screen: wordmark, plan rail (none on Start), the inline links, "More", the one action */
+/* The desktop header on every screen, four parts only: the wordmark, the plan rail (none on Start), the one action,
+   and the Menu. The hint above the action shows only when it says why the action is not possible yet. */
 function deskHeader(p = {}) {
   const railPart = p.rail === false ? '<span class="od-fill"></span>' : `<div class="od-fill f-head__rail">${rail(p.rail || 'shortlist')}</div>`;
-  return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${topLinks()}${moreBtn(p.ctx || 'desktop')}${nextBar('head', p.next)}</header>`;
+  return `<header class="f-head f-head--desk">${WORDMARK}${railPart}${nextBar('head', p.next)}${menuBtn(p.ctx || 'desktop')}</header>`;
 }
 /* The footers, the same on every screen, phone included: the privacy promise and the two links, Disclaimer and
    Terms of use. That is the whole disclaimer in the app; the sentence lives on the Terms of use page. */
@@ -2385,12 +2406,12 @@ function startB2(variant, ctx) {
   return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
     <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
 }
-/* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
+/* The Start shell: no plan rail (the visitor has not started), the wordmark and the Menu, the cover credit
    in the footers, with the Disclaimer and Terms of use links. parts: { body, offline, menuId } */
 function startShell(ctx, parts) {
   const id = parts.menuId || ctx;
   const credit = `Cover: ${esc(START.cover.credit)}`;
-  const menu = appMenu(id, { start: true, more: ctx !== 'phone' });
+  const menu = appMenu(id, { start: true });
   if (ctx === 'phone') {
     return `<div class="od-screen">
       <div class="f-top"><header class="f-head">${WORDMARK}<span class="od-fill"></span>${menuBtn(id)}</header>${parts.offline ? offlineLine() : ''}</div>
@@ -2398,7 +2419,7 @@ function startShell(ctx, parts) {
     </div>${menu}`;
   }
   return `<div class="od-screen">
-    <header class="f-head f-head--desk">${WORDMARK}<span class="od-fill"></span>${topLinks()}${moreBtn(id)}</header>${parts.offline ? offlineLine() : ''}
+    <header class="f-head f-head--desk">${WORDMARK}<span class="od-fill"></span>${menuBtn(id)}</header>${parts.offline ? offlineLine() : ''}
     <div class="od-scroll" data-scroll><div class="f-desk d2-full st-desk st-desk--start"><main class="f-desk__main f-screen st-screen st-screen--start">${parts.body}</main></div></div>
     ${deskFoot({ credit })}
   </div>${menu}`;
@@ -2658,7 +2679,7 @@ function dsInit() {
   document.getElementById('sealDark').innerHTML = sizeRow();
   const loops = [220, 160, 140].map(n => { const m = seal(n).match(/data-loops="(\d+)"/); return `${m[1]} at ${n}px`; });
   document.getElementById('loopCount').textContent = `${loops.join(', ')}; before, about 88 in three layers`;
-  const tab = `<div class="tabbar" role="img" aria-label="Browser tab with the 16px monogram as its icon"><span class="tab"><img src="./assets/favicon.svg" width="16" height="16" alt=""><span>The Emigrant · Shortlist</span></span><span class="tab tab--off"><span>New tab</span></span></div>`;
+  const tab = `<div class="tabbar" role="img" aria-label="Browser tab with the 16px monogram as its icon"><span class="tab"><span class="tab__icon" aria-hidden="true">${monogram(16)}</span><span>The Emigrant · Shortlist</span></span><span class="tab tab--off"><span>New tab</span></span></div>`;
   const inUse = `<div>${WORDMARK}</div>${tab}<div class="g-row">${stampTag(3, { name: 'M. Solano' })}${stampTag(3, { compact: true, name: 'A. Hofer' })}${stampTag(3, { big: true, name: 'M. Solano' })}</div>`;
   document.getElementById('sealInUse').innerHTML = inUse;
   document.getElementById('sealInUseDark').innerHTML = inUse;
@@ -2675,11 +2696,376 @@ function dsInit() {
   document.getElementById('photoTicket').innerHTML = ticket('AUT', { acts: false });
 }
 </script>
+<script>/* The Emigrant — D1 component gallery. Every component from the brief, in every variant and state.
+ * Uses emigrant-ds.js. All content is sample data. */
+
+const $ = (s, el = document) => el.querySelector(s);
+const item = (title, state, body, cls = '') => `<div class="g-item ${cls}"><div class="g-item__label"><b>${title}</b>${state ? `<span>${state}</span>` : ''}</div>${body}</div>`;
+const frames = (phone, desk, opts = {}) => `<div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390</span><div class="g-phone" ${opts.frame ? 'data-frame' : ''} style="position:relative"><div class="g-pad">${phone}</div></div></div><div class="g-frame"><span class="g-frame__label">Desktop · content column</span><div class="g-desk" ${opts.frame ? 'data-frame' : ''} style="position:relative"><div class="g-pad">${desk}</div></div></div></div>`;
+const LANGUAGES = ['Arabic', 'Bengali', 'Bosnian', 'Bulgarian', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Estonian', 'Finnish', 'French', 'German', 'Greek', 'Hindi', 'Hungarian', 'Icelandic', 'Irish', 'Italian', 'Japanese', 'Korean', 'Latvian', 'Lithuanian', 'Maltese', 'Mandarin Chinese', 'Norwegian', 'Polish', 'Portuguese', 'Romanian', 'Russian', 'Serbian', 'Slovak', 'Slovenian', 'Spanish', 'Swahili', 'Swedish', 'Thai', 'Turkish', 'Ukrainian', 'Vietnamese'];
+
+const S = {};
+const COUNTRY_ITEMS = () => COUNTRIES.slice().sort((a, b) => a.name.localeCompare(b.name)).map(c => ({ label: c.name, code: c.iso }));
+const TIME_ZONES = [['UTC−08:00', 'Pacific Time (Los Angeles, Vancouver)'], ['UTC−06:00', 'Central Time (Chicago, Mexico City)'], ['UTC−06:00', 'Central America (San José, Guatemala City)'], ['UTC−05:00', 'Eastern Time (New York, Toronto)'], ['UTC−03:00', 'Brasília Time (São Paulo)'], ['UTC±00:00', 'Greenwich and Western European Time (London, Lisbon)'], ['UTC+01:00', 'Central European Time (Vienna, Berlin)'], ['UTC+02:00', 'Eastern European Time (Athens, Helsinki)'], ['UTC+03:00', 'Istanbul, Nairobi, Riyadh'], ['UTC+04:00', 'Gulf Time (Dubai)'], ['UTC+05:30', 'India Standard Time (Mumbai, Delhi)'], ['UTC+07:00', 'Indochina Time (Bangkok, Hanoi)'], ['UTC+08:00', 'China and Singapore Time'], ['UTC+09:00', 'Japan and Korea Time'], ['UTC+10:00', 'Australian Eastern Time (Sydney)'], ['UTC+12:00', 'New Zealand Time (Auckland)']].map(([code, label]) => ({ label, code }));
+const CLIMATE_ZONES = ['Tropical', 'Dry', 'Temperate', 'Cold', 'Polar'];
+let askUid = 0;
+/* The one question a criterion asks, right on its card, once the household picks it */
+const CRIT_ASK = {
+  timezone: () => selectMenu({ label: 'Which time zone do you work with?', items: TIME_ZONES, value: 'Central European Time (Vienna, Berlin)', searchPlaceholder: 'Type a city or UTC offset' }),
+  driving: () => { const u = ++askUid; return `<span class="field__label" id="askd${u}">Which side of the road do you prefer?</span><div class="segc" role="group" aria-labelledby="askd${u}">${['Left', 'Right', 'No preference'].map(t => `<button type="button" aria-pressed="${t === 'Right'}">${t}</button>`).join('')}</div>`; },
+  climate: () => { const u = ++askUid; return `<fieldset class="chk-chips"><legend class="field__label">Which climate zones do you like?</legend><div class="chk-chips__row">${CLIMATE_ZONES.map(z => `<label class="chk-chip"><input type="checkbox" name="clz${u}"${['Temperate', 'Cold'].includes(z) ? ' checked' : ''}><span class="chk-chip__box" aria-hidden="true">${icon('check')}</span><span>${z}</span></label>`).join('')}</div></fieldset>`; }
+};
+
+/* ── Basics ────────────────────────────────────────────────────────── */
+S.buttons = () => `<div class="g-grid">
+  ${item('Styles', 'primary · secondary · ghost · destructive', `<div class="g-row"><button type="button" class="btn btn--primary" data-toast="Primary: the one next action per screen.">Find where you could go</button><button type="button" class="btn btn--secondary" data-toast="Secondary.">Open a travel folder</button><button type="button" class="btn btn--ghost" data-toast="Ghost.">Back to your shortlist</button><button type="button" class="btn btn--danger" data-toast="Destructive: always says what it destroys.">${icon('trash')}<span>Delete your travel folder</span></button></div>`)}
+  ${item('Sizes', 'small 44 · medium 48 · large 56', `<div class="g-row"><button type="button" class="btn btn--secondary btn--sm">Small</button><button type="button" class="btn btn--secondary">Medium</button><button type="button" class="btn btn--primary btn--lg">Large</button></div><p class="g-note">Even the small size keeps a 44px touch height.</p>`)}
+  ${item('Loading and disabled', 'states', `<div class="g-row"><button type="button" class="btn btn--primary" aria-busy="true" aria-live="polite">${icon('refresh')}<span>Saving…</span></button><button type="button" class="btn btn--primary" disabled>Compare your shortlist</button><button type="button" class="btn btn--secondary" disabled>Save your travel folder</button></div><p class="f-next__hint f-next__reason">Disabled buttons always come with the reason: "Add at least one country to compare."</p>`)}
+  ${item('Destructive, confirmed', 'inside the Delete dialog', `<div class="g-row"><button type="button" class="btn btn--secondary">Keep my data</button><button type="button" class="btn btn--danger-solid btn--primary" data-toast="Deleted. Back to the first-visit Start.">${icon('trash')}<span>Delete my travel folder and data</span></button></div>`)}
+</div>`;
+
+S.inputs = () => `<div class="g-grid">
+  ${item('Text input', 'default · with why · error · disabled', `<div class="field"><label class="field__label" for="in1">Name for this plan</label><input class="input" id="in1" value="Our move, 2027"></div>
+    <div class="field"><label class="field__label" for="in2">Search by name</label><span class="field__why" id="in2w">Type part of a country name.</span><input class="input" id="in2" aria-describedby="in2w" placeholder="e.g. Bosnia"></div>
+    <div class="field"><label class="field__label" for="in3">Child's age</label><input class="input" id="in3" value="-2" aria-invalid="true" aria-describedby="in3e"><span class="field__error" id="in3e">Enter an age from 0 to 17. Older children count as adults.</span></div>
+    <div class="field"><label class="field__label" for="in4">Data version</label><input class="input" id="in4" value="2026-10-24" disabled></div>`)}
+  ${item('Select menu', 'Nuxt UI USelectMenu · short list, no search', `${selectMenu({ label: 'Sort results by', items: ['Best fit first', 'Most known first', 'Name, A to Z'], value: 'Best fit first' })}<p class="g-note">Every dropdown is a select menu, never a native select. From eight options up, the menu opens with a search field.</p>`)}
+  ${item('Select menu with search', `all ${COUNTRIES.length} countries`, selectMenu({ id: 'smCountry', label: 'Where do you live now?', why: 'We compare prices from here.', items: COUNTRY_ITEMS(), value: 'Austria', searchPlaceholder: 'Type a country' }))}
+  ${item('Select menu with search', 'open, shown statically', `<div style="min-height:380px">${selectMenu({ label: 'Region', items: ['All regions', ...[...new Set(COUNTRIES.map(c => c.region))].sort()], value: 'All regions', open: true, static: true, searchPlaceholder: 'Type a region' })}</div>`)}
+  ${item('Number input with unit', 'child age · years', `<div class="field"><label class="field__label" for="num1">Child's age</label><span class="field__why">Some routes treat children differently from age 12 or 18.</span><div class="num"><input class="input" id="num1" inputmode="numeric" value="11"><span class="num__unit">years</span></div></div>`)}
+  ${item('Password with strength hint', 'export', `<div class="field"><label class="field__label" for="pw1">Password (optional)</label><div class="pw"><input class="input" id="pw1" type="password" value="olive-harbor-17"><button type="button" class="f-iconbtn" data-toggle-pw="pw1" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>
+    <div class="strength" aria-live="polite"><span class="strength__bars" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="field__why"><b>Good.</b> A lost password cannot be recovered. We cannot reset it.</span></div></div>`)}
+</div>`;
+
+S.choices = () => `<div class="g-grid">
+  ${item('Checkbox', 'off · on · disabled', `<label class="check"><input type="checkbox"><span class="check__box" aria-hidden="true"></span><span>Show facts you didn't select</span></label><label class="check"><input type="checkbox" checked><span class="check__box" aria-hidden="true"></span><span>Include my criteria in the export</span></label><label class="check"><input type="checkbox" disabled><span class="check__box" aria-hidden="true"></span><span>Sync between devices (not in release 1)</span></label>`)}
+  ${item('Radio group', 'relationship to the partner', `<fieldset class="rgroup"><legend>How are you and your partner related?</legend><label class="radio"><input type="radio" name="rel" checked><span class="radio__box" aria-hidden="true"></span><span>Married</span></label><label class="radio"><input type="radio" name="rel"><span class="radio__box" aria-hidden="true"></span><span>Registered partnership</span></label><label class="radio"><input type="radio" name="rel"><span class="radio__box" aria-hidden="true"></span><span>Durable partnership</span></label></fieldset>`)}
+  ${item('Switch', 'off · on', `<label class="switch"><input type="checkbox" role="switch" data-switch><span class="switch__track" aria-hidden="true"></span><span>Route check available only</span><span class="switch__state" aria-hidden="true">Off</span></label><label class="switch"><input type="checkbox" role="switch" checked data-switch><span class="switch__track" aria-hidden="true"></span><span>Show sources inline</span><span class="switch__state" aria-hidden="true">On</span></label>`)}
+  ${item('Segmented control', 'how much cost of living matters', `<div class="g-col"><span class="field__label" id="segl">How much does cost of living matter?</span><div class="segc" role="group" aria-labelledby="segl"><button type="button" aria-pressed="false">Not much</button><button type="button" aria-pressed="true">Somewhat</button><button type="button" aria-pressed="false">A lot</button></div></div>`)}
+</div>`;
+
+S.containers = () => `<div class="g-grid">
+  ${item('Card', 'paper card on the pattern', `<div class="f-card"><h3 class="f-card__title">Your household</h3><ul class="f-find"><li><b>You</b><span>Austrian citizen</span></li><li><b>Partner</b><span>Brazilian citizen, durable partnership</span></li></ul></div>`, 'g-item--plain')}
+  ${item('Tag and badge', 'quiet, sample, count', `<div class="g-row"><span class="tagx">Scored</span><span class="tagx tagx--quiet">Yes / no</span><span class="tagx tagx--sample">Sample data</span><span class="countbadge">12</span><span class="countbadge">137</span></div>`)}
+  ${item('Tabs', 'arrow keys move between tabs', `<div class="tabs" data-tabs><div class="tabs__list" role="tablist" aria-label="Fact groups"><button type="button" class="tabs__tab" role="tab" aria-selected="true" aria-controls="tp1" id="tb1">Your criteria</button><button type="button" class="tabs__tab" role="tab" aria-selected="false" aria-controls="tp2" id="tb2" tabindex="-1">Other facts</button><button type="button" class="tabs__tab" role="tab" aria-selected="false" aria-controls="tp3" id="tb3" tabindex="-1">Route</button></div><div class="tabs__panel" role="tabpanel" id="tp1" aria-labelledby="tb1">The 11 criteria you selected, with their values and sources.</div><div class="tabs__panel" role="tabpanel" id="tp2" aria-labelledby="tb2" hidden>Facts you didn't select, grouped by category.</div><div class="tabs__panel" role="tabpanel" id="tp3" aria-labelledby="tb3" hidden>Whether a route check is available for this country.</div></div>`)}
+  ${item('Accordion', 'collapsed · expanded', `<div class="acc"><div class="acc__item"><button type="button" class="acc__btn" data-disclose aria-expanded="true" aria-controls="ac1">What is in the export file?<span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="acc__body" id="ac1">Your criteria and piles, your shortlist, your household if you entered it, and the data version. Nothing else.</div></div><div class="acc__item"><button type="button" class="acc__btn" data-disclose aria-expanded="false" aria-controls="ac2">Why is there no rank number?<span class="k-chev">${icon('nav-arrow-down')}</span></button><div class="acc__body" id="ac2" hidden>The order speaks for itself. A rank would suggest a winner we cannot know.</div></div></div>`)}
+</div>`;
+
+function deleteDialog() {
+  return `<div class="dlg__head"><h2 class="dlg__title" tabindex="-1">Delete your travel folder?</h2><button type="button" class="f-iconbtn" data-close aria-label="Close">${icon('xmark')}</button></div><div class="dlg__body"><p>This deletes your travel folder and the stored data on this device: criteria, shortlist, household and route results.</p><div class="alert alert--warning">${icon('warning-triangle')}<div><b>This cannot be undone.</b>Save your travel folder first if you might want it back.</div></div></div><div class="dlg__foot"><button type="button" class="btn btn--secondary" data-toast="Opens Save your travel folder.">${icon('download')}<span>Save it first</span></button><button type="button" class="btn btn--danger-solid btn--primary" data-close>${icon('trash')}<span>Delete</span></button></div>`;
+}
+const stateFrames = (title, state, phone, desk) => `<div class="g-item"><div class="g-item__label"><b>${title}</b><span>${state}</span></div><div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390 · shown open</span><div class="g-phone state-frame" role="group" aria-label="${title}, phone, shown open">${phone}</div></div><div class="g-frame"><span class="g-frame__label">Desktop · content column · shown open</span><div class="g-desk state-frame" role="group" aria-label="${title}, desktop, shown open">${desk}</div></div></div></div>`;
+const behind = txt => `<div class="g-pad"><div class="f-card"><h3 class="f-card__title">Austria</h3><p>${txt}</p></div><div class="f-card"><p>Healthcare · Life expectancy</p><p class="mono">81.6 years</p></div></div>`;
+const staticToast = () => `<div class="k-toast k-toast--static" role="status"><span class="od-fill">Austria added to your shortlist.</span><button type="button" aria-label="Dismiss">${icon('xmark')}</button></div>`;
+S.overlays = () => `<div class="g-grid">
+  ${item('Modal', 'Delete your travel folder', `<button type="button" class="btn btn--danger" data-open-delete>${icon('trash')}<span>Delete your travel folder</span></button><p class="g-note">Opens a modal: what gets deleted, that it cannot be undone, a suggestion to save the folder first.</p>`)}
+  ${item('Toast', 'one line, dismissible', `<button type="button" class="btn btn--secondary" data-toast="Austria added to your shortlist.">Show a toast</button>`)}
+  ${item('Inline alerts', 'info · warning · error', `<div class="alert alert--info" role="note">${icon('info-circle')}<div><b>Ranking is provisional.</b>Set your priorities to make it yours.</div></div><div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>Some facts are out of date.</b>3 values come from 2021 or earlier.</div></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be opened.</b>It is not a travel folder file. Your travel folder on this device is unchanged.</div></div>`)}
+</div>
+<div class="g-item"><div class="g-item__label"><b>Bottom sheet and side panel</b><span>tap a fact: a sheet on phone, a side panel on desktop</span></div>
+  ${frames(`<p>Tap the value to open its source note.</p>${valButton('healthAUT', '<span class="f-val__n">81.6</span><span class="f-val__u">years</span>', 'Life expectancy, Austria')}<div style="height:420px"></div>`, `<p>Click the value to open its source note.</p>${valButton('routeCRI', '<span class="f-val__n">Rentista</span>', 'Rentista route, Costa Rica')}<div style="height:420px"></div>`, { frame: true })}</div>
+${stateFrames('Bottom sheet and side panel', 'open: a source note over the screen', `${behind('The source note opens as a sheet from the bottom.')}<div class="k-scrim"></div><div class="k-panel k-panel--overlay">${sourcePanel(NOTES.healthAUT, 'stSheet', true)}</div>`, `${behind('The source note opens as a side panel on the right.')}<div class="k-scrim"></div><div class="k-panel k-panel--overlay">${sourcePanel(NOTES.routeCRI, 'stPanel', true)}</div>`)}
+${stateFrames('Modal', 'open: Delete your travel folder', `${behind('Behind the modal.')}<div class="k-scrim"></div><div class="dlg dlg--static">${deleteDialog()}</div>`, `${behind('Behind the modal.')}<div class="k-scrim"></div><div class="dlg dlg--static">${deleteDialog()}</div>`)}
+${stateFrames('Toast', 'visible: one line, dismissible, gone after four seconds', `${behind('A country was just added.')}${staticToast()}`, `${behind('A country was just added.')}${staticToast()}`)}`;
+
+S.feedback = () => `<div class="g-grid">
+  ${item('Progress', 'determinate · indeterminate', `<div class="prog"><div class="prog__txt"><span>Downloading the data</span><span class="mono">40%</span></div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><div class="prog prog--ind"><div class="prog__txt"><span>Recalculating your results</span></div><div class="prog__track" role="progressbar" aria-label="Recalculating"><span class="prog__bar"></span></div></div>`)}
+  ${item('File drop zone', 'idle · drag over · chosen · error', `<div class="drop">${icon('upload')}<b>Drop a travel folder file here</b><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the file picker.">Choose a file</button></div><div class="drop is-over">${icon('upload')}<b>Release to import</b></div><div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-10-12 · 3 countries, 1 route checked</span></div><div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}holiday-photos.zip</span><span class="field__error">Not a travel folder file. Nothing was changed.</span></div>`)}
+  ${item('Empty state', 'shortlist', `<div class="empty">${icon('journal-page')}<p class="empty__title">Your shortlist is empty</p><p>Add up to three countries from your results to compare them.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Back to results.">See results</button></div>`)}
+  ${item('Loading skeleton', 'reduced motion: no shimmer', `<div class="skel" aria-busy="true" aria-label="Loading"><i></i><i></i><i></i></div>`)}
+  ${item('Tooltip', 'open, shown statically', `<div class="tip-demo"><span class="tip"><span>Evidence band</span><button type="button" class="tip__btn" aria-expanded="true" aria-controls="tip0" data-tip>${icon('help-circle', 'What is the evidence band?')}</button><span class="tip__bubble" id="tip0" role="tooltip">How many of your criteria are known for this country: Strong, Partial or Thin.</span></span></div>`)}
+  ${item('Tooltip', 'closed: opens on tap or focus, never on hover only', `<span class="tip"><span>Evidence band</span><button type="button" class="tip__btn" aria-expanded="false" aria-controls="tip1" data-tip>${icon('help-circle', 'What is the evidence band?')}</button><span class="tip__bubble" id="tip1" role="tooltip" hidden>How many of your criteria are known for this country: Strong, Partial or Thin.</span></span>`)}
+  ${item('Link', 'inline and standalone', `<p>Read <a href="#" data-toast="Opens How the evidence works.">how the evidence works</a> before you rely on a fact.</p><a class="f-link" href="#" data-toast="Opens the full terms.">${icon('journal-page')}<span>Terms of use</span></a>`)}
+</div>`;
+
+let cmpUid = 0;
+function compareTable(cols, stack = false) {
+  const rows = [['non', ['safety', 'health']], ['important', ['language', 'internet', 'cost']]];
+  const u = ++cmpUid, hid = k => `cmp${u}-${k}`;
+  const cell = (iso, id) => {
+    const v = (VALUES[iso] || {})[id], hd = stack ? ` headers="${hid(iso)} ${hid(id)}"` : '';
+    if (!v || !v[0]) return `<td${hd}><span class="cmp__cell"><span class="f-iconline f-val--unknown">${icon('help-circle')}<span>Not known yet</span></span></span></td>`;
+    const note = id === 'health' ? 'healthAUT' : id === 'language' ? 'langAUT' : id === 'internet' ? 'internetCRI' : 'costAUT';
+    return `<td${hd}><span class="cmp__cell"><span class="cmp__v">${v[0]} <small>${v[1]}</small></span>${evButton(note, { compact: true, level: v[2], risk: v[3] })}${v[5] ? staleNote(v[5]) : ''}</span></td>`;
+  };
+  if (stack) return `<div class="cmp-wrap"><table class="cmp cmp--stack"><thead><tr>${cols.map(i => `<th scope="col" id="${hid(i)}">${countryBy(i).name}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(([p, ids]) => `<tr class="cmp__pile"><th colspan="${cols.length}">${PILE_NAMES[p]}</th></tr>${ids.map(id => `<tr class="cmp__crit"><th colspan="${cols.length}" id="${hid(id)}">${critName(critBy(id))}</th></tr><tr>${cols.map(i => cell(i, id)).join('')}</tr>`).join('')}`).join('')}
+  </tbody></table></div>`;
+  return `<div class="cmp-wrap"><table class="cmp"><thead><tr><th scope="col">Criterion</th>${cols.map(i => `<th scope="col">${countryBy(i).name}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(([p, ids]) => `<tr class="cmp__pile"><th colspan="${cols.length + 1}">${PILE_NAMES[p]}</th></tr>${ids.map(id => `<tr><th scope="row">${critName(critBy(id))}</th>${cols.map(i => cell(i, id)).join('')}</tr>`).join('')}`).join('')}
+  </tbody></table></div>`;
+}
+S.compare = () => `<div class="g-item"><div class="g-item__label"><b>Comparison table</b><span>criteria as rows, grouped by pile; unknowns visible; one tap to each source</span></div>
+  ${frames(`<div class="cmp-switch"><span class="lbl">Second column</span><div class="segc" role="group" aria-label="Second country" data-cmp-switch><button type="button" aria-pressed="true" data-iso="CRI">Costa Rica</button><button type="button" aria-pressed="false" data-iso="DEU">Germany</button></div></div><div data-cmp-phone>${compareTable(['AUT', 'CRI'], true)}</div><p class="g-note">Phone: two countries side by side, each criterion name across both columns above its values, and a switch for the third country.</p>`, compareTable(['AUT', 'CRI', 'DEU']), { frame: true })}</div>`;
+
+S.longlist = () => `<div class="g-item"><div class="g-item__label"><b>Long list</b><span>all ${COUNTRIES.length} countries as compact rows, with search, region and route-check filters</span></div>
+  <div class="g-row" style="align-items:end">
+    <div class="field" style="min-width:220px;flex:1 1 220px"><label class="field__label" for="llSearch">Search by name</label><input class="input" id="llSearch" placeholder="e.g. Saint"></div>
+    <div class="field" style="min-width:220px;flex:1 1 220px">${selectMenu({ id: 'llRegion', label: 'Region', items: ['All regions', ...[...new Set(COUNTRIES.map(c => c.region))].sort()], value: 'All regions', searchPlaceholder: 'Type a region' })}</div>
+    <label class="switch"><input type="checkbox" role="switch" id="llRoute" data-switch><span class="switch__track" aria-hidden="true"></span><span>Route check available only</span><span class="switch__state" aria-hidden="true">Off</span></label>
+  </div>
+  <p class="g-note" id="llCount" role="status" aria-live="polite"></p>
+  <div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390</span><div class="long-frame g-phone clist-wrap" id="llPhone"></div></div><div class="g-frame"><span class="g-frame__label">Desktop · content column</span><div class="long-frame clist-wrap" id="llDesk"></div></div></div></div>`;
+function renderLongList() {
+  const q = ($('#llSearch').value || '').trim().toLowerCase(), region = smValue($('#llRegion'))[0] === 'All regions' ? '' : smValue($('#llRegion'))[0], route = $('#llRoute').checked;
+  const list = COUNTRIES.filter(c => (!q || c.name.toLowerCase().includes(q)) && (!region || c.region === region) && (!route || c.routeCheck !== 'none'));
+  const html = list.length ? BANDS.map(b => {
+    const rows = list.filter(c => c.band === b.id);
+    if (!rows.length) return '';
+    return `<section class="f-band" style="margin-bottom:12px"><div class="f-band__btn" style="cursor:default"><span class="f-band__title">${b.title}</span><span class="f-band__count">${rows.length}</span><span></span><span class="f-band__means">${b.means}</span></div><ul class="clist" style="margin-bottom:12px">${rows.map(c => countryRow(c)).join('')}</ul></section>`;
+  }).join('') : `<div class="empty">${icon('search')}<p class="empty__title">No country matches this filter</p><p>Clear the search or switch off "Route check available only".</p></div>`;
+  $('#llPhone').innerHTML = html; $('#llDesk').innerHTML = html;
+  $('#llCount').textContent = `${list.length} of ${COUNTRIES.length} countries shown.`;
+}
+
+/* ── Designed for The Emigrant ─────────────────────────────────────── */
+S.evidence = () => `<div class="g-grid">
+  ${item('Evidence marks', 'E0 · E1 · E2 (designed now, used later) · E3, full', `<div class="g-col">${[0, 1, 2, 3].map(l => evButton(['climateCRI', 'healthAUT', 'costAUT', 'langAUT'][l], { level: l, risk: 'low' })).join('')}</div>`)}
+  ${item('Risk classes', 'low · medium · high', `<div class="g-col">${['low', 'medium', 'high'].map(r => evButton('healthAUT', { risk: r })).join('')}</div>`)}
+  ${item('Flagged and machine translation', 'medium risk at E1 is flagged · MT mark on E3', `<div class="g-col">${evButton('costAUT', { risk: 'medium', flagged: true })}${evButton('routeCRI', { machineTranslation: true })}</div>`)}
+  ${item('Compact', 'in tickets, rows and tables', `<div class="g-row">${[0, 1, 2, 3].map(l => evButton(['climateCRI', 'healthAUT', 'costAUT', 'langAUT'][l], { level: l, compact: true })).join('')}</div><p class="g-note">Readable without color: the ring tells the level (light, single, double, double with our mark after the name), and the word is always there.</p>`)}
+</div>`;
+S.panel = () => `<div class="g-grid">
+  ${item('Source panel, E3 with machine translation', 'static, as in the side panel', `<div class="k-panel f-panel--static" role="region" aria-labelledby="spT1">${sourcePanel(NOTES.routeCRI, 'spT1', false)}</div>`, 'g-item--plain')}
+  ${item('Source panel, E1 out of date', 'static', `<div class="k-panel f-panel--static" role="region" aria-labelledby="spT2">${sourcePanel(NOTES.internetCRI, 'spT2', false)}</div>`, 'g-item--plain')}
+  ${item('Source panel, E0 unknown', 'static', `<div class="k-panel f-panel--static" role="region" aria-labelledby="spT3">${sourcePanel(NOTES.climateCRI, 'spT3', false)}</div>`, 'g-item--plain')}
+</div>`;
+S.unknown = () => `<div class="g-grid">
+  ${item('Unknown value', 'no usable source', unknownBlock('source'))}
+  ${item('Unknown value', 'below the minimum level', unknownBlock('minimum'))}
+  ${item('Unknown value', 'sources contradict', unknownBlock('contradict', { decide: 'The 2026 edition of the national statistics yearbook.' }))}
+  ${item('Unknown value', 'translations disagree', unknownBlock('translation'))}
+  ${item('Shown but not counted', 'value at E0 below the ranking minimum', shownNotCounted('62 Mbit/s', 0))}
+  ${item('Out-of-date marker', 'on a value · in a panel row', `<div class="f-stalebox"><span class="f-muted">Internet · Speed tests, Costa Rica</span>${valButton('internetCRI', '<span class="f-val__n">54</span><span class="f-val__u">Mbit/s</span>', 'Speed tests, Costa Rica')}${staleNote('2021')}</div><div class="f-panel__body" style="padding:0"><dl><div><dt>Data from</dt><dd><span class="mono">2021</span><small>${staleNote('2021')}</small></dd></div><div><dt>Last checked</dt><dd><span class="mono">2026-08</span></dd></div></dl></div><p class="g-note">The marker names the year the data is from. The panel shows both: "Data from" (the value's year) and "Last checked" (when we checked the source).</p>`)}
+</div>`;
+S.bands = () => `<div class="g-grid">
+  ${item('Evidence band', 'Strong · Partial · Thin, with the share', `<div class="g-col">${eband(10, 11)}${eband(7, 11)}${eband(4, 11)}</div><p class="g-note">The share counts the criteria the household selected. Here: 11 of 17.</p>`)}
+  ${item('Evidence band, capped', 'Strong by count, shown as Partial: a Non-negotiable is unknown', `<div class="g-col">${eband(10, 11, { cap: 'Safety' })}${coverage(10, 11, { cap: 'Safety', button: false })}</div><p class="g-note">A country never shows Strong while one of the household's Non-negotiables is not known. The band is capped at Partial, and the one line says which criterion holds it there. The same cap applies to the coverage mark.</p>`)}
+  ${item('Coverage marks', 'one box per selected criterion; 44px hit area', `<div class="g-col">${coverage(10, 11)}${coverage(9, 14)}${coverage(3, 6)}</div>`)}
+  ${item('Score', '0–10 on the known criteria · absent', `<div class="g-row">${score('7.4')}${score('7.4', { hl: true })}${score(null)}</div><p class="g-note">Never a crown, medal, rank or "best". The highlighted form is used once per card.</p>`)}
+  ${item('Route check label', 'a quiet tag, never a band, never approval', `<div class="g-col">${routeCheck('available')}${routeCheck('partly')}${routeCheck('none')}</div><p class="g-note">It says whether we can run the route check for this country. Results for the household only appear after Route. Country rows show only the first two; "not available yet" appears on the country page and in the filter, never repeated on every row.</p>`)}
+</div>
+<div class="g-item"><div class="g-item__label"><b>Band header</b><span>collapsed · expanded, with count</span></div>
+  ${BANDS.map((b, i) => `<section class="f-band"><button type="button" class="f-band__btn" data-disclose aria-expanded="${i === 0}" aria-controls="bh${i}"><span class="f-band__title">${b.title}</span><span class="f-band__count">${b.count}</span><span class="k-chev">${icon('nav-arrow-down')}</span><span class="f-band__means">${b.means}</span></button><div class="f-band__body" id="bh${i}"${i === 0 ? '' : ' hidden'}><ul class="clist clist-wrap">${COUNTRIES.filter(c => c.band === b.id).slice(0, 2).map(c => countryRow(c)).join('')}</ul></div></section>`).join('')}</div>`;
+S.rows = () => {
+  const longNames = ['VCT', 'COD', 'BIH', 'STP'].map(countryBy);
+  const rows = `<ul class="clist">${countryRow(countryBy('AUT'), { state: 'added' })}${countryRow(countryBy('CRI'))}${countryRow(countryBy('PRT'), { state: 'full' })}${longNames.map(c => countryRow(c)).join('')}</ul>`;
+  return `<div class="g-item"><div class="g-item__label"><b>Country row</b><span>postage stamp, name, score, evidence band, route check label; added · idle · shortlist full · ruled out · longest names</span></div>
+  <div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390</span><div class="g-phone clist-wrap"><div class="g-pad">${rows}</div></div></div><div class="g-frame"><span class="g-frame__label">Desktop · content column</span><div class="g-desk clist-wrap"><div class="g-pad">${rows}</div></div></div></div>
+  <p class="g-note">No flags: the country code and the postage-stamp photo identify the country. Ruled-out rows name the Non-negotiable that rules them out. The route-check tag appears only where a check is available (Austria, Costa Rica) or partly available (Portugal); "not available yet" is said once, by the filter and on the country page. On a phone, a row with a one-line name is about <span data-rowh></span>px tall.</p></div>`;
+};
+
+function critCard(id, opts = {}) {
+  const c = critBy(id);
+  return `<li class="crit crit--${c.kind}${opts.dragging ? ' is-dragging' : ''}${opts.focused ? ' is-focused' : ''}" tabindex="0" data-crit="${id}" aria-label="${critName(c)}, ${c.kind === 'yesno' ? 'yes or no' : 'scored'}. Press 1 to 4 to move it.">
+    <span class="crit__grip" aria-hidden="true">${icon('drag-hand-gesture')}</span>
+    <div class="crit__body"><span class="crit__name">${critName(c)}</span><span class="crit__line">${[c.meaning, c.limit].filter(Boolean).join(' ')}</span><span class="tagx ${c.kind === 'yesno' ? 'tagx--quiet' : ''} crit__kind">${c.kind === 'yesno' ? 'Yes / no' : `Scored · ${c.unit}`}</span>${opts.picked !== false && CRIT_ASK[id] ? `<div class="crit__ask">${CRIT_ASK[id]()}</div>` : ''}</div>
+    <button type="button" class="crit__move" data-move="${id}" aria-label="Move ${critName(c)} to another pile">${icon('sort')}</button>
+    ${opts.keys ? '<span class="crit__keys">Keys: 1 Non-negotiable · 2 Important · 3 Nice to have · 4 Not used</span>' : ''}</li>`;
+}
+const SORT = JSON.parse(JSON.stringify(PILES));
+function renderPiles() {
+  const matches = 12 - SORT.non.length * 2 + 4;
+  $('#piles').innerHTML = Object.keys(PILE_NAMES).map(p => `<section class="pile pile--${p}" data-pile="${p}" aria-label="${PILE_NAMES[p]}"><div class="pile__head"><span class="pile__title">${PILE_NAMES[p]}</span><span class="countbadge">${SORT[p].length}</span></div>${SORT[p].length ? `<ul class="g-col" style="justify-items:stretch">${SORT[p].map(id => critCard(id, { picked: p !== 'unused' })).join('')}</ul>` : '<p class="pile__empty">Empty. Move a criterion here.</p>'}</section>`).join('');
+  $('#sortSummary').innerHTML = `<b>${Math.max(0, matches)} matches</b> · ${41 + SORT.non.length} possible · ${140 - SORT.non.length * 3} ruled out <span class="tagx tagx--sample">sample data</span>`;
+}
+function moveCrit(id, pile) {
+  Object.keys(SORT).forEach(p => { SORT[p] = SORT[p].filter(x => x !== id); });
+  SORT[pile].push(id);
+  renderPiles();
+  document.querySelectorAll('#piles [data-smenu]').forEach(r => { if (!r.querySelector('.smenu__pop').hidden) smDraw(r); });
+  const matches = Math.max(0, 12 - SORT.non.length * 2 + 4);
+  $('#sortLive').textContent = `${critBy(id).topic} moved to ${PILE_NAMES[pile]}. ${matches} matches.`;
+  const el = document.querySelector(`#piles [data-crit="${id}"]`); if (el) el.focus();
+}
+S.criteria = () => `<div class="g-grid">
+  ${item('Criterion card, scored', 'idle', `<ul>${critCard('internet')}</ul>`)}
+  ${item('Criterion card with its question', 'Time zone distance · picked: asks which time zone you work with', `<ul>${critCard('timezone')}</ul>`)}
+  ${item('Criterion card with its question', 'Driving side · picked: asks which side of the road you prefer', `<ul>${critCard('driving')}</ul>`)}
+  ${item('Criterion card with its question', 'Climate zone · picked: asks which climate zones you like', `<ul>${critCard('climate')}</ul>`)}
+  ${item('Criterion card with a question', 'not used: the question stays hidden', `<ul>${critCard('driving', { picked: false })}</ul>`)}
+  ${item('Criterion card, yes / no', 'visibly different: a light edge, the not-yet mark', `<ul>${critCard('language')}</ul>`)}
+  ${item('Criterion card, scored', 'Community · People born abroad (%)', `<ul>${critCard('community')}</ul>`)}
+  ${item('Criterion card', 'dragging', `<ul>${critCard('cost', { dragging: true })}</ul>`)}
+  ${item('Criterion card', 'focused, keyboard moving', `<ul>${critCard('safety', { focused: true, keys: true })}</ul>`)}
+  ${item('Not available yet', 'one line below the piles, not selectable', `<div class="na-line"><p class="f-iconline">${icon('help-circle')}<b>Not available yet</b></p><p class="f-muted">No source we may legally use yet, unless the line says otherwise.</p><div class="na-line__list">${naTags()}</div></div>`)}
+  ${item('Pile', 'empty · drop target active', `<section class="pile pile--nice"><div class="pile__head"><span class="pile__title">Nice to have</span><span class="countbadge">0</span></div><p class="pile__empty">Empty. Move a criterion here.</p></section><section class="pile pile--important is-target"><div class="pile__head"><span class="pile__title">Important</span><span class="countbadge">4</span></div><p class="pile__empty">Drop here</p></section>`)}
+</div>
+<div class="g-item"><div class="g-item__label"><b>Piles, working</b><span>tap the move button and choose a pile, or focus a card and press 1–4; every move is announced</span></div>
+  <p class="g-note" id="sortSummary"></p><p class="sr-only" role="status" aria-live="polite" id="sortLive"></p>
+  <div class="g-grid" id="piles"></div>
+  <div class="k-menu f-menu" id="pileMenu" role="menu" aria-label="Move to" hidden style="position:fixed"></div></div>`;
+
+S.conditions = () => {
+  const cond = (k, t, why, req, doc, note) => {
+    const st = { met: ['check-circle', 'Appears met'], notmet: ['xmark-circle', 'Appears not met'], unknown: ['help-circle', 'Not known yet'] }[k];
+    return `<li class="f-cond f-cond--${k}">${icon(st[0])}<span class="f-cond__body"><span class="f-cond__text">${t}</span><b>${st[1]}</b>${why ? `<span class="f-muted">${why}</span>` : ''}<span class="f-cond__meta"><span><b>Requirement:</b> ${req}</span><span><b>Document:</b> ${doc}</span></span>${valButton(note, `<span>Source note ${NOTES[note].n}</span>`, 'Condition source', 'f-val--small')}</span></li>`;
+  };
+  return `<div class="g-grid">
+  ${item('Condition list · Austria', 'You (Austrian) and Partner (Brazilian, durable partnership)', `<div class="f-cgroup"><h4 class="f-cgroup__title">You<span>Austrian citizen</span></h4><ul>${cond('met', 'Hold Austrian citizenship', null, 'Citizenship of Austria', 'Passport', 'euRuleAUT')}</ul></div>
+    <div class="f-cgroup"><h4 class="f-cgroup__title">Partner<span>Brazilian citizen, durable partnership</span></h4><ul>${cond('notmet', 'Proof of a durable partnership of at least two years', 'You entered one year together.', 'Shared household for two years', 'Lease or registration records', 'partnerAUT')}${cond('unknown', 'Sufficient resources for both of you', 'What would decide it: your joint net income, which you have not entered.', 'Income above the reference rate', 'Income statements', 'partnerAUT')}</ul></div>`)}
+  ${item('Condition list · Costa Rica, rentista', 'You and Partner', `<div class="f-cgroup"><h4 class="f-cgroup__title">You<span>US citizen</span></h4><ul>${cond('met', 'A stable monthly income from abroad', null, 'At least the set amount for two years', 'Bank letter', 'routeCRI')}${cond('unknown', 'Clean criminal record', 'What would decide it: a record certificate from each country lived in.', 'No convictions', 'Apostilled certificate', 'routeCRI')}</ul></div>`)}
+  ${item('Condition list · Germany', 'a child (11), dual national', `<div class="f-cgroup"><h4 class="f-cgroup__title">Child<span>German and Indian citizen, 11</span></h4><ul>${cond('met', 'Hold German citizenship', null, 'Citizenship of Germany', 'Passport or certificate', 'euRuleAUT')}</ul></div>`)}
+</div>`;
+};
+S.members = () => `<div class="g-grid">${HOUSEHOLDS.map((h, hi) => item(h.name, hi === 0 ? 'complete' : hi === 1 ? 'complete · two children' : hi === 2 ? 'one member' : 'dual nationality', h.members.map(m => `<div class="mcard"><div class="mcard__head"><span class="mcard__role">${m.role}</span>${m.nat.length > 1 ? '<span class="tagx">Dual nationality</span>' : ''}</div><dl><div><dt class="lbl">Nationalities</dt><dd>${m.nat.join(', ')}</dd></div>${m.relation ? `<div><dt class="lbl">Relationship</dt><dd>${m.relation}</dd></div>` : ''}${m.age !== undefined ? `<div><dt class="lbl">Age</dt><dd>${m.age}</dd></div>` : ''}</dl></div>`).join(''), 'g-item--plain')).join('')}
+  ${item('Household member card', 'incomplete: partner without a relationship', `<div class="mcard mcard--incomplete"><div class="mcard__head"><span class="mcard__role">Partner</span></div><dl><div><dt class="lbl">Nationalities</dt><dd>Brazil</dd></div><div><dt class="lbl">Relationship</dt><dd class="mcard__missing">Not chosen yet</dd></div></dl><p class="qp__why">${icon('info-circle')}<span>Why we ask: routes treat married, registered and durable partners differently.</span></p></div>`, 'g-item--plain')}</div>`;
+
+S.lines = () => `<div class="g-grid">
+  ${item('Disclaimer: the footer, the same on every screen', 'the privacy promise and the two links, Disclaimer and Terms of use; phone and desktop', `<div class="g-col" style="justify-items:stretch">${phoneFoot()}${deskFoot()}</div>`, 'g-item--plain')}
+  ${item('Route result note', 'kept on every route result', `<div class="f-pinned" role="note">${icon('info-circle')}<p><b>This is not a visa or residence decision.</b> Only the authority decides.</p></div>`)}
+  ${item('Provisional banner', 'until the criteria sort is touched · on phone, on one line', `<div class="banner banner--prov" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional.</b> Set your priorities to make this ranking yours.</span></span><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens the criteria sort.">Set priorities</button></div><div class="banner banner--prov banner--line" role="status"><span class="banner__txt">${icon('info-circle')}<span><b>Provisional</b> until you set your priorities.</span></span><button type="button" class="f-link" data-toast="Opens the criteria sort.">Set them</button></div>`)}
+  ${item('Data-updated notice', 'with what changed', `<div class="banner banner--upd" role="status"><span class="banner__txt">${icon('refresh')}<span><b>Data updated, your results were recalculated.</b> 3 changes.</span></span><button type="button" class="btn btn--ghost btn--sm" data-disclose aria-expanded="false" aria-controls="updList">Show changes</button><div class="banner__changes" id="updList" hidden><span>Austria · Cost · Price level: 102 → 104</span><span>Costa Rica moved from Possible to Matches</span><span>Germany · Internet · Speed tests: now E1, was unknown</span></div></div>`)}
+</div>`;
+
+S.report = () => `<div class="g-grid">
+  ${item('Report-an-error dialog', 'choose a reason', `<div class="dlg">${reportDialog('Healthcare · Life expectancy, Austria', 'idle')}</div>`, 'g-item--plain')}
+  ${item('Report-an-error dialog', 'sent', `<div class="dlg">${reportDialog('', 'sent')}</div>`, 'g-item--plain')}
+  ${item('Report-an-error dialog', 'failed: offline, will retry', `<div class="dlg">${reportDialog('', 'failed')}</div>`, 'g-item--plain')}
+  ${item('Open it for real', 'from any fact', `<button type="button" class="btn btn--secondary" data-report="Healthcare · Life expectancy, Austria">${icon('message-alert')}<span>Report an error</span></button>`)}
+</div>`;
+
+S.shell = () => `<div class="g-item"><div class="g-item__label"><b>Plan rail</b><span>current · done · not yet; Plan "coming"; neutral pages mark no step as current; 44px legs</span></div>
+  ${frames(`<div class="f-railrow" style="border-radius:8px">${rail('shortlist', { compact: true })}</div><div class="f-railrow" style="border-radius:8px">${rail('route', { compact: true })}</div><div class="f-railrow" style="border-radius:8px">${rail('none', { compact: true })}</div>`, `<div class="g-desk--scroll" tabindex="0" aria-label="Desktop rail demo"><div class="g-col" style="min-width:420px">${rail('shortlist')}${rail('route')}${rail('none')}</div></div>`)}
+  <p class="g-note">The third row is the neutral rail: on reading pages, system states and the empty travel folder no step is current. The not-yet step has a light circle and "coming" a light tag. The connector after a finished step is a solid green line.</p></div>
+<div class="g-item"><div class="g-item__label"><b>Phone: header, menu, next-action bar, footer</b><span>the compact title with the info button; the one action sticky at the bottom; the footer with the two links</span></div>
+  <div class="g-frames"><div class="g-frame"><span class="g-frame__label">Phone · 390</span><div class="g-phone" style="height:560px;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr)"><div class="f-top"><header class="f-head" style="height:68px;padding:8px 8px 0 16px">${WORDMARK}<span class="od-fill"></span><button type="button" class="f-menubtn" data-toast="Opens the menu.">${icon('menu')}<span>Menu</span></button></header><div class="f-railrow">${rail('shortlist', { compact: true })}</div></div><div class="g-pad"><div class="f-titleblock f-titleblock--compact" style="background:var(--paper-card);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow-card)"><div class="f-titlerow"><h3 class="f-title">Where could you go?</h3><button type="button" class="f-iconbtn f-whatbtn" data-disclose aria-expanded="false" aria-controls="whatDemo" aria-label="What happens next">${icon('info-circle')}</button></div><p class="f-whatfold" id="whatDemo" hidden><b>What happens next:</b> add up to three countries to your shortlist.</p></div></div><div>${nextBar('phone', { label: 'Compare your shortlist', hint: 'Step 1 of 3 · 2 countries on your shortlist' })}${phoneFoot()}</div></div></div>
+  </div></div>
+<div class="g-item"><div class="g-item__label"><b>Desktop header and footer at full width</b><span>1440 and 1024: four parts only, the wordmark, the plan rail, the one action and the Menu (shown open); the footer with the two links</span></div>${deskHeaderDemo(1440)}${deskHeaderDemo(1024)}<p class="g-note">The same header on every app screen: the wordmark, the plan rail, the one next action, and the Menu, which holds the travel folder, help, about and your data. The action carries no hint line; only when it is disabled does a short reason sit beside it. Start shows the wordmark and the Menu. The footer carries the privacy promise, the Disclaimer and Terms of use links, and the data version.</p></div>`;
+function deskHeaderDemo(w) {
+  return `<div class="g-frame"><span class="g-frame__label">Desktop · ${w} wide · shown at <span data-scale-pct>100%</span></span><div class="scaler" data-scale-w="${w}"><div class="scaler__in" style="width:${w}px"><div class="f-app">${deskHeader({ rail: 'shortlist', next: { label: 'Compare your shortlist', hint: '2 countries on your shortlist' }, ctx: `d${w}` })}
+    <div class="f-menu--open">${menuList(`d${w}`)}</div>
+    <div class="g-pad" style="min-height:420px;padding:32px 40px"><div class="f-titleblock" style="background:var(--paper-card);padding:20px 24px;border-radius:12px;box-shadow:var(--shadow-card);max-width:640px"><h3 class="f-title" style="font-size:var(--fs-h1)">Where could you go?</h3><p>193 countries, in three bands, checked against your criteria.</p></div></div>
+    ${deskFoot()}</div></div></div></div>`;
+}
+function fitScalers() {
+  document.querySelectorAll('.scaler').forEach(sc => {
+    const w = +sc.dataset.scaleW, inner = sc.firstElementChild, k = Math.min(1, sc.clientWidth / w);
+    sc.style.setProperty('--s', k); sc.style.height = `${Math.ceil(inner.offsetHeight * k)}px`;
+    const pct = sc.parentElement.querySelector('[data-scale-pct]'); if (pct) pct.textContent = `${Math.round(k * 100)}%`;
+  });
+}
+
+S.map = () => `<div class="g-grid">
+  ${item('Locator map', 'Austria', mapCard('AUT'), 'g-item--plain')}
+  ${item('Locator map', 'Costa Rica', mapCard('CRI'), 'g-item--plain')}
+  ${item('Locator map', 'a small island country: ring marker', mapCard('VCT'), 'g-item--plain')}
+  ${item('Locator map', 'São Tomé and Príncipe, small', mapCard('STP', { size: 'sm' }), 'g-item--plain')}
+  ${item('Locator map', 'Germany, small (phone)', mapCard('DEU', { size: 'sm' }), 'g-item--plain')}
+  ${item('Locator map', 'Democratic Republic of the Congo, wide view', mapCard('COD', { span: 90 }), 'g-item--plain')}
+</div><p class="g-note">An engraved paper map card: fine graticule, the country as a solid navy silhouette with a fine paper edge, a ring for small countries and islands, and a small world inset marking the view. The text alternative names the region. Outlines from Natural Earth, served from our own site.</p>`;
+
+S.tickets = () => `<div class="g-item"><div class="g-item__label"><b>Ticket</b><span>for what the household chose: the shortlist (up to three), Compare, the travel folder and the top of the country page</span></div>
+  ${frames(`${ticket('AUT')}${ticket('CRI', { routeDone: [['You', 'covered'], ['Partner', 'partly']] })}`, `${ticket('AUT', { remove: true })}${ticket('CRI', { remove: true, routeDone: [['You', 'covered'], ['Partner', 'partly']], })}${ticket('DEU', { remove: true })}`)}
+  <p class="g-note">Before Route: the answer line comes from the criteria, and the route shows only as the route check label. After Route has been done for a country (Costa Rica here), the ticket shows each member's "Appears …" result. The fourth fact is the value of the household's most important criterion, here Healthcare · Life expectancy. Coverage marks count the 11 selected criteria.</p></div>`;
+
+/* Cover with the papers card: the Start (B2) component from the D1 engine, the same one D2 renders as screen 1.
+   Every state on the real artboards, phone (390 × 844) and desktop (1440 × 900, scaled to fit). */
+const COVER_STATES = [['first', 'first visit: the destination still blank, the departure board on arrival'], ['terms', 'terms not yet accepted: the card is the terms, the only button is Accept'], ['changed', 'terms changed since you accepted'], ['returning', 'returning with a travel folder: the shortlist codes on the pass'], ['firstload', 'data loading for the first time']];
+S.cover = () => COVER_STATES.map(([v, label]) => `<div class="g-item g-boards" id="cover-${v}"><div class="g-item__label"><b>Cover with the papers card</b><span>${label}</span></div>
+  <div class="k-boards"><div class="k-board"><div class="board-label"><b>Phone</b><span>390 × 844</span><span class="sample">Sample data</span></div><div class="k-artboard k-phone" data-frame data-cover="${v}" data-ctx="phone">${startShell('phone', { body: startB2(v, 'phone'), menuId: `cover-${v}-phone` })}</div></div>
+    <div class="k-board k-board--desktop"><div class="board-label"><b>Desktop</b><span data-fit-label>1440 × 900</span><span class="sample">Sample data</span></div><div class="k-fit k-artboard" data-fit><div class="k-desk" data-frame data-cover="${v}" data-ctx="desktop">${startShell('desktop', { body: startB2(v, 'desktop'), menuId: `cover-${v}-desktop` })}</div></div></div></div></div>`).join('') + '<p class="g-note">The full photo as the stage, the papers card over its lower part: the headline about the life, the rational line, the boarding pass as the one object (the destination "???" in navy on a light underline, the stub code in oxblood), the three journey legs with plain hairline dividers, Plan marked "coming". The card band carries the cover\'s place line. On desktop the card ends 24px above the footer with the journey row fully visible, and the pass is about 15% larger. The boarding pass perforation is a line of punched holes. On desktop the card lies over the lower part of the photo and ends on the paper ground. The footers carry the cover credit, the privacy promise and the Disclaimer and Terms of use links. Text never sits on the photo.</p>';
+
+S.profile = () => `<div class="g-grid">
+  ${item('Quick profile · 1 of 3', 'where you live now · select menu with search', `<div class="qp"><span class="qp__step">Question 1 of 3</span><div class="prog"><div class="prog__track" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="3" aria-label="Question 1 of 3"><span class="prog__bar" style="width:33%"></span></div></div><p class="qp__q" id="qp1q">Where do you live now?</p><p class="qp__why">${icon('info-circle')}<span>Why we ask: to compare prices from where you are.</span></p>${selectMenu({ ariaLabel: 'Where do you live now?', items: COUNTRY_ITEMS(), value: 'Austria', searchPlaceholder: 'Type a country' })}<div class="qp__foot"><button type="button" class="btn btn--ghost btn--sm" data-toast="Skipped. We use no home country.">Skip</button><button type="button" class="btn btn--secondary" data-toast="Next question.">Next</button></div></div>`)}
+  ${item('Quick profile · 2 of 3', 'languages you speak · select menu, several choices, with search (needed for Language · Official languages)', `<div class="qp"><span class="qp__step">Question 2 of 3</span><div class="prog"><div class="prog__track" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="3" aria-label="Question 2 of 3"><span class="prog__bar" style="width:67%"></span></div></div><p class="qp__q">Which languages does your household speak?</p><p class="qp__why">${icon('info-circle')}<span>Why we ask: "Language · Official languages" checks whether a country's official language is one of these.</span></p>
+    ${selectMenu({ id: 'smLang', ariaLabel: 'Languages your household speaks', items: LANGUAGES, value: ['German', 'Portuguese', 'English'], multiple: true, icon: 'language', placeholder: 'Add a language', searchPlaceholder: 'Type a language' })}<div class="chips" id="langChips"></div><div class="qp__foot"><span class="field__why" id="langCount" aria-live="polite"></span><button type="button" class="btn btn--secondary" data-toast="Next question.">Next</button></div></div>`)}
+  ${item('Quick profile · 3 of 3', 'cost importance · segmented', `<div class="qp"><span class="qp__step">Question 3 of 3</span><div class="prog"><div class="prog__track" role="progressbar" aria-valuenow="3" aria-valuemin="0" aria-valuemax="3" aria-label="Question 3 of 3"><span class="prog__bar" style="width:100%"></span></div></div><p class="qp__q">How much does cost of living matter?</p><p class="qp__why">${icon('info-circle')}<span>Why we ask: sets how strongly Cost · Price level counts. You can change it in the sort.</span></p><div class="segc" role="group" aria-label="Cost importance"><button type="button" aria-pressed="false">Not much</button><button type="button" aria-pressed="true">Somewhat</button><button type="button" aria-pressed="false">A lot</button></div><div class="qp__foot"><span class="field__why">7 inputs or fewer before your first ranking.</span><button type="button" class="btn btn--primary" data-toast="Shows the first ranking.">Show my first ranking</button></div></div>`)}
+</div><p class="g-note">The climate question moved to the Climate · Climate zone card, and time zone and driving side ask on their cards too, only when the household picks them. Languages stay here, because Language · Official languages needs them.</p>`;
+
+/* ── Wiring ────────────────────────────────────────────────────────── */
+const SECTIONS = [
+  ['buttons', 'Buttons'], ['inputs', 'Text, select and number inputs'], ['choices', 'Checkbox, radio, switch, segmented control'], ['containers', 'Card, tag, tabs, accordion'],
+  ['overlays', 'Modal, sheet and side panel, toast, alerts'], ['feedback', 'Progress, drop zone, empty, skeleton, tooltip, link'], ['compare', 'Comparison table'], ['longlist', 'Long list'],
+  ['evidence', 'Evidence marks'], ['panel', 'Source panel'], ['unknown', 'Unknown value and out-of-date marker'], ['bands', 'Evidence band, coverage, score, route check, band header'],
+  ['rows', 'Country row'], ['tickets', 'Ticket'], ['criteria', 'Criterion cards and piles'], ['conditions', 'Condition list'], ['members', 'Household member card'],
+  ['lines', 'Disclaimer, notes, banners'], ['report', 'Report-an-error dialog'], ['shell', 'Plan rail, header, menu, next-action bar, footer'], ['map', 'Locator map'],
+  ['cover', 'Cover with the papers card (Start, B2)'], ['profile', 'Quick profile questions']
+];
+function galleryInit() {
+  $('#toc').innerHTML = SECTIONS.map(([id, t]) => `<a href="#g-${id}">${t}</a>`).join('');
+  $('#gallery').innerHTML = SECTIONS.map(([id, t], i) => `<section class="g-sec" id="g-${id}" aria-labelledby="gh-${id}"><div class="dep"><div class="dep__row"><span class="dep__no">${String(i + 1).padStart(2, '0')}</span><h2 class="cond" id="gh-${id}">${t}</h2></div></div>${S[id]()}</section>`).join('');
+  /* languages: the select menu holds the choice, the chips show it and remove it */
+  const drawChips = () => {
+    const chosen = smValue($('#smLang'));
+    $('#langChips').innerHTML = chosen.map(l => `<button type="button" class="chip-x" data-lang="${esc(l)}"><span>${esc(l)}</span>${icon('xmark')}<span class="sr-only"> remove</span></button>`).join('');
+    $('#langCount').textContent = `${chosen.length} ${chosen.length === 1 ? 'language' : 'languages'} chosen`;
+  };
+  drawChips();
+  $('#langChips').addEventListener('click', e => { const b = e.target.closest('[data-lang]'); if (b) smSet($('#smLang'), smValue($('#smLang')).filter(x => x !== b.dataset.lang)); });
+  document.addEventListener('smenu-change', e => {
+    if (e.target.id === 'smLang') drawChips();
+    if (e.target.id === 'llRegion') renderLongList();
+    if (e.target.id === 'smCountry') toast(`${e.detail.value[0]} selected.`);
+  });
+  /* piles */
+  renderPiles();
+  document.addEventListener('keydown', e => {
+    const card = e.target.matches && e.target.matches('#piles [data-crit]') ? e.target : null;
+    if (card && ['1', '2', '3', '4'].includes(e.key)) moveCrit(card.dataset.crit, ['non', 'important', 'nice', 'unused'][+e.key - 1]);
+    if (e.key === 'Escape') { $('#pileMenu').hidden = true; document.querySelectorAll('[data-tip][aria-expanded="true"]').forEach(b => { b.setAttribute('aria-expanded', 'false'); document.getElementById(b.getAttribute('aria-controls')).hidden = true; }); }
+  });
+  document.addEventListener('click', e => {
+    const mv = e.target.closest('#piles [data-move]');
+    const menu = $('#pileMenu');
+    if (mv) {
+      const r = mv.getBoundingClientRect();
+      menu.innerHTML = Object.keys(PILE_NAMES).map(p => `<button type="button" class="f-mi" role="menuitem" data-pile-to="${p}" data-crit-id="${mv.dataset.move}">${PILE_NAMES[p]}</button>`).join('');
+      menu.style.top = `${Math.round(Math.min(r.bottom + 4, innerHeight - 240))}px`; menu.style.left = `${Math.round(Math.max(8, Math.min(r.right - 240, innerWidth - 248)))}px`; menu.style.width = '240px';
+      menu.hidden = false; menu.querySelector('button').focus(); return;
+    }
+    const to = e.target.closest('[data-pile-to]');
+    if (to) { menu.hidden = true; moveCrit(to.dataset.critId, to.dataset.pileTo); return; }
+    if (!e.target.closest('#pileMenu')) menu.hidden = true;
+    const seg = e.target.closest('.segc button');
+    if (seg) {
+      seg.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === seg)));
+      if (seg.closest('[data-cmp-switch]')) $('[data-cmp-phone]').innerHTML = compareTable(['AUT', seg.dataset.iso], true);
+    }
+    const tab = e.target.closest('[role=tab]');
+    if (tab) selectTab(tab);
+    const tip = e.target.closest('[data-tip]');
+    if (tip) { const open = tip.getAttribute('aria-expanded') === 'true'; tip.setAttribute('aria-expanded', String(!open)); document.getElementById(tip.getAttribute('aria-controls')).hidden = open; }
+    const pw = e.target.closest('[data-toggle-pw]');
+    if (pw) { const inp = document.getElementById(pw.dataset.togglePw); const show = inp.type === 'password'; inp.type = show ? 'text' : 'password'; pw.setAttribute('aria-pressed', String(show)); pw.setAttribute('aria-label', show ? 'Hide password' : 'Show password'); pw.innerHTML = icon(show ? 'eye-closed' : 'eye'); }
+    if (e.target.closest('[data-open-delete]')) {
+      const dlg = document.getElementById('kDialog');
+      dlg.innerHTML = `<div class="dlg">${deleteDialog()}</div>`;
+      dlg.showModal(); dlg.querySelector('h2').focus();
+    }
+  });
+  document.addEventListener('change', e => {
+    if (e.target.matches('[data-switch]')) { const s = e.target.closest('.switch').querySelector('.switch__state'); if (s) s.textContent = e.target.checked ? 'On' : 'Off'; }
+    if (e.target.matches('#llRoute')) renderLongList();
+  });
+  $('#llSearch').addEventListener('input', renderLongList);
+  renderLongList();
+  fitScalers(); fitDesks(); addEventListener('resize', () => { fitScalers(); fitDesks(); }); document.fonts.ready.then(() => { fitScalers(); fitDesks(); });
+  /* the Start artboards: the menus, and the departure board when the first-visit boards come into view */
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-menu], .f-mi'); if (!t) return;
+    const board = t.closest('[data-cover]'); if (!board) return;
+    const m = board.querySelector('.k-menu'), btn = board.querySelector('[data-menu]');
+    if (t.matches('[data-menu]')) { const open = m.hidden; m.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open) m.querySelector('.f-mi').focus(); }
+    else { m.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+  });
+  armStartFlaps(document.getElementById('cover-first'), () => [...document.querySelectorAll('[data-cover="first"]')]);
+  document.querySelectorAll('[data-tabs] [role=tablist]').forEach(tl => tl.addEventListener('keydown', e => {
+    const tabs = [...tl.querySelectorAll('[role=tab]')], i = tabs.indexOf(document.activeElement);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; selectTab(n); n.focus(); }
+  }));
+}
+function selectTab(tab) {
+  const list = tab.closest('[role=tablist]');
+  list.querySelectorAll('[role=tab]').forEach(t => { const on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; document.getElementById(t.getAttribute('aria-controls')).hidden = !on; });
+}
+</script>
 <script>
   renderPatterns();
   document.getElementById('heroMrz').innerHTML = mrzLines(countryBy('AUT')).map(esc).join('<br>');
   document.getElementById('i-media').outerHTML = icon('media-image');
   document.querySelectorAll('[data-i]').forEach(el => { el.outerHTML = icon(el.dataset.i); });
+  galleryInit();
   initBehavior();
   dsInit();
 </script>
