@@ -1635,8 +1635,9 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
   .f-rail--compact li + li::before { width: 8px; -webkit-mask-size: 8px 8px; mask-size: 8px 8px; }
   .f-rail--compact .f-step { padding: 0 4px 0 2px; }
 }
-/* Phone header: the hamburger stands alone, no circle around it */
-.k-phone .f-menubtn--icon, .g-phone .f-menubtn--icon { border: 0; background: transparent; }
+/* The hamburger stands alone, no circle around it, on phone and desktop; hover and open show a soft square */
+.f-menubtn--icon { border: 0; background: transparent; border-radius: var(--r-btn); }
+.f-menubtn--icon[aria-expanded="true"] { background: var(--paper-page); }
 /* ── Condition list ────────────────────────────────────────────────────────────────────────────────
    Per household member: the member as a header, then each condition as a row: the title with its status pill on
    the right, one muted line for the reason or what would decide it, and a quiet two-column list for the
