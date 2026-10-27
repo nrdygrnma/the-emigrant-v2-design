@@ -1605,6 +1605,29 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .f-band .crow--ruled { background: transparent; }
 .f-band .crow--ruled .crow__name { color: var(--ink-text-2); }
 .f-band__body { padding-bottom: 8px; }
+
+/* ── Typed values: mono only ever on its chip ────────────────────────────────────────────────────
+   Dates, codes, URLs, file names, data versions and terms as written are typed values: Martian Mono, narrow, on a
+   pale chip with a hairline edge, like an entry typed into a form field. Mono never runs loose in text. Large figures
+   (scores, values), evidence marks, stub codes, the boarding pass and the passport line keep their mono: their frame
+   is already there. */
+.mchip { display: inline-block; padding: 1px 6px; border-radius: 4px; background: var(--paper-page); box-shadow: inset 0 0 0 1px var(--line-hair); font-family: var(--f-mono); font-stretch: 75%; font-weight: 500; font-size: var(--fs-xs); line-height: 1.6; letter-spacing: 0; color: var(--ink-navy); white-space: nowrap; vertical-align: baseline; text-transform: none; }
+.f-panel__body dd > .mchip, .cp__fields dd > .mchip { font-size: var(--fs-sm); }
+.mchip--link { display: inline-flex; gap: 4px; margin-top: 4px; color: var(--ink-evidence); white-space: normal; overflow-wrap: anywhere; }
+.f-panel__body dd small:has(.mchip--link) { display: block; }
+.stamp-row__date, .d2-fact__meta > span:has(.mchip) { font-family: var(--f-text); font-stretch: 100%; font-size: var(--fs-sm); color: var(--ink-text-2); }
+/* codes before a line of text: the chip, then the words in the text font */
+.f-entry__code, .crow__meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; font-family: var(--f-text); font-stretch: 100%; font-size: var(--fs-xs); color: var(--ink-text-2); }
+.crow__meta { font-size: var(--fs-xs); }
+.drop__file { font-family: var(--f-text); font-stretch: 100%; }
+.drop__file .mchip { font-size: var(--fs-sm); }
+.smenu__code.mchip { flex: none; }
+.f-mt .mchip { font-size: var(--fs-sm); }
+.appfoot__meta .mchip { font-size: var(--fs-xs); }
+/* small labels that were mono by habit: the text font */
+.qp__step, .crit__keys, .start-card__last { font-family: var(--f-text); font-stretch: 100%; }
+/* the proof line on the Start card: one chip */
+.st-proof { justify-self: start; font-size: var(--fs-xs) !important; padding: 2px 8px; border-radius: 4px; background: var(--paper-page); box-shadow: inset 0 0 0 1px var(--line-hair); }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
@@ -1836,6 +1859,8 @@ function hash(s) { let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(
 function rnd(seed, i = 0) { return (hash(seed + ':' + i) % 10000) / 10000; }
 function plural(n, one, many) { return `${n} ${n === 1 ? one : many}`; }
 function hl(s) { return `<span class="hl">${s}</span>`; }
+/* A typed value: dates, codes, URLs, file names, terms as written. Mono, always on its pale chip, never loose */
+const chip = (s, cls = '') => `<span class="mchip${cls ? ` ${cls}` : ''}">${s}</span>`;
 function meter(n) { return `<span class="k-meter" aria-hidden="true">${[1, 2, 3].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`; }
 const DISCLAIMER = 'We take no responsibility for the accuracy, completeness or currency of this information. Confirm with the authority or an adviser.';
 const PRIVACY = 'Your plan stays on this device. No profile or plan data is sent to our server.';
@@ -2095,7 +2120,7 @@ function extras(o) {
 function mark(level, risk, opts = {}) {
   const [n, rw] = RISK[risk];
   if (opts.compact) return stampTag(level, { name: opts.name, compact: true });
-  return `<span class="stamp-row">${stampTag(level, { name: opts.name })}<span class="stamp-row__risk">${meter(n)}<span>${rw}</span></span>${opts.asOf ? `<span class="stamp-row__date">Last checked ${opts.asOf}</span>` : ''}${extras(opts)}</span>`;
+  return `<span class="stamp-row">${stampTag(level, { name: opts.name })}<span class="stamp-row__risk">${meter(n)}<span>${rw}</span></span>${opts.asOf ? `<span class="stamp-row__date">Last checked ${chip(opts.asOf)}</span>` : ''}${extras(opts)}</span>`;
 }
 function evButton(id, opts = {}) {
   const d = NOTES[id];
@@ -2215,7 +2240,7 @@ function ticket(iso, opts = {}) {
   const acts = opts.acts === false ? '' : `<div class="f-entry__acts"><button type="button" class="btn btn--secondary" data-toast="Opens the country page for ${esc(c.name)}.">See details<span class="sr-only"> for ${esc(c.name)}</span></button>${opts.remove ? `<button type="button" class="btn btn--ghost" data-toast="${esc(c.name)} removed from your shortlist.">${icon('minus')}<span>Remove</span></button>` : ''}</div>`;
   return `<article class="tk" aria-label="Ticket: ${esc(c.name)}"><div class="tk__in">
     <figure class="tk__photo ph">${phImg(c, 'ticket')}<figcaption class="ph__credit">${credit(c)}</figcaption></figure>
-    <div class="tk__main">${answerLine(c)}<div class="f-entry__id"><h3 class="f-entry__name">${esc(c.name)}</h3><span class="f-entry__code">${c.iso}${c.capital ? ` · ${c.capital[0]}` : ''} · ${esc(c.region)}</span></div>${facts}${acts}</div>
+    <div class="tk__main">${answerLine(c)}<div class="f-entry__id"><h3 class="f-entry__name">${esc(c.name)}</h3><span class="f-entry__code">${chip(c.iso)}<span>${c.capital ? `${c.capital[0]} · ` : ''}${esc(c.region)}</span></span></div>${facts}${acts}</div>
     <div class="tk__stub" aria-hidden="true"><span class="stub__label">Stub</span><span class="stub__code">${c.iso}</span><span class="stub__city">${c.capital ? `${c.capital[0]} · ${c.capital[1]}` : esc(c.region)}</span></div>
   </div></article>`;
 }
@@ -2229,7 +2254,7 @@ function countryRow(c, opts = {}) {
     : `<span class="crow__facts">${score(c.score)}${eband(c.known, c.total, { cap: opts.cap ?? bandCap(c) })}</span>`;
   return `<li class="crow crow--${c.band}${state === 'full' ? ' crow--full' : ''}${c.routeCheck === 'none' ? ' crow--noroute' : ''}">
     ${pstamp(c, 'sm')}
-    <a class="crow__main" href="#" data-toast="Opens the country page for ${esc(c.name)}."><span class="crow__name">${esc(c.name)}</span><span class="crow__meta">${c.iso} · ${esc(c.region)}</span></a>
+    <a class="crow__main" href="#" data-toast="Opens the country page for ${esc(c.name)}."><span class="crow__name">${esc(c.name)}</span><span class="crow__meta">${chip(c.iso)}<span>${esc(c.region)}</span></span></a>
     <span class="crow__detail">${detail}${c.routeCheck === 'none' ? '' : `<span class="crow__route">${routeCheck(c.routeCheck)}</span>`}</span>
     ${add}</li>`;
 }
@@ -2239,20 +2264,20 @@ function sourcePanel(d, titleId, closable) {
   const rows = [
     ['The fact', esc(d.value)],
     ['Evidence mark', mark(d.level, d.risk, { name: d.verifier, flagged: d.flagged, machineTranslation: d.machineTranslation })],
-    ['From', `${esc(d.source)}${d.url ? `<small class="mono">${esc(d.url)}</small>` : ''}`],
+    ['From', `${esc(d.source)}${d.url ? `<small>${chip(`${esc(d.url)}<span aria-hidden="true">↗</span>`, 'mchip--link')}</small>` : ''}`],
     ['License', esc(d.license)],
-    ['Data from', `<span class="mono">${esc(dataYear(d.dataFrom || d.asOf))}</span>${d.stale ? `<small>${staleNote(d.dataFrom || d.asOf)}</small>` : ''}`],
-    ['Last checked', `<span class="mono">${esc(d.asOf === 'None' ? 'Not yet' : d.asOf)}</span>`],
+    ['Data from', `${dataYear(d.dataFrom || d.asOf) === 'Not yet' ? 'Not yet' : chip(esc(dataYear(d.dataFrom || d.asOf)))}${d.stale ? `<small>${staleNote(d.dataFrom || d.asOf)}</small>` : ''}`],
+    ['Last checked', d.asOf === 'None' ? 'Not yet' : chip(esc(d.asOf))],
     ['Editorial label', esc(d.label)]
   ];
-  if (d.verifier) rows.push(['Verified by', `${esc(d.verifier)}<small>${esc(d.role)}</small>`], ['Verified on', `<span class="mono">${esc(d.verifiedOn)}</span>`], ['Why it applies', esc(d.why)]);
+  if (d.verifier) rows.push(['Verified by', `${esc(d.verifier)}<small>${esc(d.role)}</small>`], ['Verified on', chip(esc(d.verifiedOn))], ['Why it applies', esc(d.why)]);
   return `<div class="f-panel__top"><div class="f-panel__grab" aria-hidden="true"></div>
     <div class="f-panel__head"><span class="f-panel__n" aria-hidden="true">${d.n}</span><div class="f-panel__titles"><span class="f-panel__kicker">Source note ${d.n} · sample data</span><h2 class="f-panel__title" id="${titleId}" tabindex="-1">${esc(d.claim)}</h2></div>
     ${closable ? `<button type="button" class="f-iconbtn" data-close aria-label="Close source note">${icon('xmark')}</button>` : ''}</div></div>
     <div class="k-panel__body f-panel__body">
       ${d.level === 0 ? unknownBlock(d.reason || 'source') : ''}
       <dl>${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
-      ${d.machineTranslation ? `<div class="f-mt"><p class="f-iconline">${icon('translate')}<b>Verified through machine translation</b></p><p>The source is in Spanish. Key terms as written: <q>${esc(d.machineTranslation[0])}</q>, <q>${esc(d.machineTranslation[1])}</q>.</p></div>` : ''}
+      ${d.machineTranslation ? `<div class="f-mt"><p class="f-iconline">${icon('translate')}<b>Verified through machine translation</b></p><p>The source is in Spanish. Key terms as written: ${chip(esc(d.machineTranslation[0]))} ${chip(esc(d.machineTranslation[1]))}.</p></div>` : ''}
       <div class="f-panel__links"><a class="f-link" href="#" data-toast="Opens How the evidence works at this level.">${icon('info-circle')}<span>What does this mean?</span></a>
         <button type="button" class="f-link" data-report="${esc(d.claim)}">${icon('message-alert')}<span>Report an error</span></button></div>
     </div>`;
@@ -2310,7 +2335,7 @@ function phoneFoot(p = {}) {
   return `<div class="appfoot${p.cls ? ` ${p.cls}` : ''}">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<p class="st-quiet__line">${icon('lock')}<span>${PRIVACY}</span></p><p class="st-quiet__line st-quiet__links">${footLinks()}</p></div>`;
 }
 function deskFoot(p = {}) {
-  return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal"><a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a><span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}<span class="mono">${DATA_VERSION}</span></div></footer>`;
+  return `<footer class="appfoot appfoot--desk"><div class="appfoot__legal"><a href="#" data-toast="${TERMS_TOAST}">Disclaimer</a><a href="#" data-toast="${TERMS_TOAST}">Terms of use</a><span class="appfoot__promise">${PRIVACY}</span></div><div class="appfoot__meta">${p.credit ? `<span class="st-footcredit">${p.credit}</span>` : ''}${chip(DATA_VERSION)}</div></footer>`;
 }
 
 /* Desktop artboards shown scaled to fit their column */
@@ -2397,7 +2422,7 @@ function startB2(variant, ctx) {
       <ul class="start-card__terms">${['We take no responsibility for the accuracy, completeness or currency of the information.', 'Our liability is limited as far as the law allows.', 'This is not legal advice.', 'Confirm with the authority or an adviser.', 'Your data stays on your device.'].map(t => `<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul>
       <a class="f-link" href="#" data-toast="Opens the full terms (screen 14).">${icon('journal-page')}<span>Read the full terms</span></a><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-act="accept">Accept</button></div></div>`;
   } else if (variant === 'firstload') {
-    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Downloading the data for the first time</span><span class="mono">40%</span></div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
+    inner = `<div class="st-col st-col--load"><span class="lbl">Getting your data ready</span><div class="prog"><div class="prog__txt"><span>Downloading the data for the first time</span>${chip('40%')}</div><div class="prog__track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Downloading the data"><span class="prog__bar" style="width:40%"></span></div></div><p class="field__why">Usually under five seconds on a phone. Happens once.</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" disabled>Find where you could go</button></div></div>`;
   } else {
     const returning = variant === 'returning';
     const lead = `<div class="st-col st-col--lead"><h1 class="f-title st-headline" tabindex="-1">${esc(START.headline)}</h1><p class="st-rational">${esc(START.rational)}</p></div>`;
@@ -2452,7 +2477,7 @@ function smDraw(root) {
   const inp = root.querySelector('.smenu__input'), q = inp ? inp.value.trim().toLowerCase() : '';
   const found = items.filter(i => `${i.label} ${i.code || ''}`.toLowerCase().includes(q));
   const active = +(root.dataset.active ?? -1);
-  list.innerHTML = found.length ? found.map((i, n) => `<div class="smenu__opt${n === active ? ' is-active' : ''}" role="option" id="${list.id}-${n}" aria-selected="${vals.includes(i.label)}" data-v="${esc(i.label)}"><span class="smenu__check" aria-hidden="true">${vals.includes(i.label) ? icon('check') : ''}</span><span class="smenu__label">${esc(i.label)}</span>${i.code ? `<span class="smenu__code mono">${esc(i.code)}</span>` : ''}</div>`).join('') : '<div class="smenu__empty">No match. Check the spelling.</div>';
+  list.innerHTML = found.length ? found.map((i, n) => `<div class="smenu__opt${n === active ? ' is-active' : ''}" role="option" id="${list.id}-${n}" aria-selected="${vals.includes(i.label)}" data-v="${esc(i.label)}"><span class="smenu__check" aria-hidden="true">${vals.includes(i.label) ? icon('check') : ''}</span><span class="smenu__label">${esc(i.label)}</span>${i.code ? chip(esc(i.code), 'smenu__code') : ''}</div>`).join('') : '<div class="smenu__empty">No match. Check the spelling.</div>';
   (inp || list).setAttribute('aria-activedescendant', active >= 0 && active < found.length ? `${list.id}-${active}` : '');
   const a = list.querySelector('.is-active'); if (a) a.scrollIntoView({ block: 'nearest' });
 }
@@ -2865,7 +2890,7 @@ function factRow(iso, id, opts = {}) {
   const report = `<button type="button" class="f-link d2-report" data-report="${esc(d.claim)}">${icon('message-alert')}<span>Report an error</span></button>`;
   if (!v || !v[0]) return `<li class="d2-fact d2-fact--unknown"><span class="d2-fact__name">${critName(c)}</span><div class="d2-fact__body">${unknownBlock(d.reason || 'source', opts.decide ? { decide: opts.decide } : {})}</div><div class="d2-fact__meta">${report}</div></li>`;
   const from = v[5] || d.dataFrom || v[4], stale = d.stale || dataYear(from) < '2024';
-  return `<li class="d2-fact"><span class="d2-fact__name">${critName(c)}</span><div class="d2-fact__body">${valButton(note, `<span class="f-val__n">${esc(v[0])}</span>${v[1] ? `<span class="f-val__u">${esc(v[1])}</span>` : ''}`, critName(c))}${evButton(note, { compact: true, level: v[2], risk: v[3], flagged: d.flagged, machineTranslation: !!d.machineTranslation })}</div><div class="d2-fact__meta">${stale ? staleNote(from) : `<span class="mono">Last checked ${v[4]}</span>`}${d.machineTranslation ? `<span class="f-iconline f-flag">${icon('translate')}<span>Via machine translation</span></span>` : ''}${report}</div></li>`;
+  return `<li class="d2-fact"><span class="d2-fact__name">${critName(c)}</span><div class="d2-fact__body">${valButton(note, `<span class="f-val__n">${esc(v[0])}</span>${v[1] ? `<span class="f-val__u">${esc(v[1])}</span>` : ''}`, critName(c))}${evButton(note, { compact: true, level: v[2], risk: v[3], flagged: d.flagged, machineTranslation: !!d.machineTranslation })}</div><div class="d2-fact__meta">${stale ? staleNote(from) : `<span>Last checked ${chip(v[4])}</span>`}${d.machineTranslation ? `<span class="f-iconline f-flag">${icon('translate')}<span>Via machine translation</span></span>` : ''}${report}</div></li>`;
 }
 /* The country page card. Desktop: the print above, the card over its lower edge. Phone: the compact card alone
    (the crop is the photo), the "what happens next" info button beside the title, so the facts reach the first screen. */
@@ -2882,12 +2907,12 @@ function countryHero(c, ctx, next) {
       ${phone ? '' : `<div class="cp__band"><span class="cp__label">Country page · your own notes</span><span class="ph__credit">${credit(c)}</span></div>`}
       <div class="cp__body"><div class="cp__crop ph">${phImg(c, 'crop', false)}</div>
         ${title}
-        <div class="cp__answer">${answerLine(c)}<span class="f-entry__code">${c.iso}${c.capital ? ` · ${esc(c.capital[0])}` : ''} · ${esc(c.region)}</span><div class="d2-cp-marks">${coverage(c.known, c.total, { cap: bandCap(c) })}${routeCheck(c.routeCheck)}</div>${phone ? `<p class="f-whatfold" id="${id}" hidden><b>What happens next:</b> ${next}</p>` : ''}</div>
+        <div class="cp__answer">${answerLine(c)}<span class="f-entry__code">${chip(c.iso)}<span>${c.capital ? `${esc(c.capital[0])} · ` : ''}${esc(c.region)}</span></span><div class="d2-cp-marks">${coverage(c.known, c.total, { cap: bandCap(c) })}${routeCheck(c.routeCheck)}</div>${phone ? `<p class="f-whatfold" id="${id}" hidden><b>What happens next:</b> ${next}</p>` : ''}</div>
         <dl class="cp__fields">
           <div><dt>Score</dt><dd class="d2-nowrap">${c.band === 'ruled' ? 'Ruled out' : c.score ? `<span class="mono">${hl(c.score)}</span> / 10` : 'No score yet'}</dd></div>
-          <div><dt>Capital</dt><dd>${c.capital ? `${esc(c.capital[0])} · <span class="mono">${c.capital[1]}</span>` : '–'}</dd></div>
-          <div><dt>Position</dt><dd class="mono">${dms}</dd></div>
-          <div><dt>Last checked</dt><dd class="mono">${esc(dateOf)}</dd></div>${phone ? `<div class="cp__credit"><dt>Photo</dt><dd class="ph__credit">${credit(c)}</dd></div>` : ''}
+          <div><dt>Capital</dt><dd>${c.capital ? `${esc(c.capital[0])} ${chip(c.capital[1])}` : '–'}</dd></div>
+          <div><dt>Position</dt><dd>${chip(dms)}</dd></div>
+          <div><dt>Last checked</dt><dd>${dateOf === 'Not yet' ? 'Not yet' : chip(esc(dateOf))}</dd></div>${phone ? `<div class="cp__credit"><dt>Photo</dt><dd class="ph__credit">${credit(c).replace(/^Photo: /, '')}</dd></div>` : ''}
         </dl></div>
       <div class="mrz" aria-hidden="true">${mrz[0]}<br>${mrz[1]}</div>
     </section>`;
@@ -2959,7 +2984,7 @@ function planBody(S, ctx) {
   const routeDone = S.state === 'routedone' || S.state === 'updated';
   const isos = S.state === 'empty' ? [] : ['AUT', 'CRI'];
   const crits = `<section class="f-section"><h2 class="f-h2">Your criteria, in short</h2>${['non', 'important', 'nice'].map(p => `<p class="d2-critline"><span class="lbl">${PILE_NAMES[p]}</span><span>${PILES[p].map(id => critName(critBy(id))).join(' · ')}</span></p>`).join('')}<div><button type="button" class="btn btn--ghost btn--sm" data-toast="Opens the criteria sort (screen 3).">Change the sort</button></div></section>`;
-  const version = `<section class="f-section"><h2 class="f-h2">Data version</h2><p><span class="mono">${DATA_VERSION}</span> · your results were calculated on it.</p>${S.state === 'updated' ? '<p class="f-muted">3 facts changed since your last visit, listed at the top.</p>' : '<p class="f-muted">Nothing changed since your last visit.</p>'}</section>`;
+  const version = `<section class="f-section"><h2 class="f-h2">Data version</h2><p>${chip(DATA_VERSION)} · your results were calculated on it.</p>${S.state === 'updated' ? '<p class="f-muted">3 facts changed since your last visit, listed at the top.</p>' : '<p class="f-muted">Nothing changed since your last visit.</p>'}</section>`;
   const data = `<section class="f-section"><h2 class="f-h2">Your data</h2><p class="f-muted">${PRIVACY}</p><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:export">${icon('download')}<span>Save your travel folder</span></button><button type="button" class="btn btn--secondary" data-act="sheet:import">${icon('upload')}<span>Open a travel folder</span></button><button type="button" class="btn btn--danger" data-act="dialog:delete">${icon('trash')}<span>Delete your travel folder</span></button></div></section>`;
   if (!isos.length) return `${pageTitle(ctx, 'Your travel folder', 'Travel folder', 'your travel folder fills as you go: shortlist first, then the routes. Everything stays on this device.')}<div class="empty">${icon('journal-page')}<p class="empty__title">Nothing in your travel folder yet</p><p>Find where you could go, or open a travel folder file you saved earlier.</p></div>${data}`;
   return `${pageTitle(ctx, 'Your travel folder', 'Travel folder', routeDone ? 'save your travel folder to keep it. Plan, the step-by-step part, comes in a later release.' : 'check whether all of you can legally live in the countries on your shortlist.')}
@@ -2979,16 +3004,16 @@ function exportSheet(st) {
 }
 function importSheet(st) {
   const pw = nid('ipw');
-  const cmp = (newer) => `<div class="d2-copies"><div class="f-card${newer === 'file' ? ' is-newer' : ''}"><span class="lbl">The file</span><b>our-move-2027.emigrant</b><span class="mono">Saved ${newer === 'file' ? '2026-10-20' : '2026-09-30'}</span><span class="f-muted">3 countries, 1 route checked</span>${newer === 'file' ? '<span class="tagx">Newer</span>' : ''}</div><div class="f-card${newer === 'device' ? ' is-newer' : ''}"><span class="lbl">On this device</span><b>Your current travel folder</b><span class="mono">Changed 2026-10-12</span><span class="f-muted">2 countries, 1 route checked</span>${newer === 'device' ? '<span class="tagx">Newer</span>' : ''}</div></div>`;
+  const cmp = (newer) => `<div class="d2-copies"><div class="f-card${newer === 'file' ? ' is-newer' : ''}"><span class="lbl">The file</span><b>our-move-2027.emigrant</b><span>Saved ${chip(newer === 'file' ? '2026-10-20' : '2026-09-30')}</span><span class="f-muted">3 countries, 1 route checked</span>${newer === 'file' ? '<span class="tagx">Newer</span>' : ''}</div><div class="f-card${newer === 'device' ? ' is-newer' : ''}"><span class="lbl">On this device</span><b>Your current travel folder</b><span>Changed ${chip('2026-10-12')}</span><span class="f-muted">2 countries, 1 route checked</span>${newer === 'device' ? '<span class="tagx">Newer</span>' : ''}</div></div>`;
   const acts = '<div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:replace">Replace my travel folder with the file</button><button type="button" class="btn btn--secondary" data-close>Keep mine</button></div>';
   let body;
   if (st === 'imported') body = `<div class="alert alert--info" role="status">${icon('check-circle')}<div><b>Opened.</b><p>Your travel folder now matches the file: 3 countries, 1 route checked. Your results were recalculated on ${DATA_VERSION.toLowerCase()}.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--primary" data-close>Go to your travel folder</button></div>`;
-  else if (st === 'cant') body = `<div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}holiday-photos.zip</span><span class="field__error">Not a travel folder file. Nothing was changed.</span></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be opened.</b><p>It is not a travel folder file, it is damaged, or it comes from a newer version of the app. Your travel folder on this device is unchanged.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:import">Choose another file</button></div>`;
-  else if (st === 'pwask' || st === 'wrongpw') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-10-20 · protected with a password</span></div>
+  else if (st === 'cant') body = `<div class="drop is-error"><span class="drop__file">${icon('warning-triangle')}${chip('holiday-photos.zip')}</span><span class="field__error">Not a travel folder file. Nothing was changed.</span></div><div class="alert alert--error" role="alert">${icon('warning-triangle')}<div><b>This file can't be opened.</b><p>It is not a travel folder file, it is damaged, or it comes from a newer version of the app. Your travel folder on this device is unchanged.</p></div></div><div class="start-card__acts"><button type="button" class="btn btn--secondary" data-act="sheet:import">Choose another file</button></div>`;
+  else if (st === 'pwask' || st === 'wrongpw') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}${chip('our-move-2027.emigrant')}</span><span class="field__why">Saved 2026-10-20 · protected with a password</span></div>
       <div class="field"><label class="field__label" for="${pw}">Password for this file</label><div class="pw"><input class="input" id="${pw}" type="password" value="${st === 'wrongpw' ? 'olive-harbor-71' : ''}"${st === 'wrongpw' ? ` aria-invalid="true" aria-describedby="${pw}e"` : ''}><button type="button" class="f-iconbtn" data-toggle-pw="${pw}" aria-label="Show password" aria-pressed="false">${icon('eye')}</button></div>${st === 'wrongpw' ? `<span class="field__error" id="${pw}e">That password does not open this file. Check it and try again; we cannot reset it.</span>` : ''}</div>
       <div class="start-card__acts"><button type="button" class="btn btn--primary" data-act="import:unlock">Open the file</button><button type="button" class="btn btn--secondary" data-close>Cancel</button></div>`;
-  else if (st === 'older') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-09-30 · 3 countries, 1 route checked</span></div><div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>This file is older than the travel folder on this device.</b>Replacing would lose what you changed since 2026-09-30.</div></div>${cmp('device')}${acts}`;
-  else if (st === 'chosen') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}our-move-2027.emigrant</span><span class="field__why">Saved 2026-10-20 · 3 countries, 1 route checked</span></div><p class="f-muted">Before anything is replaced: which copy is newer?</p>${cmp('file')}${acts}`;
+  else if (st === 'older') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}${chip('our-move-2027.emigrant')}</span><span class="field__why">Saved 2026-09-30 · 3 countries, 1 route checked</span></div><div class="alert alert--warning" role="note">${icon('clock-rotate-right')}<div><b>This file is older than the travel folder on this device.</b>Replacing would lose what you changed since 2026-09-30.</div></div>${cmp('device')}${acts}`;
+  else if (st === 'chosen') body = `<div class="drop is-chosen"><span class="drop__file">${icon('journal-page')}${chip('our-move-2027.emigrant')}</span><span class="field__why">Saved 2026-10-20 · 3 countries, 1 route checked</span></div><p class="f-muted">Before anything is replaced: which copy is newer?</p>${cmp('file')}${acts}`;
   else body = `<div class="drop">${icon('upload')}<b>Drop a travel folder file here</b><button type="button" class="btn btn--secondary btn--sm" data-act="import:chosen">Choose a file</button></div><p class="f-muted">Nothing is replaced until you say so. We show you which copy is newer first.</p>`;
   return sheet('Open a travel folder', body, nid('it'));
 }
@@ -3068,7 +3093,7 @@ SCREENS.evidence = {
       ['The three bands', `${P('<b>Matches</b> fit every Non-negotiable you set. <b>Possible, needs checking</b> fit, with questions still open. <b>Ruled out</b> miss at least one Non-negotiable, and stay listed with the reason.')}${P('There is no winner and no rank number. The order speaks for itself, and a score only counts the criteria that are known.')}`],
       ['The evidence band', `<div class="g-col">${eband(10, 11)}${eband(7, 11)}${eband(4, 11)}</div>${P('How many of the criteria you selected are known for a country: Strong from 80 percent, Partial from 50, Thin below.')}`],
       ['Why unknown never becomes a recommendation', `${unknownBlock('source')}${P('A value we do not know counts neither for nor against a country. We never fill a gap with a guess, an average or a zero. The reason is always shown.')}`],
-      ['The machine-translation exception', `<div class="f-mt"><p class="f-iconline">${icon('translate')}<b>Verified through machine translation</b></p><p>Where a named person verified a source in a language we do not read, the note says so and quotes the key terms as written, for example <q>residencia temporal</q>.</p></div>`]
+      ['The machine-translation exception', `<div class="f-mt"><p class="f-iconline">${icon('translate')}<b>Verified through machine translation</b></p><p>Where a named person verified a source in a language we do not read, the note says so and quotes the key terms as written, for example ${chip('residencia temporal')}.</p></div>`]
     ], ctx) };
   }
 };
@@ -3080,7 +3105,7 @@ SCREENS.system = {
   system: [],
   render(ctx, S) {
     if (S.state === 'firstload') return { body: startB2('firstload', ctx), startShell: true, full: true, next: null };
-    if (S.state === 'notfound') return { body: `${back('your travel folder', `toast:${MENU_ITEMS.folder[1]}`)}${pageTitle(ctx, 'This page does not exist', 'Not found', 'check the address, or go back to your travel folder. Nothing in it was lost.')}<div class="empty">${icon('search')}<p class="empty__title">We could not find that page</p><p>An address shows at most a country or route name, for example <span class="mono">/countries/austria</span>.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See your results</button></div>`, rail: 'none', next: null, side: findCard() };
+    if (S.state === 'notfound') return { body: `${back('your travel folder', `toast:${MENU_ITEMS.folder[1]}`)}${pageTitle(ctx, 'This page does not exist', 'Not found', 'check the address, or go back to your travel folder. Nothing in it was lost.')}<div class="empty">${icon('search')}<p class="empty__title">We could not find that page</p><p>An address shows at most a country or route name, for example ${chip('/countries/austria')}.</p><button type="button" class="btn btn--secondary btn--sm" data-toast="Opens Results (screen 4).">See your results</button></div>`, rail: 'none', next: null, side: findCard() };
     const res = SCREENS.results.render(ctx, { ...S, state: 'sorted', list: new Set(['AUT']), search: '', region: 'All regions', coveredOnly: false });
     if (S.state === 'storage') res.body = res.body.replace('<div class="f-status">', `${storageAlert()}<div class="f-status">`);
     return { ...res, updated: S.state === 'updated', offline: S.state === 'offline' };
