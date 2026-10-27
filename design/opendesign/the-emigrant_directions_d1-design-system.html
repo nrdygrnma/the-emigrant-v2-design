@@ -1580,6 +1580,16 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 @container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 3px 6px; } }
 /* the destination: the dots run along the bottom edge only */
 .st-pass__blank { border-bottom: 2px solid transparent; }
+
+/* ── Start, round 6 ─────────────────────────────────────────────────────────────────────────────
+   The perforation of the boarding pass is the tickets' tear line: a 2px dashed line in the control-edge ink
+   between the notches, no punched holes. */
+.st-pass__perf { width: 0; left: calc(100% - var(--stub) - 1px); top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); background: none; border-left: 2px dashed var(--line-edge); }
+.k-desk .st-pass__perf { top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); }
+/* Desktop: the papers card lies over the lower part of the photo and ends on the paper ground, the way the base
+   file's opening does. The photo stops behind the card; below it the security paper shows, then the footer. */
+.k-desk .st-stage { background: none; }
+.k-desk .st-cover--stage { inset: 0 0 auto 0; height: auto; bottom: 168px; }
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48c3R5bGU+c3Zne2NvbG9yOiM1YTNlOWV9QG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyayl7c3Zne2NvbG9yOiNiOWE2ZjJ9fTwvc3R5bGU+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iMiIgaGVpZ2h0PSI2IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI1IiB3aWR0aD0iNCIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMyIgaGVpZ2h0PSIxIiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjQiIGhlaWdodD0iMSIgZmlsbD0iY3VycmVudENvbG9yIi8+PC9zdmc+Cg==">
 <style>
@@ -2391,14 +2401,14 @@ function startB2(variant, ctx) {
     const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
       ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
       : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
-    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p><p class="st-quiet__line">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p></div>`;
+    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
   }
   const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
   return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
     <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
 }
 /* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
-   in the footers. The disclaimer sentence appears once, on the card under the proof line. parts: { body, offline, menuId } */
+   in the footers, with the Disclaimer and Terms of use links. parts: { body, offline, menuId } */
 function startShell(ctx, parts) {
   const id = parts.menuId || ctx;
   const credit = `Cover: ${esc(START.cover.credit)}`;

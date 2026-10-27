@@ -1580,6 +1580,16 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 @container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 3px 6px; } }
 /* the destination: the dots run along the bottom edge only */
 .st-pass__blank { border-bottom: 2px solid transparent; }
+
+/* ── Start, round 6 ─────────────────────────────────────────────────────────────────────────────
+   The perforation of the boarding pass is the tickets' tear line: a 2px dashed line in the control-edge ink
+   between the notches, no punched holes. */
+.st-pass__perf { width: 0; left: calc(100% - var(--stub) - 1px); top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); background: none; border-left: 2px dashed var(--line-edge); }
+.k-desk .st-pass__perf { top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); }
+/* Desktop: the papers card lies over the lower part of the photo and ends on the paper ground, the way the base
+   file's opening does. The photo stops behind the card; below it the security paper shows, then the footer. */
+.k-desk .st-stage { background: none; }
+.k-desk .st-cover--stage { inset: 0 0 auto 0; height: auto; bottom: 168px; }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
@@ -2397,14 +2407,14 @@ function startB2(variant, ctx) {
     const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
       ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
       : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
-    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p><p class="st-quiet__line">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p></div>`;
+    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
   }
   const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
   return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
     <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
 }
 /* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
-   in the footers. The disclaimer sentence appears once, on the card under the proof line. parts: { body, offline, menuId } */
+   in the footers, with the Disclaimer and Terms of use links. parts: { body, offline, menuId } */
 function startShell(ctx, parts) {
   const id = parts.menuId || ctx;
   const credit = `Cover: ${esc(START.cover.credit)}`;
@@ -2698,7 +2708,7 @@ function fontStatus() {
   const el = $('#fontStatus'); if (!el) return;
   document.fonts.ready.then(() => { const ok = document.fonts.check('800 48px Archivo') && [...document.fonts].some(f => f.family === 'Archivo' && f.status === 'loaded'); el.textContent = ok ? 'Fonts: Archivo (width axis 62–125%) and Martian Mono loaded from this project' : 'Fonts: Archivo did not load in this viewer, a fallback is showing'; el.dataset.ok = ok; });
 }
-const STUDY_NOTE = 'The chosen direction, as D2 renders it on screen 1 and D1 shows it as "Cover with the papers card": the photo first, the papers card on its lower part, the headline about the life with the rational line under it, one strong object (the boarding pass, the destination "???" in navy on a dotted underline) above the button, the proof line as plain mono text, and the three journey legs as clean typography with hairline dividers; Plan marked "coming" with the dotted tag. The card band carries the cover\'s place line. On desktop the card ends 24px above the footer with the journey row fully visible, and the pass is about 15% larger. The footers carry the cover credit, the privacy promise and the Disclaimer and Terms of use links; the disclaimer sentence sits once on the card. On arrival the photo drifts slowly and the legs appear one after another; all motion is off under reduced motion. The cover switcher swaps the cover photo, its credit, place line and focal point. Sample data.';
+const STUDY_NOTE = 'The chosen direction, as D2 renders it on screen 1 and D1 shows it as "Cover with the papers card": the photo first, the papers card on its lower part, the headline about the life with the rational line under it, one strong object (the boarding pass, the destination "???" in navy on a dotted underline) above the button, the proof line as plain mono text, and the three journey legs as clean typography with hairline dividers; Plan marked "coming" with the dotted tag. The card band carries the cover\'s place line. On desktop the card ends 24px above the footer with the journey row fully visible, and the pass is about 15% larger. The boarding pass tears along a dashed line, as the tickets do. On desktop the card lies over the lower part of the photo and ends on the paper ground. The footers carry the cover credit, the privacy promise and the Disclaimer and Terms of use links. On arrival the photo drifts slowly and the legs appear one after another; all motion is off under reduced motion. The cover switcher swaps the cover photo, its credit, place line and focal point. Sample data.';
 function sectionHtml() {
   const coverRow = `<div class="d2-states__row">${COVER_ORDER.map(id => `<button type="button" class="d2-state" aria-pressed="${id === activeCover}" data-cover="${id}">${COVERS[id].label}</button>`).join('')}<span class="st-covernote">The three files in assets/photos. The coastal road is a generated image, a placeholder, not for release.</span></div>`;
   const sw = `<div class="d2-states" role="group" aria-label="Prototype controls"><span class="d2-states__tag">${icon('eye')}<span>Prototype · headline</span></span><div class="d2-states__row">${HEADLINES_B2.map((h, i) => `<button type="button" class="d2-state" aria-pressed="${i === b2Headline}" data-b2h="${i}">${i + 1} · ${h}</button>`).join('')}<a class="d2-state" href="#" data-replay>Replay the destination board</a></div><span class="d2-states__tag" style="margin-top:8px">${icon('eye')}<span>Prototype · cover</span></span>${coverRow}<p class="st-fontstatus" id="fontStatus" role="status">Fonts: checking…</p></div>`;

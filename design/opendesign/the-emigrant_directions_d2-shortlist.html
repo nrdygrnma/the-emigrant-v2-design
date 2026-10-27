@@ -1580,6 +1580,16 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 @container rail (max-width: 359px) { .f-rail--compact .f-step__soon { padding: 3px 6px; } }
 /* the destination: the dots run along the bottom edge only */
 .st-pass__blank { border-bottom: 2px solid transparent; }
+
+/* ── Start, round 6 ─────────────────────────────────────────────────────────────────────────────
+   The perforation of the boarding pass is the tickets' tear line: a 2px dashed line in the control-edge ink
+   between the notches, no punched holes. */
+.st-pass__perf { width: 0; left: calc(100% - var(--stub) - 1px); top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); background: none; border-left: 2px dashed var(--line-edge); }
+.k-desk .st-pass__perf { top: calc(var(--notch) + 4px); bottom: calc(var(--notch) + 4px); }
+/* Desktop: the papers card lies over the lower part of the photo and ends on the paper ground, the way the base
+   file's opening does. The photo stops behind the card; below it the security paper shows, then the footer. */
+.k-desk .st-stage { background: none; }
+.k-desk .st-cover--stage { inset: 0 0 auto 0; height: auto; bottom: 168px; }
 </style>
 <style data-od-inline-asset="./d2-screens.css?v=20261026z">/* The Emigrant — D2 screen composition layer.
  * Only layout for composing screens from the D1 components in emigrant-ds.css. No new colors, type
@@ -2385,14 +2395,14 @@ function startB2(variant, ctx) {
     const passCol = `<div class="st-col st-col--pass">${returning ? startPass('AUT · CRI · DEU', { stub: 'AUT' }) : startPass('???', { flap: true })}${returning
       ? `<p class="st-last">Your travel folder · last changed 2026-10-12 · 2 countries, 1 route checked</p><div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="${esc(MENU_ITEMS.folder[1])}">Continue with your travel folder</button>${startImport()}</div>`
       : `<div class="st-acts"><button type="button" class="btn btn--primary btn--lg st-main" data-toast="Opens the quick profile (screen 2).">Find where you could go</button>${startImport()}</div>`}</div>`;
-    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p><p class="st-quiet__line">${icon('info-circle')}<span>${DISCLAIMER} <a href="#" data-toast="${TERMS_TOAST}">Terms of use</a></span></p></div>`;
+    inner = `${lead}${passCol}<div class="st-col st-col--legs">${startLegs()}</div><div class="st-col st-col--proof"><p class="st-proof" aria-label="${esc(START.proof)}">${esc(START.proof)}</p></div>`;
   }
   const gridCls = (variant === 'terms' || variant === 'changed' || variant === 'firstload') ? 'd2-termsgrid' : 'st-grid st-grid--b2';
   return `<section class="st-stage d2-start" aria-label="Start, ${variant}">${startCover()}
     <div class="cp st-card st-card--b2">${phone ? '' : startBand()}<div class="${gridCls}">${inner}</div>${phone ? startBand() : ''}</div></section>`;
 }
 /* The Start shell: no plan rail (the visitor has not started), the desktop inline links with "More", the cover credit
-   in the footers. The disclaimer sentence appears once, on the card under the proof line. parts: { body, offline, menuId } */
+   in the footers, with the Disclaimer and Terms of use links. parts: { body, offline, menuId } */
 function startShell(ctx, parts) {
   const id = parts.menuId || ctx;
   const credit = `Cover: ${esc(START.cover.credit)}`;
@@ -2772,7 +2782,7 @@ const defState = () => ({ list: new Set(), country: 'AUT', search: '', region: '
 
 SCREENS.start = {
   no: '1 · 1a', title: 'Start, with Terms of use',
-  note: 'The first impression, in the chosen B2 direction: the full photo as the stage, the papers card over its lower part with the headline about the life, the rational line, the boarding pass as the one object, and the three journey legs. Terms of use (1a) take the card over until accepted; then the only button is "Accept". The cover is provisional and comes from one setting, START.cover, in the D1 engine; D1\'s "Cover with the papers card" is this same component. The footers carry the privacy promise and the Disclaimer and Terms of use links; the disclaimer sentence sits once on the card.',
+  note: 'The first impression, in the chosen B2 direction: the full photo as the stage, the papers card over its lower part with the headline about the life, the rational line, the boarding pass as the one object, and the three journey legs. Terms of use (1a) take the card over until accepted; then the only button is "Accept". The cover is provisional and comes from one setting, START.cover, in the D1 engine; D1\'s "Cover with the papers card" is this same component. The footers carry the privacy promise and the Disclaimer and Terms of use links.',
   states: [['first', 'First visit'], ['terms', 'Terms not accepted'], ['changed', 'Terms changed'], ['returning', 'Returning with a plan'], ['firstload', 'Data loading for the first time']],
   system: [['offline', 'Offline']],
   render(ctx, S) {
