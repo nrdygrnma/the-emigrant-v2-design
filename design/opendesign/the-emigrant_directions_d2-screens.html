@@ -1566,17 +1566,20 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 .k-desk .st-stage { background: none; }
 .k-desk .st-cover--stage { inset: 0 0 auto 0; height: auto; bottom: 168px; }
 
-/* ── Perforations, one look everywhere: a line of punched holes ───────────────────────────────────
+/* ── Perforations, one look everywhere: a line of punched holes on the notch line ────────────────────
    Tickets tear off their stub along the same holes as the boarding pass: 6px holes every 10px, the paper ground
-   showing through, a faint inner shadow on each hole's upper edge, kept clear of the notches. No dashed tear lines. */
-.tk__stub { position: relative; border-top: 0; }
-.tk__stub::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 12px; pointer-events: none;
-  background-image: radial-gradient(circle 3px at 5px 6.4px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5px 5.6px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
+   showing through, a faint inner shadow on each hole's upper edge. The notches sit on the stub, 8px in from its
+   edge, and the holes sit on exactly that line, so notches and holes share one centre line. No line, no dashes. */
+.tk__main { -webkit-mask: none; mask: none; }
+.tk__stub { position: relative; border-top: 0; padding-top: 22px; -webkit-mask: radial-gradient(circle var(--notch) at 0 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 100% 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)); -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at 0 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 100% 8px, #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
+.tk__stub::before { content: ""; position: absolute; top: 2px; left: 16px; right: 16px; height: 12px; pointer-events: none;
+  background-image: radial-gradient(circle 3px at 5px 6px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5px 5.4px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
   background-size: 10px 12px; background-repeat: round no-repeat; }
 @container tk (min-width: 640px) {
-  .tk__stub { border-left: 0; }
-  .tk__stub::before { top: 16px; bottom: 16px; left: 0; right: auto; width: 12px; height: auto;
-    background-image: radial-gradient(circle 3px at 6.4px 5px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 5.6px 5px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
+  .tk__main { -webkit-mask: none; mask: none; }
+  .tk__stub { border-left: 0; padding: 16px 16px 16px 26px; -webkit-mask: radial-gradient(circle var(--notch) at 8px 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 8px 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); -webkit-mask-composite: source-in; mask: radial-gradient(circle var(--notch) at 8px 0, #0000 calc(var(--notch) - 1px), #000 var(--notch)), radial-gradient(circle var(--notch) at 8px 100%, #0000 calc(var(--notch) - 1px), #000 var(--notch)); mask-composite: intersect; }
+  .tk__stub::before { top: 16px; bottom: 16px; left: 2px; right: auto; width: 12px; height: auto;
+    background-image: radial-gradient(circle 3px at 6px 5px, var(--paper-ground) 3px, #0000 3.6px), radial-gradient(circle 3.1px at 6px 4.4px, rgba(20, 33, 61, 0.22) 3.1px, #0000 3.8px);
     background-size: 12px 10px; background-repeat: no-repeat round; }
 }
 
