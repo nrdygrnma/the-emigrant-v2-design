@@ -1630,7 +1630,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
 
 <main id="main" class="wrap">
   <section class="opening" aria-labelledby="dsTitle" style="margin-top:32px">
-    <figure class="ph opening__photo"><div class="ph__img" role="img" aria-label="Placeholder: drone photo of the Hohe Tauern valley in morning light, Austria. Cover, 2:1 desktop, 4:3 phone"><span class="ph__tag" aria-hidden="true"><span class="ph__type"><span id="i-media"></span><span>Drone photo</span></span><span class="ph__subj">Hohe Tauern valley in morning light, Austria</span><span class="ph__ratio">Cover · 2:1 desktop · 4:5 phone</span></span></div></figure>
+    <figure class="ph opening__photo"><div class="ph__img" role="img" aria-label="Placeholder: photo of the Hohe Tauern valley in morning light, Austria. Cover, 2:1 desktop, 4:3 phone"><span class="ph__tag" aria-hidden="true"><span class="ph__type"><span id="i-media"></span><span>Photo</span></span><span class="ph__subj">Hohe Tauern valley in morning light, Austria</span><span class="ph__ratio">Cover · 2:1 desktop · 4:5 phone</span></span></div></figure>
     <div class="cp opening__card">
       <div class="cp__band"><span class="cp__label">D1 · for review · nothing is frozen until you approve it</span><span class="ph__credit">Cover: Drone photo: [credit]</span></div>
       <div class="dp__grid"><div>
@@ -1655,7 +1655,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
         <li><span data-i="check"></span>The disclaimer is the same everywhere: every footer, phone included, carries the privacy promise and the two links, Disclaimer and Terms of use. Nothing in the body.</li>
         <li><span data-i="check"></span>Oxblood is for real next steps only; reading pages have a Back link instead.</li>
         <li><span data-i="check"></span>Citrus highlights at most one value per card, never a stale, unknown or flagged value.</li>
-        <li><span data-i="check"></span>Text never sits on a photo. Every photo has a credit line: "Drone photo: [credit]" or "Photo: [name] / Unsplash".</li>
+        <li><span data-i="check"></span>Text never sits on a photo. Every photo has a credit line: "Photo: [credit]" or "Photo: [name] / Unsplash".</li>
       </ul></div>
       <div class="card"><h3>Never</h3><ul class="rules rules--dont">
         <li><span data-i="xmark-circle"></span>A winner, crown, medal, rank number, "best match" or confidence percentage.</li>
@@ -1735,7 +1735,7 @@ dialog.k-dialog .dlg { position: relative; margin: auto; top: 50%; transform: tr
     </div>
   </section>
 
-  <section aria-labelledby="h8"><div class="dep"><div class="dep__row"><span class="dep__no">08</span><h2 class="cond" id="h8">Photos</h2></div><p>The owner's drone photography and Unsplash, served from our own site. Prints with a thin white border and a soft shadow, no fastening; ticket panels; postage stamps for small images. Text never sits on a photo. Placeholders state the source type, subject and aspect ratio.</p></div>
+  <section aria-labelledby="h8"><div class="dep"><div class="dep__row"><span class="dep__no">08</span><h2 class="cond" id="h8">Photos</h2></div><p>The owner's own photos and Unsplash, served from our own site. Prints with a thin white border and a soft shadow, no fastening; ticket panels; postage stamps for small images. Text never sits on a photo. Placeholders state the source type, subject and aspect ratio.</p></div>
     <div class="sec-body">
       <div class="cols"><div class="card card--stretch"><h3>Print</h3><div id="photoPrint" class="g-col" style="justify-items:stretch"></div></div><div class="card"><h3>Postage stamps</h3><div id="photoStamp" class="g-col"></div></div></div>
       <div class="card card--stretch"><h3>Ticket panel</h3><div id="photoTicket"></div></div>
@@ -2162,8 +2162,8 @@ function memberResult(role, key) { const [ic, w] = MEMBER_ROUTE[key]; return `<s
 
 /* ── Photos ────────────────────────────────────────────────────────── */
 const SLOT_RATIO = { cover: 'Cover · 2:1 desktop · 4:3 phone', print: '16:9 desktop · 4:3 phone', crop: '3:4 crop of the same photo', ticket: '3:2 desktop · 16:9 phone', stamp: 'postage stamp, 4:5' };
-const srcWord = c => c.src === 'unsplash' ? 'Unsplash photo' : 'Drone photo';
-const credit = c => c.src === 'unsplash' ? 'Photo: [name] / Unsplash' : 'Drone photo: [credit]';
+const srcWord = c => c.src === 'unsplash' ? 'Unsplash photo' : 'Photo';
+const credit = c => c.src === 'unsplash' ? 'Photo: [name] / Unsplash' : 'Photo: [credit]';
 function phImg(c, slot, tag = true) {
   return `<div class="ph__img" role="img" aria-label="Placeholder: ${srcWord(c).toLowerCase()} of ${esc(c.photo)}, ${SLOT_RATIO[slot]}">${tag ? `<span class="ph__tag" aria-hidden="true"><span class="ph__type">${icon('media-image')}<span>${srcWord(c)}</span></span><span class="ph__subj">${esc(c.photo)}</span><span class="ph__ratio">${SLOT_RATIO[slot]}</span></span>` : icon('media-image')}</div>`;
 }

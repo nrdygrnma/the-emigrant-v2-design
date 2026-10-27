@@ -2145,8 +2145,8 @@ function memberResult(role, key) { const [ic, w] = MEMBER_ROUTE[key]; return `<s
 
 /* ── Photos ────────────────────────────────────────────────────────── */
 const SLOT_RATIO = { cover: 'Cover · 2:1 desktop · 4:3 phone', print: '16:9 desktop · 4:3 phone', crop: '3:4 crop of the same photo', ticket: '3:2 desktop · 16:9 phone', stamp: 'postage stamp, 4:5' };
-const srcWord = c => c.src === 'unsplash' ? 'Unsplash photo' : 'Drone photo';
-const credit = c => c.src === 'unsplash' ? 'Photo: [name] / Unsplash' : 'Drone photo: [credit]';
+const srcWord = c => c.src === 'unsplash' ? 'Unsplash photo' : 'Photo';
+const credit = c => c.src === 'unsplash' ? 'Photo: [name] / Unsplash' : 'Photo: [credit]';
 function phImg(c, slot, tag = true) {
   return `<div class="ph__img" role="img" aria-label="Placeholder: ${srcWord(c).toLowerCase()} of ${esc(c.photo)}, ${SLOT_RATIO[slot]}">${tag ? `<span class="ph__tag" aria-hidden="true"><span class="ph__type">${icon('media-image')}<span>${srcWord(c)}</span></span><span class="ph__subj">${esc(c.photo)}</span><span class="ph__ratio">${SLOT_RATIO[slot]}</span></span>` : icon('media-image')}</div>`;
 }
